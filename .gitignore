@@ -46,3 +46,5 @@ ENV/
 *.toc
 # Ignore papers directory (personal academic work)
 /posim_papers/
+# Ignore web interface directory (personal development)
+/web/

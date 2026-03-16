@@ -1,1 +1,0 @@
-import{d as i,e as N,b0 as l,r as o,f as e,s as v}from"./index-V-KAxtpr.js";var d=function(a){var r=a.className,s=a.tagName,t=s===void 0?"div":s,m=i(a,["className","tagName"]),c=N(l,r);return o.createElement(t,e(e({},m),{className:c}))};d.displayName="".concat(v,".Divider");export{d as D};
