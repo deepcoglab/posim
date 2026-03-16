@@ -2,7 +2,7 @@
   <img src="assets/posim_logo.png" alt="POSIM Logo" width="600">
 </p>
 
-<h3 align="center">POSIM — 基于元认知智能体的通用社交媒体舆情仿真框架</h3>
+<h3 align="center">POSIM — 面向社交媒体舆情演化的多智能体仿真框架</h3>
 
 <p align="center">
   <em>"All models are wrong, but some are useful." — George E. P. Box</em>
