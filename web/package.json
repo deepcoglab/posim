@@ -1,0 +1,40 @@
+{
+  "name": "posim-platform",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext ts,tsx"
+  },
+  "dependencies": {
+    "@blueprintjs/core": "^5.13.0",
+    "@blueprintjs/datetime2": "^2.3.0",
+    "@blueprintjs/icons": "^5.13.0",
+    "@blueprintjs/select": "^5.3.0",
+    "@blueprintjs/table": "^5.3.0",
+    "@cosmograph/react": "^2.2.1",
+    "axios": "^1.7.4",
+    "classnames": "^2.5.1",
+    "dayjs": "^1.11.12",
+    "echarts": "^5.5.1",
+    "echarts-for-react": "^3.0.2",
+    "i18next": "^23.14.0",
+    "immer": "^10.1.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-i18next": "^15.0.1",
+    "react-router-dom": "^6.26.0",
+    "zustand": "^4.5.4"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.4",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react-swc": "^3.7.0",
+    "sass": "^1.77.8",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.2"
+  }
+}
