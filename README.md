@@ -1,15 +1,15 @@
 <p align="center">
+  <a href="README_CN.md">中文</a> | <b>English</b>
+</p>
+
+<p align="center">
   <img src="assets/posim_logo.png" alt="POSIM Logo" width="600">
 </p>
 
-<h3 align="center">POSIM — 面向社交媒体舆情演化的多智能体仿真框架</h3>
+<h3 align="center">POSIM — A Multi-Agent Simulation Framework for Social Media Public Opinion Evolution and Governance</h3>
 
 <p align="center">
   <em>"All models are wrong, but some are useful." — George E. P. Box</em>
-</p>
-
-<p align="center">
-  <a href="README.md">中文</a> | <a href="README_EN.md">English</a>
 </p>
 
 <p align="center">
@@ -21,471 +21,528 @@
 
 ---
 
-## 📖 目录
+<h2 align="center">
+  🌐 <a href="https://DeepCogLab.github.io/posim/">https://DeepCogLab.github.io/posim/</a> 🌐
+</h2>
 
-- [💡 为什么需要 POSIM？](#为什么需要-posim)
-- [✨ 主要贡献](#主要贡献)
-- [🏗️ 框架总览](#框架总览)
-- [🧠 EBDI 元认知智能体](#ebdi-元认知智能体)
-- [🌍 仿真环境](#仿真环境)
-- [🧪 策略推演与计算实验](#策略推演与计算实验)
-- [🛡️ 三层递进验证体系](#三层递进验证体系)
-- [💾 实验数据集](#实验数据集)
-- [📊 实验结果与分析](#实验结果与分析)
-- [🌳 项目结构](#项目结构)
-- [⚙️ 环境配置与安装](#环境配置与安装)
-- [🚀 快速开始](#快速开始)
-- [🔌 扩展指南](#扩展指南)
-- [📝 引用](#引用)
-- [📄 许可证](#许可证)
+<p align="center">
+  <a href="https://DeepCogLab.github.io/posim/">
+    <img src="https://img.shields.io/badge/🏠_Project_Homepage-DeepCogLab.github.io/posim-blue?style=for-the-badge&logoColor=white" alt="Project Homepage">
+  </a>
+</p>
+
+<p align="center">
+  📄 <a href="#">Paper (under review)</a> &nbsp;|&nbsp;
+  🌐 <a href="https://DeepCogLab.github.io/posim/">Homepage</a> &nbsp;|&nbsp;
+  🐛 <a href="https://github.com/DeepCogLab/posim/issues">Issues</a>
+</p>
 
 ---
 
-## 💡 为什么需要 POSIM？
+## 📖 Table of Contents
 
-一则突发事件可以在数小时内席卷整个社交网络——数万用户涌入评论区，情绪在转发链中逐级放大，意见领袖的一条博文足以改写舆论走向。理解并预判这些复杂的群体动力学过程，对社会治理、危机应对和公共政策制定有着切实的价值。
-
-然而真实世界的社会实验面临伦理约束和不可重复的根本困难。传统计算仿真方法——无论是传染病模型、阈值级联模型还是经典的基于智能体建模（ABM）——虽各有优势，却共同面临一个瓶颈：**它们无法深入到个体认知过程的显式建模**。固定规则驱动的智能体既无法感知纷繁复杂的外部环境信息，也无法模拟情感演化、动机推理和自主决策等高级认知过程。
-
-近年来大语言模型（LLM）的突破带来了全新可能——语义理解、上下文推理和自主决策能力使仿真智能体有望真正"理解"事件并做出类人决策。但多数现有工作仅将 LLM 作为端到端的行为映射器，缺乏显式的中间认知状态建模，长周期仿真中行为机制难以保证。
-
-**POSIM** 正是为应对这一挑战而生。
-
-| 能力维度     |   S3   | HiSim |  OASIS  | TrendSim | LMAgent |   **POSIM**   |
-| ------------ | :----: | :---: | :------: | :------: | :-----: | :------------------: |
-| 认知机制建模 |   ✗   |  ✗  |    ✗    |    ✗    |   ✗   |     **✓**     |
-| 真实数据验证 |   ✓   |  ✓  |    ✗    |    ✗    |   ✓   |     **✓**     |
-| 策略推演能力 |   ✗   |  ✗  |    ✗    |    ✗    |   ✗   |     **✓**     |
-| 多类型智能体 |   ✗   |  ✓  |    ✗    |    ✓    |   ✓   |     **✓**     |
-| 时间精度     | ★★★ | ★★ | ★★★★ | ★★★★ |  ★★  | **★★★★★** |
-| 可扩展性     | ★★★ | ★★ | ★★★★ |  ★★★  |  ★★  | **★★★★★** |
-
-## ✨ 主要贡献
-
-1. **EBDI 元认知智能体架构** — 将 LLM 嵌入分层认知框架（感知 → 信念 → 欲望 → 意图 → 行为），三个认知子系统各由独立 LLM 调用完成，模块间通过结构化中间状态传递信息，行为的生成过程完全可追溯——不再是"给一个 prompt，出一个回答"的黑箱。
-2. **时间-事件混合驱动仿真环境** — 霍克斯自激点过程统一建模外生事件冲击（新闻爆料、官方声明）与内生用户交互（转发、评论的雪球效应），叠加昼夜节律调制，在分钟级时间分辨率下再现"爆发—持续—衰退"的非平稳活跃模式。
-3. **三层递进验证体系** — 借鉴仿真工程领域经典 V&V 方法论，从微观行为机制校准 → 宏观涌现现象检验 → 统计结果一致性对齐，逐层建立仿真可信度。
-4. **高度解耦的模块化架构** — 智能体、仿真环境、策略推演三大核心组件通过标准接口通信，可独立替换——换认知架构、改时间引擎、接入新评估指标，都不需要动其他模块的代码。
+- [💡 Why POSIM?](#-why-posim)
+- [✨ Key Contributions](#-key-contributions)
+- [🏗️ Framework Overview](#%EF%B8%8F-framework-overview)
+- [🧠 Social-BDI Agent Architecture](#-social-bdi-agent-architecture)
+- [🌍 Simulation Environment](#-simulation-environment)
+- [🧪 Strategy Evaluation](#-strategy-evaluation)
+- [🛡️ Three-Tier Progressive Validation](#%EF%B8%8F-three-tier-progressive-validation)
+- [💾 Datasets](#-datasets)
+- [📊 Experimental Results](#-experimental-results)
+- [🌳 Project Structure](#-project-structure)
+- [⚙️ Installation](#%EF%B8%8F-installation)
+- [🚀 Quick Start](#-quick-start)
+- [🔌 Extension Guide](#-extension-guide)
+- [📄 License](#-license)
+- [🚧 Online System — Coming Soon](#-online-system--coming-soon)
 
 ---
 
-## 🏗️ 框架总览
+## 💡 Why POSIM?
+
+A single breaking event can sweep across social networks within hours — thousands of users flood comment sections, emotions escalate through repost chains, and a single opinion leader's post can reshape public discourse. Understanding and anticipating these complex collective dynamics is of critical value for social governance, crisis response, and public policy.
+
+However, real-world social experiments face fundamental challenges of ethical constraints and irreproducibility. Traditional computational simulation methods — whether epidemic models, threshold cascade models, or classic agent-based modeling (ABM) — each have strengths, but share a common bottleneck: **they cannot explicitly model individual cognitive processes**. Rule-driven agents can neither perceive complex environmental information nor simulate emotional evolution, motivational reasoning, and autonomous decision-making.
+
+Recent breakthroughs in large language models (LLMs) bring new possibilities — semantic understanding, contextual reasoning, and autonomous decision-making enable simulation agents to truly "understand" events and make human-like decisions. Yet most existing work treats LLMs as end-to-end behavior generators without explicitly modeling intermediate cognitive states, leaving behavioral mechanisms opaque in long-horizon simulations.
+
+**POSIM** (**P**ublic **O**pinion **Sim**ulator) is designed to address these challenges.
+
+| **Platform** | **Explicit Cognitive Modeling** | **Validation (M/P/S)** | **Real-Case Intervention** | **LLM Multi-Type Agents** | **Temporal Precision** | **Modular Design** |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| S3 | ✗ | ✗/✓/✓ | ✗ | ✗ | ★★★ | ★★★ |
+| HiSim | ✗ | ✗/✗/✓ | ✗ | ✗ | ★★ | ★★ |
+| GA-S3 | ✗ | ✗/✗/✓ | ✗ | ✓ | ★★★ | ★★ |
+| SPARK | ✗ | ✗/✓/✗ | ✗ | ✓ | ★★ | ★★ |
+| FDE-LLM | ✗ | ✗/✗/✓ | ✗ | ✗ | ★★ | ★★ |
+| TrendSim | ✗ | ✓/✗/✗ | ✗ | ✓ | ★★★★ | ★★★ |
+| OASIS | ✗ | ✗/✓/✓ | ✗ | ✗ | ★★★★ | ★★★★ |
+| LMAgent | ✗ | ✗/✗/✓ | ✗ | ✓ | ★★ | ★★ |
+| **POSIM (Ours)** | **✓** | **✓/✓/✓** | **✓** | **✓** | **★★★★★** | **★★★★★** |
+
+> *M = Mechanism validation; P = Phenomenon validation; S = Statistical validation.*
+
+---
+
+## ✨ Key Contributions
+
+1. 🧠 **Social-BDI Agent Architecture** — Embeds LLMs within a layered cognitive framework (Perception → Belief → Desire → Intention → Action), incorporating emotional arousal and cognitive biases. Three cognitive subsystems are each powered by independent LLM calls, communicating through structured intermediate states. The entire behavioral generation process is fully traceable — no longer a "prompt in, answer out" black box.
+
+2. ⏱️ **Hawkes Process-Driven Simulation Environment** — A Hawkes self-exciting point process unifies exogenous event shocks (breaking news, official statements) with endogenous user interactions (the snowball effect of reposts and comments), coupled with circadian rhythm modulation, reproducing non-stationary "outbreak–sustain–decay" activity patterns at minute-level temporal resolution.
+
+3. 🛡️ **Three-Tier Progressive Validation Framework** — Drawing on classical V&V principles from simulation engineering, validation progresses from individual behavioral mechanism calibration → collective phenomenon emergence calibration → statistical result consistency calibration, establishing simulation credibility layer by layer.
+
+4. 🔌 **Highly Decoupled Modular Architecture** — Agents, simulation environment, and strategy evaluation communicate through standard interfaces and can be independently replaced — swap the cognitive architecture, change the temporal engine, or add new evaluation metrics without touching other modules.
+
+---
+
+## 🏗️ Framework Overview
 
 <p align="center">
   <img src="assets/framework_overview.png" alt="POSIM Framework Overview" width="95%">
 </p>
-<p align="center"><b>图 1</b> POSIM 框架总体架构。左侧为 EBDI 元认知智能体的认知决策链路；中上方为霍克斯点过程驱动的仿真环境与虚拟社交媒体平台；右下方为策略推演模块（干预器-仿真器-评估器）。</p>
+<p align="center"><b>Figure 1.</b> Overall architecture of POSIM. The Social-BDI agent architecture implements the cognitive pipeline (left); the Hawkes-based temporal engine and virtual social media platform form the simulation environment (center-top); the strategy evaluation module supports counterfactual governance assessment (right-bottom).</p>
 
-POSIM 由三大核心组件协同构成：
+POSIM comprises three core components working in concert:
 
-> **(1) 元认知智能体** — 基于 EBDI 认知架构，从真实用户数据和 LLM 驱动的深度访谈生成多类型智能体（普通网民、意见领袖、媒体、政府），每个智能体维护从身份信念到即时情绪的完整认知状态。
+> **(1) Social-BDI Agents** — Built on the BDI cognitive architecture with emotional arousal and cognitive biases, generating multi-type agents (ordinary users, opinion leaders, media accounts, governments) from real user data and LLM-driven structured interviews. Each agent maintains a complete cognitive state from role identity beliefs to real-time emotional arousal.
 >
-> **(2) 仿真环境** — 霍克斯自激点过程时间引擎控制智能体的激活时序，虚拟社交媒体平台提供个性化推荐、社交网络和热搜榜单，共同构成智能体感知和交互的虚拟世界。
+> **(2) Simulation Environment** — The Hawkes self-exciting point process temporal engine controls agent activation timing; the virtual social media platform provides personalized recommendations, social networks, and trending topics, forming the virtual world where agents perceive and interact.
 >
-> **(3) 策略推演** — 干预器、仿真器和评估器三模块协同，支持事件注入、节点控制和平台策略等多种干预手段，通过检查点回调生成平行演化轨迹以实现反事实推理。
+> **(3) Strategy Evaluation** — Intervenor, Simulator, and Evaluator modules work together, supporting event injection, node control, and platform policy interventions. Checkpoint callback generates parallel evolution trajectories for counterfactual reasoning.
 
 ---
 
-## 🧠 EBDI 元认知智能体
+## 🧠 Social-BDI Agent Architecture
 
-传统的反应式智能体不过是无状态的行为生成器——给一个输入，吐一个输出，中间发生了什么一无所知。POSIM 的做法截然不同：在经典 BDI 认知架构上融入情感维度，构建具有**显式自我认知状态**和**可审计多阶段决策链**的元认知智能体。认知流程形式化为：
+Traditional reactive agents are merely stateless behavior generators — given an input, producing an output, with no insight into the intermediate process. POSIM takes a fundamentally different approach: building on the classic BDI cognitive architecture, it integrates emotional arousal and cognitive biases to construct agents with **explicit cognitive states** and an **auditable multi-stage decision chain**. The cognitive pipeline is formalized as:
 
 $$
 \text{Perception}(P_t) \;\to\; \text{Belief}(B_t) \;\to\; \text{Desire}(D_t) \;\to\; \text{Intention}(I_t) \;\to\; \text{Action}(A_t)
 $$
 
-### 💭 信念子系统 — 智能体如何"理解世界"
+### 💭 Belief Subsystem — How Agents "Understand the World"
 
-心理学研究表明个体的不同认知层次具有不同的稳定性——核心人格特质在短期内高度稳定，而对特定事件的即时情绪则随信息输入快速变化。基于这一认知分层特性，POSIM 设计了四层信念体系：
-
-```
-  ┌───────────────────────────────────────────────────────────────┐
-  │  B^id  ─ 角色身份信念    性别、地域、职业、粉丝规模           │  ← 仿真期间不变（人格锚点）
-  │  B^psy ─ 心理认知信念    从众、偏执、宣泄、猎奇...            │  ← 高度稳定
-  │  B^evt ─ 事件观点信念    对各参与主体的立场与理由              │  ← 随信息输入动态演化
-  │  B^emo ─ 情绪激发信念    [快乐, 悲伤, 愤怒, 恐惧, 惊讶, 厌恶] │  ← 实时波动
-  └───────────────────────────────────────────────────────────────┘
-                             ▲  修正难度递减  ▼
-```
-
-几个值得关注的设计细节：
-
-- **心理认知信念的初始化**：基于对多起真实舆情事件的分析，我们归纳了自我实现型、猎奇探究型、减压宣泄型、仇官仇富型、跟风从众型等典型心理模式，每种模式包含约 30 条从真实数据中提炼的认知条目（如"主流媒体未报道的往往才是真相""骂得越狠越解气"），初始化时由 LLM 根据用户历史行为进行个性化匹配。
-- **事件观点信念的提取**：采用 LLM 驱动的结构化深度访谈，每条观点以 $\langle t, \text{subject}, \text{opinion}, \text{reason} \rangle$ 四元组表示。
-- **情绪的三重驱动**：时间衰减（$\mathbf{e}(t) = \mathbf{e}(t_0) \cdot e^{-\lambda_e(t-t_0)}$）、内容刺激、以及邻居间的社交传染（$(1-\rho) \cdot \mathbf{e}_i + \rho \cdot \bar{\mathbf{e}}_{\text{neighbor}}$）。
-- **认知偏差的显式注入**：信念更新时通过提示词引入确认偏差、锚定效应、情绪优先推理和简单归因倾向，模拟真实用户认知中的系统性偏差。
-
-### 🎯 欲望子系统 — 智能体"想做什么"
-
-社交媒体用户的参与动机高度多样——有人为了宣泄愤怒，有人为了获取信息，有人纯粹凑热闹。欲望子系统利用 LLM 的常识推断能力自动推断行为驱动力，输出带强度权重的动机列表：
-
-> *情绪宣泄 (0.8)* · *正义倡导 (0.6)* · *自我表达 (0.4)* · *信息获取 (0.3)* · ...
-
-动机列表为下游意图规划提供约束——情绪宣泄占主导时，智能体倾向短评论和激烈表达；信息获取为主时，则更可能转发带评论或发布长文。
-
-### 🛠️ 意图子系统 — 智能体"怎么做"
-
-与传统单步行为生成不同，意图子系统采用**三级思维链**递进决策：
+Psychological research shows that different cognitive layers have different stability — core personality traits are highly stable in the short term, while immediate emotions change rapidly with information input. Based on this cognitive stratification, POSIM designs a four-layer hierarchical belief system:
 
 ```
-  L1 — 做什么 & 对谁做
-    从原子操作中选择（点赞/转发/转发带评/短评/长评/短原创/长原创），确定互动目标
-
-  L2 — 以什么方式表达
-    四个正交维度：情绪(类型+强度) × 立场(支持/反对/中立) × 风格(理性/讽刺/攻击/共情/质疑) × 叙事(事实/标签化/呼吁/权威引用)
-
-  L3 — 具体说什么
-    基于 L1+L2 约束，生成符合角色特征的微博文本
+  ┌──────────────────────────────────────────────────────────────────────┐
+  │  B^id  — Role Identity Belief     Gender, region, occupation, fans   │  ← Fixed (personality anchor)
+  │  B^psy — Psychological Cognition  Conformity, prejudice, catharsis   │  ← Highly stable
+  │  B^evt — Event Opinion Belief     Stance & reasoning per actor       │  ← Evolves with new information
+  │  B^emo — Emotional Arousal        [happy, sad, angry, fear, ...]     │  ← Real-time fluctuation
+  └──────────────────────────────────────────────────────────────────────┘
+                              ▲  Modification difficulty decreasing  ▼
 ```
 
-这种分解的价值：为内容生成提供**显式策略约束**，避免 LLM 在无引导下生成平均化的温和文本；同时每一级决策结果均被记录，行为生成过程完全可追溯。
+Key design highlights:
 
-### 🎭 四类异质性智能体
+- **Psychological cognition initialization** — Based on analysis of real public opinion events, representative psychological patterns are identified (self-actualization, curiosity-seeking, cathartic venting, anti-authority resentment, bandwagon conformity), each containing ~30 cognitive entries distilled from real data. During initialization, an LLM matches the best-fitting profile based on each user's historical behavior.
+- **Event opinion extraction** — LLM-driven structured interviews, with each opinion stored as a structured quadruple $\langle t, \text{subject}, \text{opinion}, \text{reason} \rangle$.
+- **Three-mechanism emotion dynamics** — Temporal decay ($\mathbf{e}(t) = \mathbf{e}(t_0) \cdot e^{-\lambda_e(t-t_0)}$), content stimulation, and social contagion among neighbors ($(1-\rho) \cdot \mathbf{e}_i + \rho \cdot \bar{\mathbf{e}}_{\text{neighbor}}$).
+- **Explicit cognitive bias injection** — Confirmation bias, anchoring effects, affect-driven reasoning, and simplistic attribution tendencies are injected during belief updates via prompts, simulating systematic biases in real user cognition.
 
-真实舆情涉及网民、意见领袖、媒体和政府等多类主体的复杂交互。四种智能体共享同一套 EBDI 认知管线，通过差异化的角色提示词注入不同社会角色特征：
+### 🎯 Desire Subsystem — What Agents "Want to Do"
 
-| 类型                     | 角色定位           | 行为特征                 | 典型表现                               |
-| ------------------------ | ------------------ | ------------------------ | -------------------------------------- |
-| **普通网民**       | 舆情参与绝对主体   | 口语化、碎片化、情绪驱动 | 高唤醒情绪下产生冲动性表达             |
-| **意见领袖 (KOL)** | 二级传播关键中介   | 观点独立、议程设置效应   | 对下游网民信念更新有显著引导作用       |
-| **媒体**           | 信息采集与传播     | 规范克制、时效准确       | 关键节点上信息确认与议程框定           |
-| **政府**           | 官方立场与公共治理 | 低频高权威               | 事件发酵后发布声明，对走势有转折性影响 |
+Social media users' participation motivations are highly diverse — some vent anger, some seek information, some simply follow the crowd. The desire subsystem leverages LLM commonsense reasoning to automatically infer behavioral motivations, outputting a weighted motivation list:
 
-> 四种智能体的行为模式**并非预先设定**，而是在角色提示词约束下由 EBDI 认知链路自主生成。
+> *Emotional catharsis (high)* · *Justice advocacy (medium)* · *Self-expression (low)* · *Information seeking (very low)* · ...
+
+The motivation list constrains downstream intention planning — when emotional catharsis dominates, agents tend toward short comments with intense expression; when information seeking leads, agents are more likely to repost with commentary or publish long-form analysis.
+
+### 🛠️ Intention Subsystem — How Agents "Carry Out Actions"
+
+Unlike traditional single-step behavior generation, the intention subsystem employs a **multi-level chain-of-thought** for progressive decision-making:
+
+```
+  L1 — What to do & to whom
+    Select from atomic operations (like / repost / repost with comment / short comment /
+    long comment / short original / long original), determine interaction target
+
+  L2 — How to express
+    Four orthogonal dimensions: Emotion (type + intensity) × Stance (support / oppose / neutral)
+    × Style (rational / sarcastic / aggressive / empathetic / questioning)
+    × Narrative (factual / labeling / call-to-action / authority citation)
+
+  L3 — What exactly to say
+    Constrained by L1 + L2, generate text matching the agent's role characteristics
+```
+
+This decomposition provides **explicit strategy constraints** for content generation, preventing the LLM from producing bland, averaged text. Every decision is logged for full traceability.
+
+### 🎭 Four Heterogeneous Agent Types
+
+Real public opinion involves complex interactions among multiple actor types. All four types share the unified Social-BDI pipeline, with behavioral differences arising solely from differentiated role-guiding prompts:
+
+| Type | Role | Behavioral Traits | Typical Manifestation |
+| --- | --- | --- | --- |
+| 👤 **Ordinary Users** | Primary participants | Colloquial, fragmented, emotion-driven | Impulsive expression under high arousal |
+| 🌟 **Opinion Leaders** | Key intermediaries (two-step flow) | Independent views, agenda-setting | Significant influence on downstream beliefs |
+| 📰 **Media Accounts** | Information gathering & dissemination | Formal, restrained, timely | Information confirmation & agenda framing |
+| 🏛️ **Governments** | Official stance & governance | Low frequency, high authority | Pivotal influence after event escalation |
+
+> Behavioral patterns of all four types are **not preset**, but emerge autonomously through the Social-BDI pipeline constrained by role-guiding prompts.
 
 ---
 
-## 🌍 仿真环境
+## 🌍 Simulation Environment
 
-### ⏱️ 霍克斯点过程时间引擎
+### ⏱️ Hawkes Point Process Temporal Engine
 
-真实舆情中的活跃度呈现高度不均匀的时间分布——一条爆炸性新闻可在数分钟内引发数千条转发，间歇期活跃度则大幅回落。传统仿真的均匀时间步长根本无法再现这种特征。
+Real public opinion activity exhibits highly non-uniform temporal distributions — breaking news can trigger thousands of reposts within minutes, while activity drops sharply during lulls. Conventional fixed-step activation cannot reproduce these event-driven surges.
 
-POSIM 采用霍克斯自激点过程对群体活跃强度建模。核心直觉类比为"传染"：每一次事件发生后短暂提高后续事件发生的概率，就像一条热门微博引发的讨论在短时间内刺激更多用户参与，随后刺激效应逐渐衰减。
-
-$$
-\lambda(t) = \underbrace{\mu}_{\text{背景率}} + \underbrace{\sum \alpha_{ext} e^{-\beta_{ext}(t - t_i)}}_{\text{外生激励（大强度·慢衰减）}} + \underbrace{\sum \alpha_{int} e^{-\beta_{int}(t - t_j)}}_{\text{内生激励（弱强度·快衰减）}}
-$$
-
-| 参数         | 符号             | 默认值 | 含义                         |
-| ------------ | ---------------- | :----: | ---------------------------- |
-| 背景活跃率   | $\mu$          |  0.01  | 舆情低谷期的背景发博行为     |
-| 外生激励强度 | $\alpha_{ext}$ |  0.08  | 新闻爆料、官方声明带来的冲击 |
-| 外生激励衰减 | $\beta_{ext}$  | 0.005 | 外部事件影响的持续时间       |
-| 内生激励强度 | $\alpha_{int}$ | 0.005 | 用户互动的"滚雪球"效应       |
-| 内生激励衰减 | $\beta_{int}$  |  0.16  | 互动引发的短期刺激消退       |
-| 昼夜节律振幅 | $s_{circ}$     |  0.3  | 凌晨活跃度自然下降的幅度     |
-
-### 📱 虚拟社交媒体平台
-
-时间引擎确定每步激活哪些智能体后，虚拟平台决定了它们**看到什么**和**被什么吸引**：
-
-**社交网络** — 三层有向关系结构：粉丝关注网络（静态基础设施）、实时转发网络和实时评论网络（仿真中动态生长）。
-
-**内容推荐** — 关系链通道 + 公域通道双通道召回，三维加权排序：
+POSIM adopts a Hawkes self-exciting point process to model collective activity intensity. The core intuition is analogous to "contagion": each event occurrence briefly raises the probability of subsequent events, like a viral post stimulating more participation before the effect decays.
 
 $$
-S_{exp}(u, p) = \alpha \cdot \underbrace{H(u, p)}_{\text{同质性}} + \beta \cdot \underbrace{P(p)}_{\text{热度}} + \gamma \cdot \underbrace{R(p)}_{\text{新鲜度}}
+\lambda(t) = \underbrace{\mu}_{\text{Background rate}} + \underbrace{\sum \alpha_{ext} e^{-\beta_{ext}(t - t_i)}}_{\text{Exogenous excitation (strong · slow decay)}} + \underbrace{\sum \alpha_{int} e^{-\beta_{int}(t - t_j)}}_{\text{Endogenous excitation (weak · fast decay)}}
 $$
 
-推荐系统保留探索位打破信息茧房效应，并维护推荐历史防止内容重复推送。嵌入模型默认采用 [BGE-small-zh-v1.5](https://huggingface.co/BAAI/bge-small-zh-v1.5) 进行语义编码与内容去重（余弦相似度阈值 0.92）。
+| Parameter | Symbol | Default | Description |
+| --- | --- | :---: | --- |
+| Background rate | $\mu$ | 0.01 | Baseline posting behavior during opinion lulls |
+| Exogenous intensity | $\alpha_{ext}$ | 0.08 | Impact from breaking news, official statements |
+| Exogenous decay | $\beta_{ext}$ | 0.005 | Duration of external event influence |
+| Endogenous intensity | $\alpha_{int}$ | 0.005 | Snowball effect from user interactions |
+| Endogenous decay | $\beta_{int}$ | 0.16 | Short-term interaction stimulus decay |
+| Circadian amplitude | $s_{circ}$ | 0.3 | Natural activity drop during late-night hours |
 
-**热搜榜单** — 自动统计话题标签热度，综合互动信号与时间衰减定期更新排名，模拟真实平台中热搜对注意力聚焦的放大效应。
+### 📱 Virtual Social Media Platform
+
+After the temporal engine determines which agents are activated, the virtual platform determines **what they see** and **what attracts them**:
+
+- 🔗 **Social Network** — Three-layer directed structure: follower network (static infrastructure), real-time repost network, and real-time comment network (growing dynamically during simulation).
+
+- 📋 **Content Recommendation** — Dual-channel retrieval (relationship + public domain), with three-dimensional weighted scoring:
+
+$$
+S_{exp}(u, p) = \alpha \cdot H(u, p) + \beta \cdot P(p) + \gamma \cdot R(p)
+$$
+
+> where $H$ = homophily (semantic similarity), $P$ = popularity (engagement signals), $R$ = freshness (time decay). Exploration slots break filter bubbles; a history mechanism prevents repeated exposure. Embedding model: [BGE-small-zh-v1.5](https://huggingface.co/BAAI/bge-small-zh-v1.5) (cosine deduplication threshold 0.92).
+
+- 🔥 **Trending Topics** — Automatically tracks hashtag popularity, combining engagement signals with time decay for periodic ranking updates, simulating the attention-focusing amplification of real trending lists.
 
 ---
 
-## 🧪 策略推演与计算实验
+## 🧪 Strategy Evaluation
 
-POSIM 不仅仅是一个仿真器——它同时是支持策略评估的计算实验平台。决策者关心的问题往往是："如果采取某种干预措施，舆情走势将如何变化？"
+POSIM is not just a simulator — it also serves as a **computational experimentation platform** for governance strategy evaluation. Decision-makers often ask: *"If we adopt a certain intervention, how will opinion trajectories change?"*
 
 ```
          ┌─────────────┐        ┌─────────────┐        ┌─────────────┐
-         │   干预器      │  ──→  │   仿真器      │  ──→  │   评估器      │
-         │  Intervenor  │        │  Simulator   │        │  Evaluator   │
+         │  Intervenor  │  ──→  │  Simulator   │  ──→  │  Evaluator   │
          └──────┬───────┘        └──────┬───────┘        └──────┬───────┘
                 │                       │                       │
-     ┌──────────┼──────────┐    检查点回调 → 多条       热度曲线 · 情感比例
-     │          │          │    平行演化轨迹             观点分布 · 话题迁移
-  事件队列   节点控制   平台策略   ↓ 反事实推理            ↓ 多维量化评估
-   注入       干预       调整
+     ┌──────────┼──────────┐    Checkpoint callback →     Hotness curves
+     │          │          │    Parallel trajectories     Sentiment dist.
+  Event Queue  Node     Platform   ↓ Counterfactual      Opinion dist.
+   Injection  Control   Policy       reasoning            ↓ Multi-dim eval
 ```
 
-- **干预器** — 三粒度注入：事件队列（如注入官方声明）、节点控制（如调整特定 KOL 信念状态）、平台策略（如修改推荐权重或限制传播范围）
-- **仿真器** — 检查点回调机制周期性保存完整状态快照，从任意检查点加载并注入不同干预方案，生成多条平行演化轨迹
-- **评估器** — 与仿真引擎完全解耦，通过标准接口读取仿真日志进行多维量化评估，结果可反馈指导下一轮干预调整
+- 🎯 **Intervenor** — Three injection granularities: event queue (e.g., inject official statement), node control (e.g., modify a KOL's belief state), platform policy (e.g., adjust recommendation weights or restrict propagation)
+- 🔄 **Simulator** — Checkpoint callback periodically saves complete state snapshots; load from any checkpoint with different interventions to generate parallel evolution trajectories for counterfactual comparison
+- 📊 **Evaluator** — Fully decoupled from the simulation engine; reads simulation logs through standard interfaces for multi-dimensional quantitative assessment
 
 ---
 
-## 🛡️ 三层递进验证体系
+## 🛡️ Three-Tier Progressive Validation
 
-借鉴仿真工程领域经典 V&V 原则，POSIM 建立了覆盖**机制 → 现象 → 数据**的递进验证体系：
+Drawing on classical V&V (Verification & Validation) principles from simulation engineering, POSIM establishes a progressive validation framework spanning **mechanism → phenomenon → statistics**:
 
 ```
-  ╔══════════════════════════════════════╗
-  ║  第一层：微观行为机制校准             ║  ← "我们是否正确地构建了模型？"
-  ║  · 认知行为链一致性 (0–5)            ║
-  ║  · 人格稳定性 (0–1)                 ║
-  ║  · 决策抗扰性 (0–1)                 ║
-  ╠══════════════════════════════════════╣
-  ║  第二层：宏观涌现现象校准             ║  ← 微观机制能否自发涌现理论预测的宏观现象？
-  ║  · 舆情生命周期                      ║
-  ║  · 多主体行为异质性                  ║
-  ║  · 情绪唤醒与极化效应                ║
-  ║  · 无标度拓扑与级联幂律              ║
-  ╠══════════════════════════════════════╣
-  ║  第三层：统计结果一致性校准           ║  ← "模型结果是否准确？"
-  ║  · 行为层 3 指标 · 内容层 3 指标     ║
-  ║  · 拓扑层 3 指标                     ║
-  ╚══════════════════════════════════════╝
+  ╔═══════════════════════════════════════════════════╗
+  ║  Tier 1: Individual Behavioral Mechanism           ║  ← "Have we built the model correctly?"
+  ║  · Cognitive-behavior chain consistency (0–5)      ║
+  ║  · Personality stability (0–1)                     ║
+  ║  · Decision robustness (0–1)                       ║
+  ╠═══════════════════════════════════════════════════╣
+  ║  Tier 2: Collective Phenomenon Emergence           ║  ← Do micro mechanisms spontaneously
+  ║  · Public opinion lifecycle                        ║    produce theory-predicted macro patterns?
+  ║  · Multi-agent behavioral heterogeneity            ║
+  ║  · Emotional arousal & polarization                ║
+  ║  · Scale-free topology & cascade power law         ║
+  ╠═══════════════════════════════════════════════════╣
+  ║  Tier 3: Statistical Result Consistency            ║  ← "Are the model's results accurate?"
+  ║  · Behavior layer: 3 metrics                       ║
+  ║  · Content layer: 3 metrics                        ║
+  ║  · Topology layer: 3 metrics                       ║
+  ╚═══════════════════════════════════════════════════╝
 ```
 
-第三层统计校准涵盖 **9 个定量指标**，覆盖行为、内容和拓扑三个维度：
+The third tier covers **9 quantitative metrics** across behavior, content, and topology:
 
-| 维度             | 指标           | 含义                                             |
-| ---------------- | -------------- | ------------------------------------------------ |
-| **行为层** | BType JSD ↓   | 模拟与真实行为类型概率分布的 Jensen-Shannon 散度 |
-|                  | Act. ρ ↑     | 活跃度时序曲线的 Pearson 相关系数                |
-|                  | Act. RMSE ↓   | 活跃度曲线的均方根误差                           |
-| **内容层** | Confr. Sim. ↑ | 话语对抗性（对抗/理性/中立）分布的相似度         |
-|                  | \|ΔTTR\| ↓   | 词汇多样性偏差（Type-Token Ratio）               |
-|                  | \|ΔS̄\| ↓   | 群体情感均值偏差                                 |
-| **拓扑层** | Net. Sim. ↑   | 互动网络拓扑特征的相似度                         |
-|                  | Casc. Sim. ↑  | 信息级联规模分布的相似度                         |
-|                  | Casc. PL ↑    | 级联规模幂律拟合参数的接近程度                   |
-
----
-
-## 💾 实验数据集
-
-实验基于从新浪微博平台采集的三个代表性社会舆情事件，分属社会争议、校园事件和食品安全类别，涵盖了不同的舆情演化模式和参与主体结构。仿真精度统一为 **10 分钟/步**。
-
-| 事件                                                                        | 代号 | 类别     | 用户规模 | 帖子量 | 时间跨度 | 仿真步数 |
-| --------------------------------------------------------------------------- | :--: | -------- | :------: | :----: | :------: | :------: |
-| **天价耳环事件** — 某演员成人礼照片中佩戴的耳饰被指认为 230 万奢侈品 |  LE  | 社会争议 |  1,530  | 34,218 |   ~46h   |   276   |
-| **武汉大学图书馆事件** — 自习区性骚扰指控纠纷，法院判决再次引爆舆论  |  WL  | 校园事件 |  1,843  | 51,647 |  ~190h  |  1,140  |
-| **西贝预制菜事件** — 网红企业家公开指控餐饮品牌大量使用预制菜        |  XF  | 食品安全 |  1,987  | 14,892 |   ~71h   |   426   |
-
-数据预处理流程：博文 ID 去重 → 低活跃用户过滤（发帖 < 2）→ 广告与垃圾内容移除 → 无关内容过滤 → 内容质量过滤（原创 ≥ 20 字，转评 ≥ 10 字）→ 时间戳标准化至分钟级。智能体信念初始化基于用户在仿真起始前的历史发布内容，依次构建角色身份、心理认知、事件观点和初始情绪，形成完整的个性化 EBDI 信念系统。
+| Layer | Metric | Description |
+| --- | --- | --- |
+| **Behavior** | BType JSD ↓ | Jensen-Shannon divergence of action type distributions |
+| | Act. ρ ↑ | Pearson correlation of behavioral hotness curves |
+| | Act. RMSE ↓ | Root mean squared error of hotness curves |
+| **Content** | Irrat. Sim. ↑ | Discourse irrationality distribution similarity (irrational / rational / neutral) |
+| | \|ΔTTR\| ↓ | Lexical diversity deviation (Type-Token Ratio) |
+| | \|ΔS̄\| ↓ | Group sentiment mean deviation |
+| **Topology** | Net. Sim. ↑ | Interaction network topological feature similarity |
+| | Casc. Sim. ↑ | Information cascade size distribution similarity |
+| | Casc. PL ↑ | Cascade power-law exponent proximity |
 
 ---
 
-## 📊 实验结果与分析
+## 💾 Datasets
 
-### 🔬 微观行为机制验证
+Experiments are based on three representative public opinion events collected from the Sina Weibo platform, spanning social controversy, campus incident, and food safety categories. Simulation temporal resolution: **10 minutes/step**.
 
-随机抽取 100 名用户运行 12 轮仿真，四种方法在完全相同的条件下对比：
+| Event | Code | Category | #Users | #Posts | Duration | #Steps |
+| --- | :---: | --- | :---: | :---: | :---: | :---: |
+| **Luxury Earring** — Jewelry worn by a public figure identified as luxury item | LE | Social Controversy | 1,530 | 34,218 | ~46h | 276 |
+| **WHU Library** — Reported harassment incident; court verdict reignited discourse | WL | Campus Incident | 1,843 | 51,647 | ~190h | 1,140 |
+| **Xibei Prepared Food** — Allegations of prepared food use in restaurant chain | XF | Food Safety | 1,987 | 14,892 | ~71h | 426 |
 
-| 方法                                  | 认知行为链一致性 (0–5) ↑ |   人格稳定性 (0–1) ↑   |   决策抗扰性 (0–1) ↑   |
-| ------------------------------------- | :------------------------: | :----------------------: | :----------------------: |
-| Direct-Nothink (Qwen2.5-7B, 单次提示) |        1.47 ± 0.50        |      0.478 ± 0.263      |      0.629 ± 0.240      |
-| Direct-Think (Qwen3-8B, 单次提示)     |        1.75 ± 0.43        |      0.448 ± 0.269      |      0.603 ± 0.299      |
-| CoT (单次调用内串联推理)              |        3.09 ± 0.29        |      0.516 ± 0.272      |      0.541 ± 0.356      |
-| **EBDI (Ours)**                 |   **4.64 ± 0.48**   | **0.661 ± 0.215** | **0.695 ± 0.213** |
+Data preprocessing pipeline: post ID deduplication → low-activity user filtering (posts < 2) → advertisement & spam removal → irrelevant content filtering → content quality filtering (original ≥ 20 chars, repost/comment ≥ 10 chars) → timestamp normalization to minute-level. Agent beliefs are initialized from each user's historical posts before the simulation start time, sequentially constructing role identity, psychological cognition, event opinion, and initial emotion to form a complete personalized Social-BDI belief system.
 
-一个有意思的现象：CoT 虽然在认知链一致性上优于 Direct 方法，但决策抗扰性反而是四者中最低的 (0.541)。原因在于思维链推理在单次调用中缺乏稳定的状态锚定，输入扰动会波及整个推理链条。而 EBDI 通过显式的信念状态和欲望系统提供了认知锚定效应——即使输入发生等价扰动，稳定的信念状态仍为决策提供了一致的锚点。
+### ⚠️ Ethical Statement & Data Access
 
-### 🌊 宏观涌现现象
+> **This study is conducted purely as data-driven scientific research aimed at advancing computational methods for public opinion simulation. All events are analyzed based entirely on publicly available data, and the authors hold no opinions, judgments, or positions regarding any events, individuals, or organizations involved. All descriptions present only publicly documented facts without expressing or implying any evaluative stance. The simulation framework is intended exclusively for academic research and methodological validation.**
 
-以下所有宏观现象均**非预设规则驱动**，而是由智能体交互自发涌现。
+📌 **About the data**: All datasets are collected from publicly available posts on the Sina Weibo platform. Due to the sensitive nature of social media data involving real users' public expressions, and in accordance with responsible data sharing principles, we do **not** provide open downloads or an apply-and-download mechanism.
 
-#### 🎢 舆情生命周期
+- 📧 If you are interested in the **experimental datasets** (preprocessed simulation-ready data) for academic research purposes, please contact us via email to discuss access.
+- 📧 If you need the **full-scale raw data** (original crawled data before preprocessing), please contact us via email for further discussion on data sharing agreements.
 
-<p align="center">
-  <img src="assets/fig_lifecycle.png" alt="Opinion Lifecycle" width="85%">
-</p>
-<p align="center"><b>图 2</b> 仿真舆情生命周期（西贝预制菜事件）：发博量变化（柱状图，左轴）与累积发博百分比的 S 曲线（实线，右轴）及 Logistic 拟合曲线（虚线）。E₁–E₇ 标记外生事件注入时间点。</p>
-
-仿真清晰展现了从爆发、平台、复燃到衰退的多阶段生命周期。E₁（食品卫生视频曝光）注入后发博量迅速攀升；E₂（罗永浩宣布停战）后活跃度回落进入平台期；E₄（创始人群聊截图流出）重新点燃讨论；E₅（官媒发声点评）触发全程最大峰值——典型的"死灰复燃"和"官媒定调引发二次爆发"效应。累积发博百分比呈 S 型增长曲线，与舆情传播学中的扩散理论高度吻合。
-
-#### 👥 多主体行为异质性
-
-<p align="center">
-  <img src="assets/fig_heterogeneity.png" alt="Agent Heterogeneity" width="90%">
-</p>
-<p align="center"><b>图 3</b> 四类智能体行为异质性：(a) 情绪强度时序演化；(b) 内容长度分布；(c) 多维行为特征雷达图。</p>
-
-Citizen 和 KOL 平均情绪强度分别为 0.645 和 0.603，始终处于高唤醒区间且事件刺激后波动更剧烈；Media 和 Government 稳定在低唤醒区间，呈现"公众情绪化、官方中性化"的分层模式。雷达图上四类智能体形成形态截然不同的多边形：Citizen 在情绪和互动频率上突出，KOL 在影响力和产出量上领先，Media 在内容质量和中性表达上占优，Government 以低频高权威为特征。
-
-#### ⚡ 情绪极化效应
-
-<p align="center">
-  <img src="assets/fig_polarization.png" alt="Emotional Polarization" width="55%">
-</p>
-<p align="center"><b>图 4</b> 情绪极化指数（PI）随仿真轮次的演化。实线为 PI 均值，阴影为 90% Bootstrap 置信区间。</p>
-
-基于情绪唤醒理论和情绪传染假说的验证结果：高唤醒情绪占比 73.5%，评论链情绪一致率达 0.772，升级/降级比 4.78（显著棘轮效应）。极化指数从早期 0.41 攀升至晚期 0.67（升幅 63%，$p < 0.001$），与回音室理论预测一致。
-
-#### 🕸️ 无标度拓扑与级联幂律
-
-<p align="center">
-  <img src="assets/fig_powerlaw.png" alt="Power-law Distribution" width="70%">
-</p>
-<p align="center"><b>图 5</b> 互动网络拓扑特性：(a) 度分布幂律拟合；(b) 级联规模 CCDF。</p>
-
-互动网络度分布幂律指数 $\gamma = 1.87$（$R^2 = 0.880$），落在真实社交网络普遍报告的 1.5–3 区间内；级联规模 CCDF 拟合 $\alpha = 3.70$（$R^2 = 0.880$），再现了"多数帖子无人问津、少数帖子病毒传播"的长尾现象。
-
-### ⚖️ 统计校准结果
-
-<p align="center">
-  <img src="assets/fig_calibration.png" alt="Calibration Results" width="80%">
-</p>
-<p align="center"><b>图 6</b> 三个事件的行为热度与分布校准结果。每行对应一个事件，左侧为活跃度时序对比，右侧为行为类型比例对比。</p>
-
-**行为层**
-
-| 数据集 | Rule-based ABM | POSIM w/ LLM | POSIM w/ CoT | **POSIM (Ours)** |
-| ------ | :------------: | :----------: | :----------: | :--------------------: |
-| LE     |     0.741     |    0.783    |    0.754    |    **0.821**    |
-| WL     |     0.746     |    0.789    |    0.800    |    **0.853**    |
-| XF     |     0.721     |    0.746    |    0.742    |    **0.804**    |
-
-POSIM 在三个数据集上的 BType JSD 均取得最优，WL 数据集 JSD 仅 0.073（远优于其他方法），这与校园讨论的行为模式相对集中有关——EBDI 的信念锚定机制使智能体准确捕捉了这种集中趋势。
-
-**内容层**
-
-| 数据集 | POSIM w/ LLM | POSIM w/ CoT | **POSIM (Ours)** |
-| ------ | :----------: | :----------: | :--------------------: |
-| LE     |    0.680    |    0.774    |    **0.910**    |
-| WL     |    0.640    |    0.673    |    **0.876**    |
-| XF     |    0.858    |    0.875    |    **0.926**    |
-
-LE 数据集上差距尤为显著（0.910 vs 0.680）——天价耳环事件中公众情绪对抗性强烈，缺乏欲望模块的动机约束使 LLM 生成的内容倾向中性化表达，无法再现真实舆情中的话语对抗格局。
-
-**拓扑层**
-
-| 数据集 | Rule-based ABM | POSIM w/ LLM | POSIM w/ CoT | **POSIM (Ours)** |
-| ------ | :------------: | :----------: | :----------: | :--------------------: |
-| LE     |     0.552     |    0.739    |    0.763    |    **0.896**    |
-| WL     |     0.736     |    0.592    |    0.784    |    **0.858**    |
-| XF     |     0.474     |    0.650    |    0.641    |    **0.698**    |
-
-> 综合三个层面：POSIM 行为、内容和拓扑指标相较于最优基线分别提升了 **5.0%**、**13.0%** 和 **8.5%**。
-
-### 🧩 消融实验
-
-在 LE 数据集上验证各模块的必要性：
-
-| 配置                 |  BType JSD ↓  |   Act. ρ ↑   |  Act. RMSE ↓  | Confr. Sim. ↑ |  \|ΔTTR\| ↓  |  \|ΔS̄\| ↓  |  Net. Sim. ↑  |  Casc. Sim. ↑  |
-| -------------------- | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: |
-| **Full POSIM** | **0.193** | **0.809** | **0.154** | **0.790** | **0.030** | **0.029** | **0.895** | **0.830** |
-| w/o Belief           |      0.258      |      0.762      |      0.172      |      0.706      |      0.058      |      0.067      |      0.861      |      0.773      |
-| w/o Desire           |      0.267      |      0.779      |      0.169      |      0.682      |      0.071      |      0.083      |      0.853      |      0.788      |
-| w/o Intention        |      0.237      |      0.802      |      0.159      |      0.728      |      0.064      |      0.055      |      0.858      |      0.814      |
-| w/o Hawkes           |      0.177      |      0.235      |      0.362      |      0.787      |      0.207      |      0.028      |      0.822      |      0.754      |
-
-各组件的功能分工非常清晰：
-
-- **移除霍克斯引擎**后 Act. ρ 从 0.809 骤降至 0.235——均匀激活完全丧失了时序波动特征
-- **移除信念模块**后对抗性相似度从 0.790 降至 0.706——丧失了对争议焦点的深层理解
-- **移除欲望模块**后内容层退化最严重（Confr. Sim. 降至 0.682，所有变体最低）——动机约束是驱动激烈话语的核心因素
-- **移除意图模块**后词汇多样性偏差恶化最大（0.064）、网络相似度降幅最大——三级思维链对多样性和拓扑至关重要
-
-### 🔍 案例研究：认知引导与反事实推演
-
-<p align="center">
-  <img src="assets/fig_cognitive_priming.png" alt="Cognitive Priming Experiment" width="90%">
-</p>
-<p align="center"><b>图 7</b> 认知引导实验：(a) 100% 覆盖率下四种条件的负面情绪比例时序演化；(b) 三种策略的 NER 变化幅度随覆盖率的剂量-效应关系。</p>
-
-**认知引导实验** — 200 个智能体，30 步仿真，第 5 步注入认知引导，测试 30%/60%/100% 三种覆盖率。理性认知引导（RC）将负面情绪比例从 0.844 降至 0.571（降幅 32.3%），覆盖率跨越 60% 后效果显著跃升，呈现清晰的**阈值效应**。而共情引导（EP）出现了反直觉的**共情悖论**——负面情绪比例反而高于对照组（0.878 vs 0.844），且随覆盖率增大进一步上升。这一现象在社会心理学中已有理论预期：共情理解他人痛苦的同时会产生更多移情性负面情绪，在仿真中被首次定量观察到。
-
-**反事实策略评估** — 保持外部事件不变，仅替换西贝的公关响应，对比五种策略。消费者对话（CD）效果最优（NER 0.744），及时致歉（SEA）次之（0.749），战略沉默（SS）表现最差（0.831）。策略效果呈**即时降温与逐步反弹**的动态模式——SEA 部署后 NER 一度降至 0.56，但随后在负面内容推荐的持续作用下逐步回升，精确模拟了公关效果衰减的常见现象。
+**Contact**: 📮 **15939048354@163.com**
 
 ---
 
-## 🌳 项目结构
+## 📊 Experimental Results
+
+### 🔬 Individual Behavioral Mechanism Calibration
+
+We randomly sample $N=500$ users as agents and run $T=12$ rounds. All methods operate under identical conditions:
+
+| Method | Cognitive-Behavior Chain Consistency (0–5) ↑ | Personality Stability (0–1) ↑ | Decision Robustness (0–1) ↑ |
+| --- | :---: | :---: | :---: |
+| Direct-Nothink (Qwen2.5-7B-Instruct) | 1.47 ± 0.50 | 0.478 ± 0.263 | 0.629 ± 0.240 |
+| Direct-Think (Qwen3-8B) | 1.75 ± 0.43 | 0.448 ± 0.269 | 0.603 ± 0.299 |
+| CoT (single-call serialized reasoning) | 3.09 ± 0.29 | 0.516 ± 0.272 | 0.541 ± 0.356 |
+| **Social-BDI (Ours)** | **4.64 ± 0.48** | **0.661 ± 0.215** | **0.695 ± 0.213** |
+
+> 💡 **Key insight**: CoT's decision robustness (0.541) is the lowest among all methods — serialized reasoning in a single call lacks stable state anchoring, and input perturbations propagate through the entire reasoning chain. Social-BDI's explicit belief states and desire subsystem provide effective cognitive grounding — even under equivalent input perturbations, stable belief states serve as consistent decision anchors.
+
+### 🌊 Emergent Collective Phenomena
+
+All macroscopic phenomena below emerge **spontaneously** from agent interactions — they are **not** driven by preset rules.
+
+<p align="center">
+  <img src="assets/fig_lifecycle_paper.png" alt="Opinion Lifecycle" width="80%">
+</p>
+<p align="center"><b>Figure 2.</b> Simulated public opinion lifecycle: posting volume (bars, left axis) and cumulative posting S-curve (solid line, right axis). E₁–E₇ mark exogenous event injection points.</p>
+
+- 🎢 **Public Opinion Lifecycle** — The simulation clearly exhibits multi-phase evolution from outbreak through plateau and resurgence to decay, with each phase transition traceable to specific exogenous events. The cumulative posting percentage follows an S-curve consistent with diffusion theory.
+- 👥 **Multi-Agent Behavioral Heterogeneity** — Ordinary users and opinion leaders maintain high emotional arousal (avg. 0.645 / 0.603); media and government agents stay in the low-arousal range, showing a "public emotionality, official neutrality" stratification.
+- ⚡ **Emotional Polarization** — High-arousal emotion ratio reaches 73.5%; comment-chain emotion consistency 0.772; escalation/de-escalation ratio 4.78 (significant ratchet effect). Polarization index rises from 0.41 → 0.67 (63% increase, $p < 0.001$).
+- 🕸️ **Scale-Free Topology & Cascade Power Law** — Degree distribution power-law exponent $\gamma = 1.87$ (within the 1.5–3 range of real social networks); cascade size CCDF exponent $\alpha = 3.70$, confirming the "most posts go unnoticed, a few go viral" long-tail phenomenon.
+
+### ⚖️ Statistical Calibration Results
+
+<p align="center">
+  <img src="assets/fig_three_event_calibration.png" alt="Calibration Results" width="80%">
+</p>
+<p align="center"><b>Figure 3.</b> Behavioral hotness and distribution calibration across three events. Left: simulated vs. real hotness curves; Right: action type proportion comparisons.</p>
+
+**Behavior Layer** (average scores, higher = better)
+
+| Dataset | Rule-based ABM | POSIM w/ Direct LLM | POSIM w/ CoT | **POSIM (Ours)** |
+| --- | :---: | :---: | :---: | :---: |
+| LE | 0.741 | 0.783 | 0.754 | **0.821** |
+| WL | 0.746 | 0.789 | 0.800 | **0.853** |
+| XF | 0.721 | 0.746 | 0.742 | **0.804** |
+
+**Content Layer** (average scores, higher = better)
+
+| Dataset | POSIM w/ Direct LLM | POSIM w/ CoT | **POSIM (Ours)** |
+| --- | :---: | :---: | :---: |
+| LE | 0.680 | 0.774 | **0.910** |
+| WL | 0.640 | 0.673 | **0.876** |
+| XF | 0.858 | 0.875 | **0.926** |
+
+**Topology Layer** (average scores, higher = better)
+
+| Dataset | Rule-based ABM | POSIM w/ Direct LLM | POSIM w/ CoT | **POSIM (Ours)** |
+| --- | :---: | :---: | :---: | :---: |
+| LE | 0.552 | 0.739 | 0.763 | **0.896** |
+| WL | 0.736 | 0.592 | 0.784 | **0.858** |
+| XF | 0.474 | 0.650 | 0.641 | **0.698** |
+
+> 📈 **Overall**: POSIM's behavior, content, and topology metrics improve by **5.0%**, **13.0%**, and **8.5%** respectively over the best baselines across all three datasets.
+
+### 🔍 Governance-Oriented Case Studies
+
+**Cognitive Priming Experiment** — Rational cognition priming (RC) reduces negative emotion ratio from 0.844 to 0.571 (32.3% reduction) with a clear threshold effect beyond 60% coverage. The most theoretically significant finding is the **empathy paradox**: empathy priming (EP) *increases* negative sentiment (0.878 vs. 0.844 control), showing a reverse dose-response effect. Empathetic understanding heightens sensitivity to others' suffering, which through Social-BDI's cognitive pipeline and social contagion mechanisms, amplifies cascading negative sentiment diffusion.
+
+**Counterfactual Strategy Evaluation** — Consumer Dialogue (CD) yields the best crisis response (NER 0.744), followed by Swift Early Apology (SEA, 0.749) and Proactive Transparency (PT, 0.773); Strategic Silence (SS) performs worst (0.831), confirming that silence is not optimal in crisis communication.
+
+---
+
+## 🌳 Project Structure
 
 ```
 posim/
-├── posim/                          # 核心框架
-│   ├── agents/                     # 智能体模块
-│   │   ├── base_agent.py           # 智能体基类（认知链路调度、非LLM决策）
-│   │   ├── citizen_agent.py        # 普通网民智能体
-│   │   ├── kol_agent.py            # 意见领袖智能体
-│   │   ├── media_agent.py          # 媒体智能体
-│   │   ├── government_agent.py     # 政府智能体
-│   │   └── ebdi/                   # EBDI 认知架构
-│   │       ├── belief/             # 信念子系统（更新、衰减、偏差注入）
-│   │       ├── desire/             # 欲望子系统（动机推断）
-│   │       ├── intention/          # 意图子系统（三级思维链）
-│   │       └── memory/             # 流式记忆库（时间衰减 + 语义检索）
-│   ├── engine/                     # 仿真引擎
-│   │   ├── simulator.py            # 仿真主循环（异步并发执行）
-│   │   ├── hawkes_process.py       # 霍克斯自激点过程
-│   │   └── time_engine.py          # 时间引擎（昼夜节律调制）
-│   ├── environment/                # 仿真环境
-│   │   ├── recommendation.py       # 内容推荐（双通道召回 + 语义去重）
-│   │   ├── social_network.py       # 三层社交网络
-│   │   ├── hot_search.py           # 热搜榜单
-│   │   └── event_queue.py          # 外部事件队列
-│   ├── evaluation/                 # 评估框架
-│   │   ├── calibration/            # 统计校准（行为/热度/情感/对抗性/网络拓扑）
-│   │   ├── mechanism/              # 宏观涌现（生命周期/异质性/极化/传播结构）
-│   │   └── evaluator_manager.py    # 评估管理器
-│   ├── micro_user_vail/            # 微观行为机制验证
-│   ├── llm/                        # LLM 资源管理
-│   │   ├── api_pool.py             # 多端点资源池（轮询负载均衡、故障转移）
-│   │   └── llm_client.py           # LLM 调用客户端
-│   ├── prompts/                    # 提示词模板（按智能体类型组织）
-│   ├── config/                     # 配置管理（dataclass schema + 加载器）
-│   ├── storage/                    # 数据存储（SQLite + 日志）
-│   └── web/                        # 实时监控（WebSocket + HTML 面板）
-├── scripts/                        # 仿真与评估脚本
-│   ├── tianjiaerhuan/              # 天价耳环事件（配置 + 运行 + 评估）
-│   ├── wudatushuguan/              # 武大图书馆事件
-│   └── xibeiyuzhicai/              # 西贝预制菜事件
-├── data/                           # 数据集
-├── assets/                         # 静态资源（Logo、论文配图）
-├── papers/                         # 论文源文件
-└── requirements.txt
+├── posim/                                 # Core Framework
+│   ├── agents/                            # Agent Module
+│   │   ├── base_agent.py                  # Base agent (cognitive pipeline scheduling)
+│   │   ├── citizen_agent.py               # Ordinary user agent
+│   │   ├── kol_agent.py                   # Opinion leader agent
+│   │   ├── media_agent.py                 # Media agent
+│   │   ├── government_agent.py            # Government agent
+│   │   └── ebdi/                          # Social-BDI Cognitive Architecture
+│   │       ├── belief/                    # Belief Subsystem
+│   │       │   ├── belief_system.py       # Belief system orchestrator
+│   │       │   ├── belief_updater.py      # LLM-driven belief update
+│   │       │   ├── emotion_belief.py      # Emotional arousal belief
+│   │       │   ├── event_belief.py        # Event opinion belief
+│   │       │   ├── identity_belief.py     # Role identity belief
+│   │       │   └── psychological_belief.py # Psychological cognition belief
+│   │       ├── desire/                    # Desire Subsystem
+│   │       │   ├── desire_system.py       # Motivation inference engine
+│   │       │   └── desire_types.py        # Predefined motivation types
+│   │       ├── intention/                 # Intention Subsystem
+│   │       │   ├── __init__.py
+│   │       │   └── intention_system.py    # Multi-level chain-of-thought planning
+│   │       └── memory/                    # Streaming Memory
+│   │           ├── memory_retrieval.py    # Recency-relevance retrieval scoring
+│   │           └── stream_memory.py       # Time-decayed memory store
+│   ├── config/                            # Configuration
+│   │   ├── config_manager.py              # Configuration loader
+│   │   └── config_schema.py              # Dataclass configuration schema
+│   ├── data/                              # Data Management
+│   │   ├── data_loader.py                 # Data loading utilities
+│   │   └── preprocessor.py               # Data preprocessing
+│   ├── engine/                            # Simulation Engine
+│   │   ├── simulator.py                   # Main simulation loop (async concurrent)
+│   │   ├── hawkes_process.py              # Hawkes self-exciting point process
+│   │   └── time_engine.py                # Temporal engine (circadian modulation)
+│   ├── environment/                       # Simulation Environment
+│   │   ├── recommendation.py              # Dual-channel content recommendation
+│   │   ├── social_network.py              # Three-layer directed social network
+│   │   ├── hot_search.py                  # Trending topics
+│   │   └── event_queue.py                # External event queue
+│   ├── evaluation/                        # Evaluation Framework
+│   │   ├── __init__.py
+│   │   ├── base.py                        # Base evaluator class
+│   │   ├── data_loader.py                 # Evaluation data loader
+│   │   ├── evaluator_manager.py           # Evaluation orchestrator
+│   │   ├── utils.py                       # Evaluation utilities
+│   │   ├── visualization.py               # Visualization tools
+│   │   ├── calibration/                   # Statistical Calibration
+│   │   │   ├── __init__.py
+│   │   │   ├── behavior.py               # Behavior layer (JSD, ρ, RMSE)
+│   │   │   ├── emotion.py                # Emotion calibration
+│   │   │   ├── hotness.py                # Hotness curve calibration
+│   │   │   ├── network.py                # Network topology & cascade
+│   │   │   ├── opinion_index.py          # Discourse irrationality index
+│   │   │   └── topic.py                  # Topic analysis
+│   │   └── mechanism/                     # Phenomenon Emergence Validation
+│   │       ├── __init__.py
+│   │       ├── agent_behavior.py          # Agent behavior analysis
+│   │       ├── lifecycle.py               # Opinion lifecycle analysis
+│   │       ├── macro_phenomenon.py        # Macro phenomenon validation
+│   │       ├── opinion_polarization.py    # Polarization analysis
+│   │       └── propagation_structure.py   # Cascade & network structure
+│   ├── llm/                               # LLM Resource Management
+│   │   ├── api_pool.py                    # Multi-endpoint pool (load balancing, failover)
+│   │   └── llm_client.py                 # Unified LLM call client
+│   ├── prompts/                           # Prompt Templates (per agent type)
+│   │   ├── prompt_loader.py               # Dynamic prompt loader
+│   │   ├── ablation_prompts.py            # Ablation experiment prompts
+│   │   ├── citizen_prompts/               # Ordinary user prompts
+│   │   │   ├── belief_prompts.py
+│   │   │   ├── desire_prompts.py
+│   │   │   └── intention_prompts.py
+│   │   ├── kol_prompts/                   # Opinion leader prompts
+│   │   │   ├── belief_prompts.py
+│   │   │   ├── desire_prompts.py
+│   │   │   └── intention_prompts.py
+│   │   ├── media_prompts/                 # Media prompts
+│   │   │   ├── belief_prompts.py
+│   │   │   ├── desire_prompts.py
+│   │   │   └── intention_prompts.py
+│   │   └── government_prompts/            # Government prompts
+│   │       ├── belief_prompts.py
+│   │       ├── desire_prompts.py
+│   │       └── intention_prompts.py
+│   └── storage/                           # Data Storage
+│       ├── database.py                    # SQLite database
+│       └── log_manager.py                # Simulation logging
+├── scripts/                               # Simulation & Evaluation Scripts
+│   ├── tianjiaerhuan/                     # LE — Luxury Earring Event
+│   │   ├── run_with_monitor.py            # Run simulation with live monitoring
+│   │   └── evaluate.py                   # Run evaluation pipeline
+│   ├── wudatushuguan/                     # WL — WHU Library Event
+│   │   ├── run_with_monitor.py
+│   │   ├── evaluate.py
+│   │   └── visualize_network.py          # Network visualization
+│   └── xibeiyuzhicai/                     # XF — Xibei Prepared Food Event
+│       ├── run_with_monitor.py
+│       └── evaluate.py
+├── docs/                                  # Project Homepage (GitHub Pages)
+│   ├── index.html
+│   ├── main.js
+│   └── styles.css
+├── assets/                                # Static Resources (logo, figures)
+└── requirements.txt                       # Python dependencies
 ```
 
 ---
 
-## ⚙️ 环境配置与安装
+## ⚙️ Installation
 
-### 💻 系统要求
+### 💻 System Requirements
 
-| 项目   | 最低要求 | 推荐配置                           |
-| ------ | -------- | ---------------------------------- |
-| Python | ≥ 3.8   | 3.10                               |
-| CUDA   | —       | ≥ 11.0（本地嵌入模型加速）        |
-| 内存   | 16 GB    | 32 GB+（大规模仿真）               |
-| GPU    | —       | 推荐（加速 sentence-transformers） |
+| Item | Minimum | Recommended |
+| --- | --- | --- |
+| Python | ≥ 3.8 | 3.10 |
+| CUDA | — | ≥ 11.0 (local embedding acceleration) |
+| RAM | 16 GB | 32 GB+ (large-scale simulation) |
+| GPU | — | Recommended (sentence-transformers acceleration) |
 
-### 📦 安装
+### 📦 Setup
 
 ```bash
-git clone https://github.com/2Cromwell/POSIM.git
-cd POSIM
+git clone https://github.com/DeepCogLab/posim.git
+cd posim
 
-# 推荐使用 conda
+# Recommended: use conda
 conda create -n posim python=3.10
 conda activate posim
 
 pip install -r requirements.txt
 ```
 
-### 📚 依赖说明
+### 📚 Dependencies
 
-| 包                        | 版本      | 用途                                           |
-| ------------------------- | --------- | ---------------------------------------------- |
-| `numpy`                 | ≥ 1.24.0 | 数值计算、霍克斯过程强度采样                   |
-| `openai`                | ≥ 1.0.0  | LLM API 调用（兼容 OpenAI 格式的任意服务）     |
-| `pydantic`              | ≥ 2.0.0  | 配置验证与结构化数据管理                       |
-| `sentence-transformers` | ≥ 2.2.0  | 语义嵌入（推荐系统、内容去重、记忆检索）       |
-| `torch`                 | ≥ 2.0.0  | 深度学习后端（嵌入模型推理）                   |
-| `matplotlib`            | ≥ 3.7.0  | 评估可视化                                     |
-| `neo4j`                 | ≥ 5.0.0  | 图数据库存储社交网络（可选，不启用不影响运行） |
-| `websockets`            | ≥ 12.0   | 仿真实时监控                                   |
+| Package | Version | Purpose |
+| --- | --- | --- |
+| `numpy` | ≥ 1.24.0 | Numerical computation, Hawkes process intensity sampling |
+| `openai` | ≥ 1.0.0 | LLM API calls (compatible with any OpenAI-format service) |
+| `pydantic` | ≥ 2.0.0 | Configuration validation & structured data management |
+| `sentence-transformers` | ≥ 2.2.0 | Semantic embeddings (recommendation, deduplication, memory) |
+| `torch` | ≥ 2.0.0 | Deep learning backend (embedding model inference) |
+| `matplotlib` | ≥ 3.7.0 | Evaluation visualization |
+| `neo4j` | ≥ 5.0.0 | Graph database for social networks (optional) |
+| `websockets` | ≥ 12.0 | Real-time simulation monitoring |
 
 ---
 
-## 🚀 快速开始
+## 🚀 Quick Start
 
-### 1️⃣ 配置 LLM
+### 1️⃣ Configure LLM
 
-POSIM 支持任何兼容 OpenAI API 格式的服务（硅基流动、vLLM 本地部署、OpenAI 等）。在仿真配置文件中设置：
+POSIM supports **any OpenAI-compatible API service**. Here are common options:
+
+#### 🔹 Option A: SiliconFlow (Recommended for Chinese scenarios)
+
+[SiliconFlow](https://siliconflow.cn/) provides cost-effective access to open-source LLMs (Qwen, DeepSeek, etc.) with an OpenAI-compatible API interface.
+
+1. Sign up at [siliconflow.cn](https://siliconflow.cn/) and obtain your API key
+2. Configure the endpoint in your simulation config:
 
 ```json
 {
@@ -497,10 +554,10 @@ POSIM 支持任何兼容 OpenAI API 格式的服务（硅基流动、vLLM 本地
     "embedding_device": "cuda",
     "llm_api_configs": [
       {
-        "name": "primary",
+        "name": "siliconflow-qwen",
         "enabled": true,
-        "base_url": "https://your-api-endpoint/v1/",
-        "api_key": "your-api-key",
+        "base_url": "https://api.siliconflow.cn/v1/",
+        "api_key": "sk-your-siliconflow-api-key",
         "model": "Qwen/Qwen2.5-14B-Instruct",
         "temperature": 0.7,
         "top_p": 0.9,
@@ -511,134 +568,150 @@ POSIM 支持任何兼容 OpenAI API 格式的服务（硅基流动、vLLM 本地
 }
 ```
 
-框架通过统一资源池管理多个 LLM 端点，支持多模型混合驱动、按用途路由、端点级并发控制、轮询负载均衡和故障自动转移。为避免 LLM 输出同质化，每次调用的采样参数会进行随机扰动。
+#### 🔹 Option B: Local Deployment (vLLM)
 
-### 2️⃣ 准备数据
+```json
+{
+  "base_url": "http://localhost:8000/v1/",
+  "api_key": "not-needed",
+  "model": "Qwen/Qwen2.5-14B-Instruct"
+}
+```
 
-每个仿真场景需要四个数据文件：
+#### 🔹 Option C: OpenAI / Other Providers
 
-| 文件                   | 内容                                                                 |
-| ---------------------- | -------------------------------------------------------------------- |
-| `users.json`         | 用户画像（ID、昵称、性别、粉丝数、认证类型、个人描述、历史行为摘要） |
-| `events.json`        | 外部事件序列（注入时间、事件描述、影响强度）                         |
-| `initial_posts.json` | 初始帖子数据（内容、作者、时间、类型、关键词）                       |
-| `relations.json`     | 用户间关注关系                                                       |
+```json
+{
+  "base_url": "https://api.openai.com/v1/",
+  "api_key": "sk-your-openai-key",
+  "model": "gpt-4o-mini"
+}
+```
 
-### 3️⃣ 运行仿真
+> 💡 **Multi-endpoint support**: The framework manages multiple LLM endpoints through a unified API pool with round-robin load balancing, per-usage-type model routing (belief/desire/intention), concurrency control, and automatic failover. To prevent output homogenization, sampling parameters are randomly perturbed on each call.
+
+### 2️⃣ Prepare Data
+
+Each simulation scenario requires four data files:
+
+| File | Contents |
+| --- | --- |
+| `users.json` | User profiles (ID, nickname, gender, followers, verification type, description, historical behavior summary) |
+| `events.json` | External event sequence (injection time, event description, impact intensity) |
+| `initial_posts.json` | Initial post data (content, author, timestamp, type, keywords) |
+| `relations.json` | User follow relationships |
+
+### 3️⃣ Run Simulation
 
 ```bash
 python scripts/tianjiaerhuan/run_with_monitor.py
 ```
 
-仿真流程：加载用户数据 → 初始化 EBDI 信念系统 → 构建社交网络与推荐系统 → 启动霍克斯时间引擎 → 逐步执行认知决策管线（推荐→信念→欲望→意图，异步并发）→ 情绪传染 → 更新热搜 → 记录轨迹。支持 WebSocket 实时监控面板。
+Simulation flow: Load user data → Initialize Social-BDI belief system → Build social network & recommendation system → Start Hawkes temporal engine → Execute cognitive pipeline per step (recommendation → belief → desire → intention, async concurrent) → Emotion contagion → Update trending → Record trajectory. Supports WebSocket real-time monitoring dashboard.
 
-### 4️⃣ 评估
+### 4️⃣ Evaluate
 
 ```bash
-# 单事件评估
 python scripts/tianjiaerhuan/evaluate.py
-
-# 批量评估
-python scripts/run_all_evaluations.py
 ```
 
-评估结果输出至 `vis_results/`，包含行为校准、热度校准、情感校准、话语对抗性校准、网络拓扑校准等可视化图表，以及 `evaluation_report.json` 综合报告。
+Evaluation outputs are saved to `vis_results/`, including behavior calibration, hotness calibration, emotion calibration, discourse irrationality calibration, network topology calibration visualizations, and a comprehensive `evaluation_report.json`.
 
 <details>
-<summary><b>完整配置参数参考</b></summary>
+<summary><b>📋 Full Configuration Parameters</b></summary>
 
-| 参数                           | 描述                 | 默认值 |
-| ------------------------------ | -------------------- | :----: |
-| `time_granularity`           | 仿真时间步长（分钟） |   10   |
-| `hawkes_mu`                  | 霍克斯过程背景活跃率 |  0.01  |
-| `hawkes_internal.alpha`      | 内生激励强度         | 0.005 |
-| `hawkes_internal.beta`       | 内生激励衰减率       |  0.16  |
-| `hawkes_external.alpha`      | 外生激励强度         |  0.08  |
-| `hawkes_external.beta`       | 外生激励衰减率       | 0.005 |
-| `total_scale`                | 活跃度缩放因子       |  2000  |
-| `circadian_strength`         | 昼夜节律调制强度     |  0.3  |
-| `recommend_count`            | 每步推荐内容数       |   10   |
-| `comment_count`              | 每帖展示评论数       |   5   |
-| `homophily_weight`           | 推荐同质性权重       |  0.3  |
-| `popularity_weight`          | 推荐热度权重         |  0.3  |
-| `recency_weight`             | 推荐新鲜度权重       |  0.2  |
-| `exploration_rate`           | 推荐探索率           |  0.2  |
-| `relation_weight`            | 关系链通道权重       |  0.5  |
-| `hot_search_update_interval` | 热搜更新间隔（分钟） |   15   |
+| Parameter | Description | Default |
+| --- | --- | :---: |
+| `time_granularity` | Simulation time step (minutes) | 10 |
+| `hawkes_mu` | Hawkes background rate | 0.01 |
+| `hawkes_internal.alpha` | Endogenous excitation intensity | 0.005 |
+| `hawkes_internal.beta` | Endogenous decay rate | 0.16 |
+| `hawkes_external.alpha` | Exogenous excitation intensity | 0.08 |
+| `hawkes_external.beta` | Exogenous decay rate | 0.005 |
+| `total_scale` | Activity scaling factor | 2000 |
+| `circadian_strength` | Circadian rhythm modulation strength | 0.3 |
+| `recommend_count` | Recommended items per step | 10 |
+| `comment_count` | Displayed comments per post | 5 |
+| `homophily_weight` | Recommendation homophily weight | 0.3 |
+| `popularity_weight` | Recommendation popularity weight | 0.3 |
+| `recency_weight` | Recommendation freshness weight | 0.4 |
+| `exploration_rate` | Recommendation exploration rate | 0.2 |
+| `relation_weight` | Relationship channel weight | 0.5 |
+| `hot_search_update_interval` | Trending update interval (minutes) | 15 |
 
 </details>
 
 ---
 
-## 🔌 扩展指南
+## 🔌 Extension Guide
 
-得益于高度解耦的模块化设计，POSIM 的各核心组件可通过标准接口独立替换与扩展。
+Thanks to the highly decoupled modular design, POSIM's core components can be independently replaced and extended through standard interfaces.
 
 <details>
-<summary><b>添加新的智能体类型</b></summary>
+<summary><b>➕ Add a New Agent Type</b></summary>
 
-1. 在 `posim/agents/` 下继承 `BaseAgent` 创建新类
-2. 在 `posim/prompts/` 下创建对应的角色提示词模板（信念/欲望/意图三套）
-3. 在仿真配置中注册新类型
+1. Inherit `BaseAgent` in `posim/agents/` to create a new class
+2. Create corresponding role prompt templates in `posim/prompts/` (belief / desire / intention)
+3. Register the new type in the simulation configuration
 
 </details>
 
 <details>
-<summary><b>替换认知架构</b></summary>
+<summary><b>🔄 Replace the Cognitive Architecture</b></summary>
 
-EBDI 三个子系统通过结构化中间状态通信，可独立替换：
+The three Social-BDI subsystems communicate through structured intermediate states and can be independently replaced:
 
-- 信念子系统：`posim/agents/ebdi/belief/`
-- 欲望子系统：`posim/agents/ebdi/desire/`
-- 意图子系统：`posim/agents/ebdi/intention/`
+- Belief subsystem: `posim/agents/ebdi/belief/`
+- Desire subsystem: `posim/agents/ebdi/desire/`
+- Intention subsystem: `posim/agents/ebdi/intention/`
 
-只需保持输入输出格式一致即可。
-
-</details>
-
-<details>
-<summary><b>切换时间引擎</b></summary>
-
-在 `posim/engine/` 下实现新的时间引擎模块，遵循相同的强度计算和智能体采样接口。
+Simply maintain the same input/output format.
 
 </details>
 
 <details>
-<summary><b>接入新的评估指标</b></summary>
+<summary><b>⏱️ Switch the Temporal Engine</b></summary>
 
-在 `posim/evaluation/calibration/` 或 `posim/evaluation/mechanism/` 下添加新的评估器类，并在 `evaluator_manager.py` 中注册。
+Implement a new temporal engine module in `posim/engine/`, following the same intensity computation and agent sampling interface.
 
 </details>
 
 <details>
-<summary><b>接入新的 LLM 服务</b></summary>
+<summary><b>📊 Add Evaluation Metrics</b></summary>
 
-在配置文件 `llm_api_configs` 中添加新端点即可——框架通过统一的 OpenAI 兼容接口调用，无需修改代码。支持本地 vLLM 部署、云端 API 服务等。
+Add a new evaluator class in `posim/evaluation/calibration/` or `posim/evaluation/mechanism/`, and register it in `evaluator_manager.py`.
+
+</details>
+
+<details>
+<summary><b>🔗 Connect a New LLM Service</b></summary>
+
+Simply add a new endpoint in the `llm_api_configs` configuration — the framework uses a unified OpenAI-compatible interface, no code changes needed. Supports local vLLM deployments, SiliconFlow, OpenAI, and other cloud API services.
 
 </details>
 
 ---
 
-## 📝 引用
+## 📄 License
 
-如果本工作对您的研究有所帮助，请引用：
+This project is open-sourced under the [MIT License](LICENSE).
 
-```bibtex
-@article{posim2025,
-  title   = {POSIM: A General-Purpose Social Media Public Opinion Simulation
-             Framework Based on Metacognitive Agents},
-  author  = {},
-  journal = {Information Processing \& Management},
-  year    = {2025}
-}
-```
+---
 
-## 📄 许可证
+## 🚧 Online System — Coming Soon
 
-本项目采用 [MIT License](LICENSE) 开源。
+🔥 **A full-featured online public opinion simulation system is under active development!** The system will provide an end-to-end pipeline covering **public opinion sensing → analysis → simulation & forecasting**, enabling researchers and practitioners to conduct computational experiments directly from a web interface.
+
+If you are interested in this project and would like to contribute to its development, we warmly welcome you to join us! Feel free to reach out via email: **15939048354@163.com**
+
+<p align="center">
+  <img src="assets/system_prototype_1.png" alt="System Prototype 1" width="420">&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="assets/system_prototype_2.png" alt="System Prototype 2" width="420">
+</p>
+<p align="center"><em>🖼️ Early-stage system demo prototypes — the official system is coming soon, stay tuned!</em></p>
 
 ---
 
 <p align="center">
-  <i>如有问题或建议，欢迎提交 <a href="https://github.com/2Cromwell/POSIM/issues">Issue</a></i>
+  <i>Questions or suggestions? Feel free to open an <a href="https://github.com/DeepCogLab/posim/issues">Issue</a> 💬</i>
 </p>

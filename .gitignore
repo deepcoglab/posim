@@ -7,10 +7,21 @@
 /data_process/xibeiyuzhicai/output
 /data_process/
 /cosmograph_demo
-/models/
+
 /scripts/tianjiaerhuan/output
 /scripts/wudatushuguan/output
 /scripts/xibeiyuzhicai/output
+
+/scripts/tianjiaerhuan/data
+/scripts/wudatushuguan/data
+/scripts/xibeiyuzhicai/data
+
+/scripts/extract_ablation_metrics.py
+/scripts/extract_all_metrics.py
+/scripts/run_ablation_batch.py
+/scripts/run_all_evaluations.py
+
+/web/
 
 # Ignore all output directories recursively
 **/output/
@@ -27,8 +38,9 @@ venv/
 ENV/
 .idea/
 .DS_Store
-.gitignore
 .conda
+
+.cursorignore
 
 .claude
 .vscode
@@ -44,7 +56,16 @@ ENV/
 *.fdb_latexmk
 *.fls
 *.toc
-# Ignore papers directory (personal academic work)
+# Ignore papers directory (under review)
 /posim_papers/
-# Ignore web interface directory (personal development)
-/web/
+
+# Ignore large model files (users download separately)
+/models/
+
+# Ignore micro validation module and web monitoring
+/posim/micro_user_vail/
+/posim/web/
+
+# Ignore old/draft README files
+README_EN.md
+README_NEW.md
