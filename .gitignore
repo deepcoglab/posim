@@ -55,7 +55,8 @@ ENV/
 *.out
 *.fdb_latexmk
 *.fls
-*.toc
+*.
+.cursorignore
 # Ignore papers directory (under review)
 /posim_papers/
 
@@ -69,3 +70,5 @@ ENV/
 # Ignore old/draft README files
 README_EN.md
 README_NEW.md
+
+
