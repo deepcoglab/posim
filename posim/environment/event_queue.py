@@ -1,4 +1,3 @@
-"""外部环境事件队列"""
 from typing import List, Dict, Any
 from dataclasses import dataclass
 from datetime import datetime

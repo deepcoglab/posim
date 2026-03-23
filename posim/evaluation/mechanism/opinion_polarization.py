@@ -1,27 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-观点极化机制验证
-
-多维度极化分析:
-1. 立场极化 (stance-based) — 从 expression_strategy / stance 字段提取
-2. 情感极化 (sentiment-based) — 基于 NLP 情感分值或关键词
-3. 情绪极化 (emotion-based) — 基于情绪强度与类型分布
-
-核心指标:
-- Esteban-Ray 极化指数 (简化)
-- Sarle 双峰系数 (Bimodality Coefficient)
-- 标准差离散度 / 非中立比率 / 对抗强度
-
-可视化 (每张图单独 figure):
-- stance_distribution.png          水平条形图
-- polarization_over_time.png       多指标折线 + fill_between
-- sentiment_polarization_over_time.png  情感极化时序
-- polarization_metrics_summary.png  指标对比柱状图
-- stance_scatter.png                散点图
-- stance_violin.png                 小提琴图
-- interaction_network_*.png         转发互动网络 (networkx 可用时)
-- *_comparison.png                  真实数据对比版本
-"""
 import logging
 import warnings
 import numpy as np

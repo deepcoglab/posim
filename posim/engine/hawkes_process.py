@@ -1,21 +1,3 @@
-"""
-霍克斯点过程 - 归一化强度的时间驱动活跃度模拟
-
-核心公式:
-    λ_raw(t) = μ + Σ α_int × w_i × exp(-β_int × Δt) + Σ α_ext × inf_i × exp(-β_ext × Δt)
-    λ_norm(t) = 1 - exp(-λ_raw(t))                          ∈ [0, 1]
-    λ(t) = λ_norm(t) × circadian_blend(t)
-
-激活数:
-    expected = total_scale × λ(t) × (time_granularity / 60)
-    activated = Poisson(expected)
-
-设计要点:
-    - 软饱和归一化 1-exp(-x) 使强度自然稳定在 [0,1]，参数微调不会引起剧烈波动
-    - total_scale 是唯一控制总量的线性旋钮（含义：峰值时每小时目标激活数）
-    - circadian_blend = (1-s) + s×curve(h)，s 控制昼夜影响强度
-    - 时间单位统一为分钟
-"""
 import logging
 import numpy as np
 from typing import List, Tuple, Dict, Any, Set
@@ -27,7 +9,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class HawkesEvent:
     """霍克斯事件"""
-    time: float         # 相对时间（分钟）
+    time: float         # 相对时间, 单位分钟
     influence: float    # 事件影响力
     event_type: str     # external / internal
     source: str = ""
@@ -54,9 +36,9 @@ class IntensityDebugInfo:
     internal_events_count: int
     internal_contribution: float  # 内部原始累加
     external_contribution: float  # 外部原始累加
-    internal_raw: float           # 同 internal_contribution（兼容）
-    external_raw: float           # 同 external_contribution（兼容）
-    base_intensity_before_circadian: float  # λ_norm（归一化后）
+    internal_raw: float           # 同 internal_contribution
+    external_raw: float           # 同 external_contribution
+    base_intensity_before_circadian: float  # λ_norm
     final_intensity: float                  # λ_norm × circadian
     top_internal_contributions: List[Dict[str, Any]] = field(default_factory=list)
     top_external_contributions: List[Dict[str, Any]] = field(default_factory=list)
@@ -203,7 +185,7 @@ class HawkesProcess:
         circ = self._circadian_blend(t)
         final = norm * circ
 
-        # top 贡献（仅在 debug 需要时计算）
+        # top 贡献
         top_int, top_ext = [], []
         if top_n > 0:
             for e in self.internal_events:

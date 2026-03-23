@@ -1,4 +1,3 @@
-"""欲望类型定义"""
 from enum import Enum
 from dataclasses import dataclass
 from typing import Optional

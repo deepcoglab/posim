@@ -1,6 +1,3 @@
-"""
-仿真核心引擎 - 整合各模块执行仿真
-"""
 import asyncio
 import random
 import logging
@@ -140,7 +137,7 @@ class Simulator:
                 'enabled': mn.enabled, 'min_rate': mn.min_rate, 'max_rate': mn.max_rate
             },
         )
-        # 设置仿真开始时间的小时数（用于昼夜节律）
+        # 设置仿真开始时间的小时数, 用于昼夜节律
         start_dt = datetime.fromisoformat(self.config.start_time)
         self.hawkes.set_start_hour(start_dt.hour)
         
@@ -153,7 +150,7 @@ class Simulator:
         # 智能体池
         self.agents: Dict[str, BaseAgent] = {}
         
-        # 事件背景（用于注入系统提示词）
+        # 事件背景, 用于注入系统提示词
         self.event_background = self.config.event_background
         
         # 仿真统计
@@ -165,7 +162,7 @@ class Simulator:
             'actions_per_step': []
         }
         
-        # 上一步的行为统计（用于调试日志）
+        # 上一步的行为统计
         self.last_step_stats = {
             'step': 0,
             'actions_count': 0,
@@ -184,10 +181,10 @@ class Simulator:
         self.step_callback = None
         self.action_callback = None
         
-        # 实时信号回调（用于WebSocket推送）
+        # 实时信号回调
         self.signal_callback: Optional[Callable[[StepSignals], None]] = None
         
-        # 信号历史（用于前端展示）
+        # 信号历史
         self.signals_history: List[StepSignals] = []
     
     def load_agents(self, agents_data: List[Dict]):
@@ -300,11 +297,11 @@ class Simulator:
         
         logger.debug(f"\n{'='*50}\n📍 Step {step_num} | Time: {current_time}\n{'='*50}")
         
-        # 输出上一轮行为统计（如果不是第一步）
+        # 输出上一轮行为统计
         if step_num > 1 and self.last_step_stats['step'] > 0:
             self._log_last_step_stats()
             
-        # 1. 获取当前外部全局事件（仅global_broadcast加入霍克斯过程）
+        # 1. 获取当前外部全局事件
         global_events = self.event_queue.get_current_events(current_time, window_minutes=self.config.time_granularity)
         # 智能体接收历史近5条事件作为上下文，而非仅本步事件
         agent_events = self.event_queue.get_recent_events(current_time, count=5)
@@ -322,7 +319,7 @@ class Simulator:
             triggered_events.append(evt.content[:50])
             logger.info(f"📰 External Event (influence={influence}): {evt.content}")
         
-        # 2. 处理节点事件（node_post）：直接触发对应智能体执行（与全局事件一致使用 time_granularity）
+        # 2. 处理节点事件 node_post, 直接触发对应智能体执行
         node_events = self.event_queue.get_node_events(current_time, window_minutes=self.config.time_granularity)
         for evt in node_events:
             for source_id in evt.source:
@@ -334,7 +331,7 @@ class Simulator:
                         self._record_action(intention, current_time, agent)
                         logger.info(f"🎯 Node Event triggered action for {agent.profile.username}: {intention.text[:30]}...")
         
-        # 3. 计算当前强度并确定激活数量（使用带调试信息的版本）
+        # 3. 计算当前强度并确定激活数量
         intensity, intensity_debug = self.hawkes.get_intensity_with_debug(elapsed)
         
         if self.decision_mode == 'wo_hawkes':
@@ -358,7 +355,7 @@ class Simulator:
         # 输出详细的强度和激活数计算过程
         self._log_intensity_debug(intensity_debug, activation_debug)
         
-        # 4. 采样激活智能体（保证最小激活数以充分利用API端点）
+        # 4. 采样激活智能体
         min_agents = max(1, len(self.api_pool.clients)) if self.config.use_llm else 1
         if 0 < num_activate < min_agents:
             logger.debug(f"   ⬆️ 提升激活数 {num_activate} -> {min_agents} (最小端点利用保证)")
@@ -376,7 +373,7 @@ class Simulator:
             logger.info(f"👥 Activated {total} agents: {agent_names}{'...' if total > 5 else ''}")
             logger.info(f"   📊 Distribution: {type_dist}")
         
-        # 5. 并发执行智能体行为（分阶段执行以最大化API利用率）
+        # 5. 并发执行智能体行为
         step_actions = []
         agent_exposed_posts = {}  # 收集每个智能体的曝光博文
         if activated_agents:
@@ -405,7 +402,7 @@ class Simulator:
                         step_actions.extend(result)
             self.perf_metrics.record_agent_execution(time.time() - exec_start)
         
-        # 6. 情绪传染（基于曝光博文作者情绪）
+        # 6. 情绪传染
         self._apply_emotion_contagion(activated_agents, agent_exposed_posts, current_time)
         
         # 7. 更新统计
@@ -417,10 +414,10 @@ class Simulator:
         # 更新上一步的行为统计
         self._update_last_step_stats(step_num, step_actions)
         
-        # 8. 每轮更新热搜（强制更新以保持实时性）
+        # 8. 更新热搜
         self.hot_search.update_hot_list(current_time, force=True)
         
-        # 8.5 定期清理过期事件和博文（每10步清理一次）
+        # 8.5 定期清理过期事件和博文
         if step_num % 10 == 0:
             self.hawkes.clear_old_events()
             self.recommendation.clear_old_posts(current_time)
@@ -464,14 +461,14 @@ class Simulator:
         # 保存信号历史
         self.signals_history.append(step_signals)
         
-        # 调用信号回调（用于WebSocket推送）
+        # 调用信号回调
         if self.signal_callback:
             try:
                 self.signal_callback(step_signals)
             except Exception as e:
                 logger.warning(f"信号回调执行失败: {e}")
         
-        # 10. 推进时间（time_granularity单位为分钟）
+        # 10. 推进时间
         self.time_engine.advance()
         self.hawkes.advance_time(self.config.time_granularity)
         
@@ -657,6 +654,162 @@ class Simulator:
         self.perf_metrics.record_emotion_contagion(time.time() - contagion_start)
         logger.debug(f"🧠 Emotion contagion applied to {len(activated_agents)} agents")
     
+    def _get_belief_text(self, agent: BaseAgent) -> str:
+        """获取智能体的信念文本（wo_belief模式使用静态身份描述）"""
+        if self.decision_mode == 'wo_belief':
+            return f"你是一个名为'{agent.profile.username}'的用户，特征是：{agent.profile.description}。"
+        return agent.belief_system.to_prompt_text()
+
+    def _collect_intention_results(self, agents: List[BaseAgent], results: List,
+                                   agent_exposed: Dict, current_time: str,
+                                   phase_name: str = "Intention") -> tuple:
+        """收集意图/行为生成结果，统一处理异常和记录"""
+        all_actions = []
+        all_exposed = {}
+        for i, result in enumerate(results):
+            agent = agents[i]
+            uid = agent.profile.user_id
+            all_exposed[uid] = agent_exposed.get(uid, [])
+
+            if isinstance(result, Exception):
+                logger.warning(f"⚠️ {phase_name} error for {agent.profile.username}: {result}")
+                continue
+
+            for intention in result:
+                action = self._process_intention(agent, intention, current_time)
+                if action:
+                    all_actions.append(action)
+                    self._record_action(action, current_time, agent)
+                    logger.info(f"   ✅ [{agent.profile.username}] -> {action['action_type']}: {action['content'][:50]}...")
+        return all_actions, all_exposed
+
+    async def _phase_fetch_recommendations(self, agents: List[BaseAgent],
+                                           current_time: str) -> Dict[str, List]:
+        """Phase 0: 并行获取所有智能体的推荐博文"""
+        async def fetch_recommendations(agent):
+            count = random.randint(0, self.config.recommend_count)
+            if count == 0:
+                return []
+            user_profile = {
+                'user_id': agent.profile.user_id,
+                'description': agent.profile.description
+            }
+            recent_posts = [m.content for m in agent.memory.get_recent(10)]
+            return self.recommendation.get_recommendations(user_profile, recent_posts, current_time, count=count)
+
+        rec_tasks = [fetch_recommendations(a) for a in agents]
+        rec_results = await asyncio.gather(*rec_tasks, return_exceptions=True)
+
+        agent_exposed = {}
+        for i, result in enumerate(rec_results):
+            uid = agents[i].profile.user_id
+            agent_exposed[uid] = result if not isinstance(result, Exception) else []
+            if isinstance(result, Exception):
+                logger.warning(f"⚠️ Recommendation error for {agents[i].profile.username}: {result}")
+        return agent_exposed
+
+    async def _phase_update_beliefs(self, agents: List[BaseAgent], current_time: str,
+                                    events_dict: List[Dict], agent_exposed: Dict):
+        """Phase 1: 并行执行所有智能体的信念更新（wo_belief模式跳过）"""
+        if self.decision_mode == 'wo_belief':
+            logger.info(f"   🔬 [wo_belief] 跳过Phase 1信念更新，使用静态初始信念")
+            return
+
+        async def update_belief(agent):
+            exposed = agent_exposed.get(agent.profile.user_id, [])
+            relevant_memories = agent.memory_retrieval.retrieve_by_recency_and_importance(agent.memory, top_k=5)
+            memories_dict = agent.memory.to_dict_list(relevant_memories)
+            agent.belief_system.decay_emotion()
+            await agent.belief_updater.update_belief(
+                agent.belief_system, exposed, events_dict, memories_dict,
+                agent.agent_type, current_time, agent.event_background
+            )
+
+        belief_tasks = [update_belief(a) for a in agents]
+        belief_results = await asyncio.gather(*belief_tasks, return_exceptions=True)
+        for i, result in enumerate(belief_results):
+            if isinstance(result, Exception):
+                logger.warning(f"⚠️ Belief update error for {agents[i].profile.username}: {result}")
+
+    async def _phase_generate_desires(self, agents: List[BaseAgent], current_time: str,
+                                      events_dict: List[Dict],
+                                      agent_exposed: Dict) -> Dict[str, List]:
+        """Phase 2: 并行执行所有智能体的欲望生成（wo_desire模式使用默认欲望）"""
+        agent_desires = {}
+
+        if self.decision_mode == 'wo_desire':
+            logger.info(f"   🔬 [wo_desire] 跳过Phase 2欲望生成，使用空欲望列表")
+            for agent in agents:
+                agent_desires[agent.profile.user_id] = [{'类型': '无特定欲望', '描述': '没有特别的想法和诉求', '强度': '极低'}]
+            return agent_desires
+
+        async def generate_desire(agent):
+            exposed = agent_exposed.get(agent.profile.user_id, [])
+            belief_text = self._get_belief_text(agent)
+            desires = await agent.desire_system.generate_desires(
+                belief_text, exposed, events_dict, agent.agent_type, current_time,
+                agent.event_background
+            )
+            return [d.to_dict() for d in desires]
+
+        desire_tasks = [generate_desire(a) for a in agents]
+        desire_results = await asyncio.gather(*desire_tasks, return_exceptions=True)
+        for i, result in enumerate(desire_results):
+            uid = agents[i].profile.user_id
+            if isinstance(result, Exception):
+                logger.warning(f"⚠️ Desire error for {agents[i].profile.username}: {result}")
+                agent_desires[uid] = []
+            else:
+                agent_desires[uid] = result
+        return agent_desires
+
+    async def _phase_generate_intentions(self, agents: List[BaseAgent], current_time: str,
+                                         events_dict: List[Dict], agent_exposed: Dict,
+                                         agent_desires: Dict, hot_topics: str) -> tuple:
+        """Phase 3: 并行执行所有智能体的意图决策（wo_intention模式使用简化行为生成）"""
+        if self.decision_mode == 'wo_intention':
+            logger.info(f"   🔬 [wo_intention] 使用简化行为生成替代结构化意图规划")
+
+            async def generate_action_simple(agent):
+                uid = agent.profile.user_id
+                exposed = agent_exposed.get(uid, [])
+                desires = agent_desires.get(uid, [])
+                belief_text = self._get_belief_text(agent)
+                intentions = await agent.generate_actions_wo_intention(
+                    belief_text, desires, exposed, current_time, events_dict, hot_topics
+                )
+                for intention in intentions:
+                    agent._record_action_to_memory(intention, current_time)
+                agent.last_action_time = current_time
+                return intentions
+
+            action_tasks = [generate_action_simple(a) for a in agents]
+            action_results = await asyncio.gather(*action_tasks, return_exceptions=True)
+            return self._collect_intention_results(agents, action_results, agent_exposed,
+                                                   current_time, "wo_intention")
+
+        # 正常意图生成
+        async def generate_intention(agent):
+            uid = agent.profile.user_id
+            exposed = agent_exposed.get(uid, [])
+            desires = agent_desires.get(uid, [])
+            belief_text = self._get_belief_text(agent)
+            intentions = await agent.intention_system.generate_intentions(
+                belief_text, desires, exposed, agent.agent_type,
+                max_actions=agent._get_max_actions(), current_time=current_time,
+                event_background=agent.event_background, external_events=events_dict,
+                hot_topics=hot_topics
+            )
+            for intention in intentions:
+                agent._record_action_to_memory(intention, current_time)
+            agent.last_action_time = current_time
+            return intentions
+
+        intention_tasks = [generate_intention(a) for a in agents]
+        intention_results = await asyncio.gather(*intention_tasks, return_exceptions=True)
+        return self._collect_intention_results(agents, intention_results, agent_exposed,
+                                               current_time, "Intention")
+
     async def _execute_agents_phased(self, agents: List[BaseAgent], current_time: str,
                                      external_events: List) -> tuple:
         """
@@ -680,173 +833,26 @@ class Simulator:
         """
         hot_topics = self.hot_search.get_top_topics_text()
         events_dict = [e.to_dict() for e in external_events]
-        
-        # Phase 0: 并行获取推荐博文（所有模式通用）
-        # 每个智能体随机获取 0~recommend_count 条博文
-        agent_exposed = {}
-        async def fetch_recommendations(agent):
-            count = random.randint(0, self.config.recommend_count)
-            if count == 0:
-                return []
-            user_profile = {
-                'user_id': agent.profile.user_id,
-                'description': agent.profile.description
-            }
-            recent_posts = [m.content for m in agent.memory.get_recent(10)]
-            return self.recommendation.get_recommendations(user_profile, recent_posts, current_time, count=count)
-        
-        rec_tasks = [fetch_recommendations(a) for a in agents]
-        rec_results = await asyncio.gather(*rec_tasks, return_exceptions=True)
-        for i, result in enumerate(rec_results):
-            uid = agents[i].profile.user_id
-            agent_exposed[uid] = result if not isinstance(result, Exception) else []
-            if isinstance(result, Exception):
-                logger.warning(f"⚠️ Recommendation error for {agents[i].profile.username}: {result}")
-        
+
+        # Phase 0: 并行获取推荐博文
+        agent_exposed = await self._phase_fetch_recommendations(agents, current_time)
+
         # 消融模式: 跳过Phase 1/2，直接调用消融方法
         if self.decision_mode in ('no_ebdi', 'cot'):
             return await self._execute_agents_ablation(
                 agents, current_time, events_dict, agent_exposed, hot_topics
             )
-        
-        # Phase 1: 并行信念更新（wo_belief跳过此阶段，信念保持初始静态状态）
-        if self.decision_mode != 'wo_belief':
-            async def update_belief(agent):
-                exposed = agent_exposed.get(agent.profile.user_id, [])
-                relevant_memories = agent.memory_retrieval.retrieve_by_recency_and_importance(agent.memory, top_k=5)
-                memories_dict = agent.memory.to_dict_list(relevant_memories)
-                agent.belief_system.decay_emotion()
-                await agent.belief_updater.update_belief(
-                    agent.belief_system, exposed, events_dict, memories_dict,
-                    agent.agent_type, current_time, agent.event_background
-                )
-            
-            belief_tasks = [update_belief(a) for a in agents]
-            belief_results = await asyncio.gather(*belief_tasks, return_exceptions=True)
-            for i, result in enumerate(belief_results):
-                if isinstance(result, Exception):
-                    logger.warning(f"⚠️ Belief update error for {agents[i].profile.username}: {result}")
-        else:
-            logger.info(f"   🔬 [wo_belief] 跳过Phase 1信念更新，使用静态初始信念")
-        
-        # Phase 2: 并行欲望生成（wo_desire跳过此阶段，使用空欲望列表）
-        agent_desires = {}
-        if self.decision_mode != 'wo_desire':
-            async def generate_desire(agent):
-                exposed = agent_exposed.get(agent.profile.user_id, [])
-                if self.decision_mode == 'wo_belief':
-                    # wo_belief消融：不使用复杂的信念记忆系统，仅使用基础人设
-                    belief_text = f"你是一个名为'{agent.profile.username}'的用户，特征是：{agent.profile.description}。"
-                else:
-                    belief_text = agent.belief_system.to_prompt_text()
-                    
-                desires = await agent.desire_system.generate_desires(
-                    belief_text, exposed, events_dict, agent.agent_type, current_time,
-                    agent.event_background
-                )
-                return [d.to_dict() for d in desires]
 
-            desire_tasks = [generate_desire(a) for a in agents]
-            desire_results = await asyncio.gather(*desire_tasks, return_exceptions=True)
-            for i, result in enumerate(desire_results):
-                uid = agents[i].profile.user_id
-                if isinstance(result, Exception):
-                    logger.warning(f"⚠️ Desire error for {agents[i].profile.username}: {result}")
-                    agent_desires[uid] = []
-                else:
-                    agent_desires[uid] = result
-        else:
-            logger.info(f"   🔬 [wo_desire] 跳过Phase 2欲望生成，使用空欲望列表")
-            for agent in agents:
-                agent_desires[agent.profile.user_id] = [{'类型': '无特定欲望', '描述': '没有特别的想法和诉求', '强度': '极低'}]
+        # Phase 1: 并行信念更新
+        await self._phase_update_beliefs(agents, current_time, events_dict, agent_exposed)
 
-        # Phase 3: 行为生成
-        all_actions = []
-        all_exposed = {}
+        # Phase 2: 并行欲望生成
+        agent_desires = await self._phase_generate_desires(agents, current_time, events_dict, agent_exposed)
 
-        if self.decision_mode == 'wo_intention':
-            # wo_intention: 简化行为生成，跳过结构化意图规划（无三级COT）
-            logger.info(f"   🔬 [wo_intention] 使用简化行为生成替代结构化意图规划")
-
-            async def generate_action_simple(agent):
-                uid = agent.profile.user_id
-                exposed = agent_exposed.get(uid, [])
-                desires = agent_desires.get(uid, [])
-                if self.decision_mode == 'wo_belief':
-                    belief_text = f"你是一个名为'{agent.profile.username}'的用户，特征是：{agent.profile.description}。"
-                else:
-                    belief_text = agent.belief_system.to_prompt_text()
-                    
-                intentions = await agent.generate_actions_wo_intention(
-                    belief_text, desires, exposed, current_time, events_dict, hot_topics
-                )
-                # 记录行为到记忆
-                for intention in intentions:
-                    agent._record_action_to_memory(intention, current_time)
-                agent.last_action_time = current_time
-                return intentions
-
-            action_tasks = [generate_action_simple(a) for a in agents]
-            action_results = await asyncio.gather(*action_tasks, return_exceptions=True)
-
-            for i, result in enumerate(action_results):
-                agent = agents[i]
-                uid = agent.profile.user_id
-                all_exposed[uid] = agent_exposed.get(uid, [])
-
-                if isinstance(result, Exception):
-                    logger.warning(f"⚠️ wo_intention action error for {agent.profile.username}: {result}")
-                    continue
-
-                for intention in result:
-                    action = self._process_intention(agent, intention, current_time)
-                    if action:
-                        all_actions.append(action)
-                        self._record_action(action, current_time, agent)
-                        logger.info(f"   ✅ [{agent.profile.username}] -> {action['action_type']}: {action['content'][:50]}...")
-        else:
-            # 正常Phase 3: 并行意图生成（ebdi / wo_belief / wo_desire / wo_hawkes）
-            async def generate_intention(agent):
-                uid = agent.profile.user_id
-                exposed = agent_exposed.get(uid, [])
-                desires = agent_desires.get(uid, [])
-                if self.decision_mode == 'wo_belief':
-                    belief_text = f"你是一个名为'{agent.profile.username}'的用户，特征是：{agent.profile.description}。"
-                else:
-                    belief_text = agent.belief_system.to_prompt_text()
-                    
-                intentions = await agent.intention_system.generate_intentions(
-                    belief_text, desires, exposed, agent.agent_type,
-                    max_actions=agent._get_max_actions(), current_time=current_time,
-                    event_background=agent.event_background, external_events=events_dict,
-                    hot_topics=hot_topics
-                )
-                # 记录行为到记忆
-                for intention in intentions:
-                    agent._record_action_to_memory(intention, current_time)
-                agent.last_action_time = current_time
-                return intentions
-            
-            intention_tasks = [generate_intention(a) for a in agents]
-            intention_results = await asyncio.gather(*intention_tasks, return_exceptions=True)
-            
-            for i, result in enumerate(intention_results):
-                agent = agents[i]
-                uid = agent.profile.user_id
-                all_exposed[uid] = agent_exposed.get(uid, [])
-                
-                if isinstance(result, Exception):
-                    logger.warning(f"⚠️ Intention error for {agent.profile.username}: {result}")
-                    continue
-                
-                for intention in result:
-                    action = self._process_intention(agent, intention, current_time)
-                    if action:
-                        all_actions.append(action)
-                        self._record_action(action, current_time, agent)
-                        logger.info(f"   ✅ [{agent.profile.username}] -> {action['action_type']}: {action['content'][:50]}...")
-        
-        return all_actions, all_exposed
+        # Phase 3: 并行意图/行为生成
+        return await self._phase_generate_intentions(
+            agents, current_time, events_dict, agent_exposed, agent_desires, hot_topics
+        )
     
     async def _execute_agents_ablation(self, agents: List[BaseAgent], current_time: str,
                                         events_dict: List[Dict], agent_exposed: Dict,
@@ -901,7 +907,7 @@ class Simulator:
         hot_topics = self.hot_search.get_top_topics_text()
         
         if not self.config.use_llm:
-            # ABM模式：从内容池随机采样少量帖子（非个性化推荐）
+            # ABM模式: 从内容池随机采样少量帖子
             # 传统ABM缺乏认知感知机制，仅能随机接触有限内容
             pool = self.recommendation.content_pool
             if pool:
@@ -911,7 +917,7 @@ class Simulator:
                 exposed_posts = []
             events_dict = [e.to_dict() for e in external_events]
             intentions = agent.random_decision(exposed_posts, events_dict, current_time)
-            # 处理并记录行为（与LLM路径统一）
+            # 处理并记录行为
             actions = []
             for intention in intentions:
                 action = self._process_intention(agent, intention, current_time)
@@ -920,7 +926,7 @@ class Simulator:
                     self._record_action(action, current_time, agent)
             return (actions, exposed_posts)
         
-        # 获取推荐博文（随机0~recommend_count条）
+        # 获取推荐博文
         rec_count = random.randint(0, self.config.recommend_count)
         if rec_count == 0:
             exposed_posts = []
@@ -936,7 +942,7 @@ class Simulator:
         # 转换外部事件格式
         events_dict = [e.to_dict() for e in external_events]
         
-        # 执行感知-行为流程（根据decision_mode路由）
+        # 执行感知-行为流程
         if self.decision_mode == 'no_ebdi':
             intentions = await agent.perceive_and_act_no_ebdi(exposed_posts, events_dict, current_time, hot_topics)
         elif self.decision_mode == 'cot':
@@ -978,7 +984,7 @@ class Simulator:
             'stance_intensity': intention.stance_intensity,
             'style': intention.style,
             'narrative': intention.narrative,
-            # 表达策略字典（兼容评估器）
+            # 表达策略字典
             'expression_strategy': {
                 'emotion_type': intention.emotion,
                 'emotion_intensity': intention.emotion_intensity,
@@ -996,7 +1002,7 @@ class Simulator:
             if action_type in ['short_comment', 'long_comment'] and intention.text:
                 self.recommendation.add_comment(intention.target_post_id, intention.text)
         
-        # 记录转发/评论关系到社交网络（Neo4j）
+        # 记录转发/评论关系到社交网络
         if intention.target_post_id and intention.target_author:
             if action_type in ['repost', 'repost_comment']:
                 self.social_network.add_repost(

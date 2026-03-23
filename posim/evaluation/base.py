@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-评估器基类 - 所有评估模块的基础类
-"""
 import logging
 from abc import ABC, abstractmethod
 from pathlib import Path

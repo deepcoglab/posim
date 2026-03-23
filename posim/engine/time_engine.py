@@ -1,7 +1,3 @@
-"""
-时间引擎 - 分钟级仿真时间管理
-支持事件驱动的高效模拟
-"""
 from datetime import datetime, timedelta
 from typing import Callable, List, Dict, Any, Optional
 from dataclasses import dataclass

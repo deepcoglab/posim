@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-"""LLM服务封装，支持多模型并发调用"""
 import asyncio
 import json
 import re
@@ -19,7 +18,7 @@ def extract_json_from_response(text: str) -> Optional[Dict]:
 
     cleaned = text.strip()
 
-    # 去除 <think>...</think> 标签（思考模型）
+    # 去除 <think>...</think> 标签
     cleaned = re.sub(r'<think>.*?</think>', '', cleaned, flags=re.DOTALL).strip()
 
     # 尝试从 markdown code block 提取

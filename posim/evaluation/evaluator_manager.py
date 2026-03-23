@@ -1,13 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-评估管理器 - 统一调度所有评估模块
-
-负责:
-1. 加载模拟数据和真实数据
-2. 按类别调度评估器
-3. 汇总评估结果
-4. 生成综合报告
-"""
 import json
 import logging
 import time
@@ -214,7 +204,7 @@ class EvaluationManager:
                 logger.error(f"传播结构验证失败: {e}", exc_info=True)
                 print(f"    ❌ 传播结构验证失败: {e}")
             
-            # 5. 宏观现象机制（保留兼容）
+            # 5. 宏观现象机制
             try:
                 evaluator = MacroPhenomenonEvaluator(self.mechanism_dir)
                 self.results['macro_phenomenon'] = evaluator.evaluate(self.sim_data)
@@ -335,7 +325,7 @@ class EvaluationManager:
                 # 提取关键指标
                 report['results'][module_name] = self._extract_key_metrics(module_name, module_results)
         
-        # 计算综合得分（如果有真实数据校准）
+        # 计算综合得分
         if self.real_data:
             overall_scores = self._compute_overall_score()
             report['overall_score'] = overall_scores

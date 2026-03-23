@@ -1,4 +1,3 @@
-"""记忆检索 - 基于新近性、重要性和多样性（MMR）"""
 import numpy as np
 from datetime import datetime
 from typing import List

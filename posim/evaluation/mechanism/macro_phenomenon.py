@@ -1,13 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-宏观现象机制验证
-
-验证内容:
-1. 观点极化与对立现象
-2. 信息长尾效应与二八定律
-3. 舆情生命周期效应
-4. 后真相时代效应
-"""
 import logging
 import numpy as np
 import matplotlib.pyplot as plt
@@ -105,7 +95,7 @@ class MacroPhenomenonEvaluator(BaseEvaluator):
         polarization_index = 1 - neutral_ratio  # 非中立比例越高越极化
         metrics['polarization_index'] = float(polarization_index)
         
-        # 对立强度：支持和反对的占比乘积（越平衡越对立）
+        # 对立强度: 支持和反对的占比乘积, 越平衡越对立
         metrics['confrontation_intensity'] = float(4 * support_ratio * oppose_ratio)
         
         # 如果有数值型立场，计算双峰性
@@ -299,7 +289,7 @@ class MacroPhenomenonEvaluator(BaseEvaluator):
         """绘制长尾效应图"""
         fig, axes = plt.subplots(2, 2, figsize=(14, 10))
         
-        # 1. 用户行为量排序图（长尾分布）
+        # 1. 用户行为量排序图
         ax = axes[0, 0]
         ax.bar(range(len(action_counts)), action_counts, color=C_SIM['total'], alpha=0.7)
         ax.set_xlabel('User Rank')
@@ -413,7 +403,7 @@ class MacroPhenomenonEvaluator(BaseEvaluator):
                 decay_rate = (data[peak_idx] - data[-1]) / max(total_len - peak_idx - 1, 1)
                 metrics['decay_rate'] = float(decay_rate)
             
-            # 半衰期（从峰值到降至一半的步数）
+            # 半衰期
             half_value = data[peak_idx] / 2
             half_life = None
             for i in range(peak_idx + 1, total_len):

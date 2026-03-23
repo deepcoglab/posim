@@ -1,7 +1,3 @@
-"""
-事件观点信念 - 对特定舆情事件的事实、背景、观点认知
-以<时间, 主体, 观点, 原因>形式组织
-"""
 from dataclasses import dataclass, field
 from typing import List, Dict, Any
 from datetime import datetime

@@ -1,23 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-微观行为机制验证 - 主入口
-
-每完成一个方法的一项验证即保存到磁盘，再次运行（--resume）时自动检测并跳过已有结果。
-
-Usage:
-    # 首次运行
-    python -m posim.micro_user_vail.main --config scripts/tianjiaerhuan/config.json
-
-    # 断点续跑：指定已有的 run 目录，自动跳过已完成的模拟/验证
-    python -m posim.micro_user_vail.main --config scripts/tianjiaerhuan/config.json --resume run_20260224_192239
-
-    # 只跑部分方法
-    python -m posim.micro_user_vail.main --config scripts/tianjiaerhuan/config.json --methods direct_nothink cot
-
-    # 只跑模拟 / 只跑验证
-    python -m posim.micro_user_vail.main --config scripts/tianjiaerhuan/config.json --skip-validation
-    python -m posim.micro_user_vail.main --config scripts/tianjiaerhuan/config.json --skip-simulation --resume run_xxx
-"""
 import argparse
 import asyncio
 import json
@@ -571,7 +552,7 @@ async def main_async(args):
     else:
         logger.info("Skipping simulation phase, will load from disk as needed.")
 
-    # 确保所有方法都有数据（从磁盘补充）
+    # 确保所有方法都有数据
     for method in config.methods:
         if method not in all_agents:
             all_agents[method] = initialize_agents(users, method)

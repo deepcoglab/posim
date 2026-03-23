@@ -1,13 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-话题演化校准
-
-评估模拟与真实的热点话题(#标签)的相似性:
-- 话题分布对比
-- 话题曲线对比
-- 话题重叠度
-- 话题演化时序相似性
-"""
 import logging
 import numpy as np
 import matplotlib.pyplot as plt
@@ -131,7 +121,7 @@ class TopicCalibrationEvaluator(BaseEvaluator):
     def _plot_topics(self, sim_times, sim_topics, sim_totals,
                     real_times, real_topics, real_totals, all_top, has_real, results):
         """绘制话题相关图"""
-        # 话题ID映射（避免中文显示问题）
+        # 话题ID映射
         topic_labels = {t: f'Topic{i+1}' for i, t in enumerate(all_top)}
         
         # 保存映射

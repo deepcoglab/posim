@@ -1,6 +1,3 @@
-"""
-信念系统主类 - 整合四类信念
-"""
 from dataclasses import dataclass
 from typing import Dict, Any
 from .identity_belief import IdentityBelief

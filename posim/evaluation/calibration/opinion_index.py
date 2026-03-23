@@ -1,13 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-舆情演化指数
-
-评估舆情演化的综合对抗性指标:
-1. 话语对抗性程度（关键词检测）
-2. 语义相似程度（Embedding编码计算）
-3. 负面情绪程度（指标计算）
-4. 综合舆情演化指数
-"""
 import logging
 import math
 import numpy as np
@@ -270,7 +260,7 @@ class OpinionIndexEvaluator(BaseEvaluator):
         try:
             from sklearn.metrics.pairwise import cosine_similarity
             
-            # 采样（避免计算量过大）
+            # 采样
             n_sample = min(500, len(sim_texts), len(real_texts))
             import random
             sim_sample = random.sample(sim_texts, n_sample) if len(sim_texts) > n_sample else sim_texts
@@ -448,7 +438,7 @@ class OpinionIndexEvaluator(BaseEvaluator):
         if has_real and 'negative_similarity' in negative:
             index['negative_emotion_similarity'] = float(negative['negative_similarity'])
         
-        # 综合指数（加权平均）
+        # 综合指数
         components = []
         weights = []
         if 'confrontation_similarity' in index:

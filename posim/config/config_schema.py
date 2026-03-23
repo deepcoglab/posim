@@ -1,13 +1,3 @@
-"""
-配置Schema定义
-
-霍克斯过程核心公式:
-    λ_raw(t) = μ + Σ α_int × w_i × exp(-β_int × Δt) + Σ α_ext × inf_i × exp(-β_ext × Δt)
-    λ_norm(t) = 1 - exp(-λ_raw)   ∈ [0, 1]
-    expected  = total_scale × λ_norm × circadian × (granularity / 60)
-
-时间单位统一为分钟。
-"""
 from dataclasses import dataclass, field
 from typing import List, Dict, Any
 
@@ -44,7 +34,7 @@ class SimulationConfig:
     hawkes_mu: float = 0.05
     hawkes_internal: HawkesInternalConfig = field(default_factory=HawkesInternalConfig)
     hawkes_external: HawkesExternalConfig = field(default_factory=HawkesExternalConfig)
-    total_scale: float = 200.0         # 峰值时每小时目标激活数（线性旋钮）
+    total_scale: float = 200.0         # 峰值时每小时目标激活数
     circadian_strength: float = 0.3    # 昼夜节律影响强度 [0,1]
     min_activation_noise: MinActivationNoiseConfig = field(default_factory=MinActivationNoiseConfig)
     # 推荐系统

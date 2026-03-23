@@ -1,7 +1,3 @@
-"""
-情绪激发信念 - 基于Ekman六大基本情感的情绪状态
-快乐、悲伤、愤怒、恐惧、惊讶、厌恶
-"""
 import numpy as np
 from dataclasses import dataclass, field
 from typing import Dict, List, Any

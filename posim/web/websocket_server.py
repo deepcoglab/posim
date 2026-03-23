@@ -1,6 +1,3 @@
-"""
-WebSocket服务器 - 实时推送仿真信号到前端
-"""
 import asyncio
 import json
 import logging
@@ -123,7 +120,7 @@ class SimulationWebSocketServer:
             loop = asyncio.get_running_loop()
             loop.create_task(self.broadcast(message))
         except RuntimeError:
-            # 如果没有运行的事件循环，忽略（服务器可能还没启动）
+            # 如果没有运行的事件循环则忽略
             pass
 
 

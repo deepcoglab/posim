@@ -1,7 +1,3 @@
-"""
-基础智能体抽象类 - 定义元认知智能体的通用接口
-感知 → 信念 → 欲望 → 意图 → 行为
-"""
 import random
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any, Optional
@@ -61,7 +57,7 @@ class BaseAgent(ABC):
                     timestamp=post.get('time', '')
                 )
         
-        # 活跃度（用于霍克斯过程采样）
+        # 活跃度, 用于霍克斯过程采样
         self.activity_score = self._calculate_activity_score()
         
         # 状态标志
@@ -91,7 +87,7 @@ class BaseAgent(ABC):
         relevant_memories = self.memory_retrieval.retrieve_by_recency_and_importance(self.memory, top_k=5)
         memories_dict = self.memory.to_dict_list(relevant_memories)
         
-        # 2. 信念推断（情绪衰减 + 外部信息影响）
+        # 2. 信念推断
         self.belief_system.decay_emotion()
         await self.belief_updater.update_belief(
             self.belief_system, exposed_posts, external_events, memories_dict, 
@@ -152,18 +148,18 @@ class BaseAgent(ABC):
         if self.is_banned:
             return []
         
-        # 获取身份文本（仅使用初始身份信息，不使用动态信念状态）
+        # 获取身份文本, 仅使用初始身份信息
         identity_text = self.belief_system.identity.to_prompt_text()
         
         # 检索近期行为记忆
         relevant_memories = self.memory_retrieval.retrieve_by_recency_and_importance(self.memory, top_k=5)
         memories_text = self._format_memories_for_ablation(relevant_memories)
         
-        # 格式化上下文（不包含热搜和外部事件，这些需要认知框架处理）
+        # 格式化上下文
         exposed_text = format_exposed_posts(exposed_posts, current_time, max_posts=10,
                                            include_stats=True, include_comments=True)
         
-        # 获取消融prompt并填充（无hot_topics/external_events）
+        # 获取消融prompt并填充
         prompt_template = get_no_ebdi_prompt(self.agent_type)
         prompt = prompt_template.format(
             event_background=self.event_background,
@@ -197,7 +193,7 @@ class BaseAgent(ABC):
         if self.is_banned:
             return []
         
-        # 获取身份文本（仅使用初始身份信息）
+        # 获取身份文本, 仅使用初始身份信息
         identity_text = self.belief_system.identity.to_prompt_text()
         
         # 检索近期行为记忆
@@ -222,7 +218,7 @@ class BaseAgent(ABC):
             recent_memories=memories_text
         )
         
-        # 单次LLM调用（含CoT推理）
+        # 单次LLM调用
         response = await self.api_pool.async_text_query(prompt, "", purpose='action')
         
         # 复用IntentionSystem的解析逻辑
@@ -277,7 +273,7 @@ class BaseAgent(ABC):
             external_events=events_text
         )
         
-        # 单次LLM调用（无三级COT推理）
+        # 单次LLM调用
         response = await self.api_pool.async_text_query(prompt, "", purpose='action')
         
         # 复用IntentionSystem的解析逻辑
@@ -318,7 +314,7 @@ class BaseAgent(ABC):
             }
         }
         
-        # 情绪分布（基于外部事件情绪偏向）
+        # 情绪分布
         # 默认分布，会根据事件动态调整
         base_emotions = {
             '愤怒': 0.15, '悲伤': 0.10, '惊奇': 0.12, '恐惧': 0.05,
@@ -359,7 +355,7 @@ class BaseAgent(ABC):
             stance = base_stance + random.uniform(-0.2, 0.2)
             stance = max(-1.0, min(1.0, stance))
             
-            # 需要目标帖子的行为（互动类）
+            # 需要目标帖子的行为
             needs_target = action_type in ['like', 'repost', 'repost_comment', 'short_comment', 'long_comment']
             
             if needs_target and exposed_posts:
@@ -395,7 +391,7 @@ class BaseAgent(ABC):
                     emotion=emotion, stance=stance
                 ))
             elif needs_target and not exposed_posts:
-                # 无可交互内容时跳过（缺乏认知驱动的自发内容创作能力）
+                # 无可交互内容时跳过
                 continue
             else:
                 # 无目标帖子或本身是发帖类行为 -> 发帖

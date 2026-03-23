@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-模拟引擎：4种决策方法的实现与运行
-"""
 import asyncio
 import json
 import logging

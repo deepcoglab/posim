@@ -1,7 +1,3 @@
-"""
-普通网民智能体 - 信念系统提示词
-"""
-
 CITIZEN_BELIEF_UPDATE_PROMPT = """你当前是一位微博平台上的普通网民，正在参与舆情事件讨论。
 
 当前舆情背景：{event_background}

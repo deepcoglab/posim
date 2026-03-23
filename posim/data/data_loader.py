@@ -1,6 +1,3 @@
-"""
-数据加载器 - 加载用户数据、事件队列等
-"""
 import json
 from pathlib import Path
 from typing import List, Dict, Any, Optional

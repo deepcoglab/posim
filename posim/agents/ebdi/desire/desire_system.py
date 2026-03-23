@@ -1,6 +1,3 @@
-"""
-欲望系统 - 基于信念和环境感知生成欲望集
-"""
 import json
 import re
 import logging
@@ -32,7 +29,7 @@ class DesireSystem:
             current_time = datetime.now().strftime('%Y-%m-%dT%H:%M')
         prompt = self._build_desire_prompt(belief_text, exposed_posts, external_events, agent_type, current_time, event_background)
         
-        # 调用LLM（无需system prompt，已合并到主提示词中）
+        # 调用LLM
         response = await self.api_pool.async_text_query(prompt, "", purpose='desire')
         return self._parse_desires(response)
     
@@ -66,15 +63,15 @@ class DesireSystem:
                 desire_list = data.get('欲望列表', [])
                 for d in desire_list:
                     try:
-                        # 解析欲望类型（中文）
+                        # 解析欲望类型
                         type_cn = d.get('类型', '自我表达')
                         desire_type = DesireType(type_cn)
                         
-                        # 解析强度（中文）
+                        # 解析强度
                         intensity = d.get('强度', '中等')
                         weight = INTENSITY_MAP.get(intensity, 0.5)
                         
-                        # 解析作用对象和描述（中文）
+                        # 解析作用对象和描述
                         target = d.get('作用对象')
                         description = d.get('描述', '')
                         

@@ -1,7 +1,3 @@
-"""
-心理认知信念 - 网民固有的心理认知特征
-5大典型心理：自我实现、猎奇探究、减压宣泄、仇官仇富、跟风从众
-"""
 from dataclasses import dataclass, field
 from typing import List, Dict, Any
 
@@ -12,7 +8,7 @@ class PsychologicalBelief:
     user_id: str
     belief_items: List[str] = field(default_factory=list)  # 心理信念条目列表
     
-    # 心理类型权重（用于行为倾向计算）
+    # 心理类型权重
     psychology_weights: Dict[str, float] = field(default_factory=dict)
     
     @classmethod

@@ -1,6 +1,3 @@
-"""
-意图系统主类 - 通过单次LLM调用使用三级COT生成行为决策列表
-"""
 import json
 import logging
 import random
@@ -101,7 +98,7 @@ class IntentionSystem:
         # 构建提示词
         prompt = self._build_intention_prompt(belief_text, desires, exposed_posts, agent_type, current_time, external_events or [], event_background, hot_topics)
         
-        # 单次LLM调用（无需system prompt，已合并到主提示词中）
+        # 单次LLM调用
         response = await self.api_pool.async_text_query(prompt, "", purpose='action')
         
         # 解析结果
@@ -120,7 +117,7 @@ class IntentionSystem:
         # 构建欲望文本
         desires_text = "\n".join([f"- {d.get('type', '')}: {d.get('description', '')}" for d in desires])
         
-        # 使用工具函数格式化信息（intention系统使用全部传入的博文）
+        # 使用工具函数格式化信息
         num_posts = min(max(0, random.randint(0, min(10, len(posts)))), len(posts)) if posts else 0
         sampled_posts = random.sample(posts, num_posts) if posts and num_posts > 0 else []
         exposed_text = format_exposed_posts(sampled_posts, current_time, max_posts=num_posts,
@@ -169,7 +166,7 @@ class IntentionSystem:
         
         return intentions
     
-    # 中文行为类型到英文的映射（包含常见变体）
+    # 中文行为类型到英文的映射
     ACTION_TYPE_MAP = {
         '点赞': 'like', '转发': 'repost', '转发并评论': 'repost_comment',
         '转发评论': 'repost_comment', '转发加评论': 'repost_comment',
@@ -219,9 +216,9 @@ class IntentionSystem:
         return raw
 
     def _parse_single_action(self, action_data: Dict, posts: List[Dict]) -> Optional[IntentionResult]:
-        """解析单个行为决策（支持中文和英文字段）"""
+        """解析单个行为决策"""
         try:
-            # 解析行为类型（支持中英文，使用鲁棒映射）
+            # 解析行为类型
             action_type_raw = action_data.get('行为类型', action_data.get('action_type', '点赞'))
             action_type = self._normalize_action_type(action_type_raw)
             
@@ -231,7 +228,7 @@ class IntentionSystem:
             # 获取目标博文信息
             target_post = posts[target_idx] if 0 <= target_idx < len(posts) else None
             
-            # 解析策略（点赞/转发无策略）
+            # 解析策略
             strategy = action_data.get('表达策略', action_data.get('strategy', {}))
             
             # 解析情绪
@@ -260,7 +257,7 @@ class IntentionSystem:
             narrative_raw = strategy.get('叙事策略', strategy.get('narrative', '事实陈述'))
             narrative = self.NARRATIVE_MAP.get(narrative_raw, narrative_raw)
             
-            # 解析内容（点赞/转发无内容）
+            # 解析内容
             content = action_data.get('内容', action_data.get('content', {}))
             text = content.get('文本', content.get('text', ''))
             topics = content.get('话题', content.get('topics', []))

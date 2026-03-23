@@ -1,14 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-网络拓扑结构校准
-
-计算模拟和真实的转发网络的各类结构指标相似性:
-- 度分布
-- 聚类系数
-- 连通分量
-- 中心性分析
-- 网络密度
-"""
 import json
 import logging
 import re
@@ -55,7 +44,7 @@ class NetworkCalibrationEvaluator(BaseEvaluator):
         
         results = {}
         
-        # 确定初始帖子数量（用于过滤初始化数据的交互）
+        # 确定初始帖子数量
         initial_posts_count = kwargs.get('initial_posts_count', 0)
         if not initial_posts_count:
             # 尝试从sim_results_dir路径推断initial_posts.json位置
@@ -71,7 +60,7 @@ class NetworkCalibrationEvaluator(BaseEvaluator):
                     except Exception as e:
                         logger.warning(f"读取initial_posts.json失败: {e}")
         
-        # 计算内容来源链（用于网络和级联的过滤）
+        # 计算内容来源链
         valid_targets = self._compute_provenance(micro_results, initial_posts_count)
         
         # 构建模拟转发网络
@@ -83,7 +72,7 @@ class NetworkCalibrationEvaluator(BaseEvaluator):
         results['sim_network'] = sim_metrics
         print(f"      节点数: {sim_metrics.get('node_count', 0)}, 边数: {sim_metrics.get('edge_count', 0)}")
         
-        # 构建真实转发网络 - 优先从base_data.json构建（包含完整转发链信息）
+        # 构建真实转发网络, 优先从base_data.json构建
         base_data_path = kwargs.get('base_data_path')
         has_real = False
         
@@ -253,7 +242,7 @@ class NetworkCalibrationEvaluator(BaseEvaluator):
                         filtered_derived += 1
                         continue
                 
-                # 确定目标节点（使用target_author的user_id）
+                # 确定目标节点
                 target_author = a.get('target_author', '')
                 target_uid = a.get('target_author_id', '')
                 dst = target_uid or name_to_id.get(target_author, target_author)
@@ -497,18 +486,15 @@ class NetworkCalibrationEvaluator(BaseEvaluator):
             'degree_gini': float(calculate_gini_coefficient(sorted(degrees)))
         }
         
-        # 度分布
         degree_dist = Counter(degrees)
         metrics['degree_distribution'] = {str(k): v for k, v in sorted(degree_dist.items())}
         
-        # 聚类系数
         try:
             undirected = G.to_undirected()
             metrics['clustering_coefficient'] = float(nx.average_clustering(undirected))
-        except:
+        except Exception:
             metrics['clustering_coefficient'] = 0.0
         
-        # 连通分量
         try:
             undirected = G.to_undirected()
             components = list(nx.connected_components(undirected))
@@ -517,10 +503,9 @@ class NetworkCalibrationEvaluator(BaseEvaluator):
             metrics['largest_component_ratio'] = float(
                 metrics['largest_component_size'] / max(G.number_of_nodes(), 1)
             )
-        except:
+        except Exception:
             metrics['connected_components'] = 0
         
-        # 中心性（采样计算，避免大图太慢）
         try:
             if G.number_of_nodes() <= 1000:
                 bc = nx.betweenness_centrality(G)
@@ -530,17 +515,15 @@ class NetworkCalibrationEvaluator(BaseEvaluator):
                     'gini': float(calculate_gini_coefficient(sorted(bc.values())))
                 }
             else:
-                # 采样计算
                 bc = nx.betweenness_centrality(G, k=min(100, G.number_of_nodes()))
                 metrics['betweenness_centrality'] = {
                     'avg': float(np.mean(list(bc.values()))),
                     'max': float(max(bc.values())),
                     'gini': float(calculate_gini_coefficient(sorted(bc.values())))
                 }
-        except:
+        except Exception:
             pass
         
-        # PageRank
         try:
             pr = nx.pagerank(G)
             pr_values = sorted(pr.values(), reverse=True)
@@ -550,7 +533,7 @@ class NetworkCalibrationEvaluator(BaseEvaluator):
                 'gini': float(calculate_gini_coefficient(sorted(pr_values))),
                 'top10_share': float(sum(pr_values[:10]) / max(sum(pr_values), 1e-10))
             }
-        except:
+        except Exception:
             pass
         
         return metrics
@@ -591,14 +574,14 @@ class NetworkCalibrationEvaluator(BaseEvaluator):
         """计算网络结构相似度（基于结构性指标，避免量依赖）"""
         similarity = {}
         
-        # ---- 结构性指标（不受交互量影响） ----
+        # ---- 结构性指标 ----
         
         # 1. 聚类系数相似度
         sim_cc = sim_metrics.get('clustering_coefficient', 0)
         real_cc = real_metrics.get('clustering_coefficient', 0)
         similarity['clustering_similarity'] = float(max(0, 1 - abs(sim_cc - real_cc)))
         
-        # 2. 度分布不等性相似度（基尼系数）
+        # 2. 度分布不等性相似度
         sim_gini = sim_metrics.get('degree_stats', {}).get('degree_gini', 0)
         real_gini = real_metrics.get('degree_stats', {}).get('degree_gini', 0)
         similarity['degree_gini_similarity'] = float(max(0, 1 - abs(sim_gini - real_gini)))
@@ -608,7 +591,7 @@ class NetworkCalibrationEvaluator(BaseEvaluator):
         real_lcc = real_metrics.get('largest_component_ratio', 0)
         similarity['lcc_similarity'] = float(max(0, 1 - abs(sim_lcc - real_lcc)))
         
-        # 4. 幂律指数相似度（尺度不变特征）
+        # 4. 幂律指数相似度
         sim_dd = sim_metrics.get('degree_distribution', {})
         real_dd = real_metrics.get('degree_distribution', {})
         sim_pl = self._fit_degree_power_law(sim_dd, sim_metrics.get('node_count', 0))
@@ -619,7 +602,7 @@ class NetworkCalibrationEvaluator(BaseEvaluator):
             similarity['sim_power_law_exp'] = float(sim_pl)
             similarity['real_power_law_exp'] = float(real_pl)
         
-        # ---- 保留量指标供参考（不计入综合分） ----
+        # ---- 保留量指标供参考 ----
         sim_density = sim_metrics.get('density', 0)
         real_density = real_metrics.get('density', 0)
         similarity['density_diff'] = float(abs(sim_density - real_density))
@@ -630,7 +613,7 @@ class NetworkCalibrationEvaluator(BaseEvaluator):
         max_deg = max(sim_avg_deg, real_avg_deg, 1)
         similarity['avg_degree_similarity'] = float(1 - abs(sim_avg_deg - real_avg_deg) / max_deg)
         
-        # ---- 综合相似度（仅基于结构性指标） ----
+        # ---- 综合相似度 ----
         structural_components = [
             similarity.get('clustering_similarity', 0),
             similarity.get('degree_gini_similarity', 0),
@@ -940,7 +923,7 @@ class NetworkCalibrationEvaluator(BaseEvaluator):
                 metrics['cascade_scale_similarity'] = float(1 - jsd)
                 print(f"      级联规模分布相似度: {1 - jsd:.4f}")
                 
-                # 级联幂律指数相似度（尺度不变结构特征）
+                # 级联幂律指数相似度
                 sim_pl = metrics.get('sim_cascade_power_law_exp')
                 real_pl = metrics.get('real_cascade_power_law_exp')
                 if sim_pl is not None and real_pl is not None:

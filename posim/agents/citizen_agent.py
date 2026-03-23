@@ -1,7 +1,3 @@
-"""
-普通网民智能体 - 社交媒体普通用户
-特点：行为轻量化、情绪化程度较高、易受热点影响
-"""
 from typing import Dict, Any, List
 from .base_agent import BaseAgent, AgentProfile
 

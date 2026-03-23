@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-评估数据加载器 - 加载模拟结果和真实标注数据
-"""
 import json
 import logging
 from pathlib import Path
@@ -77,9 +73,14 @@ class SimulationDataLoader:
             'short_comment': 'comment', 'long_comment': 'comment', 'like': 'comment'
         }
         
-        # 批量情绪分类
         texts = [a.get('text', a.get('content', '')) for a in micro_results]
         emotions, _ = batch_classify_emotions(texts)
+        
+        try:
+            from snownlp import SnowNLP
+            _has_snownlp = True
+        except ImportError:
+            _has_snownlp = False
         
         actions_data = []
         for i, a in enumerate(micro_results):
@@ -91,7 +92,6 @@ class SimulationDataLoader:
             atype = type_map.get(action_type, 'comment')
             emotion = emotions[i] if i < len(emotions) else 'Neutral'
             
-            # 尝试从表达策略获取情绪
             strategy = a.get('expression_strategy', {})
             if strategy:
                 emo_raw = strategy.get('emotion_type', '')
@@ -103,12 +103,13 @@ class SimulationDataLoader:
             e_buckets[t][emotion] += 1
             action_buckets[t][action_type] += 1
             
-            # 情感极性
             text = a.get('text', a.get('content', ''))
-            try:
-                from snownlp import SnowNLP
-                sentiment_score = SnowNLP(text).sentiments if text else 0.5
-            except:
+            if _has_snownlp and text:
+                try:
+                    sentiment_score = SnowNLP(text).sentiments
+                except Exception:
+                    sentiment_score = 0.5
+            else:
                 sentiment_score = 0.5
             if sentiment_score > 0.6:
                 sentiment_buckets[t]['positive'] += 1
@@ -117,12 +118,10 @@ class SimulationDataLoader:
             else:
                 sentiment_buckets[t]['neutral'] += 1
             
-            # 话题
             for topic in a.get('topics', []):
                 topic = topic.strip('#').strip()
                 if topic:
                     topic_buckets[topic][t] += 1
-            # 也从content中提取
             for topic in extract_topics(text):
                 topic_buckets[topic][t] += 1
             

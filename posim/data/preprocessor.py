@@ -1,6 +1,3 @@
-"""
-数据预处理 - 处理原始数据为仿真可用格式
-"""
 from typing import List, Dict, Any
 import re
 
@@ -62,7 +59,7 @@ def aggregate_user_emotions(posts: List[Dict]) -> Dict[str, float]:
     emotion_counts = {'happiness': 0, 'sadness': 0, 'anger': 0, 
                      'fear': 0, 'surprise': 0, 'disgust': 0}
     
-    # 简单的关键词匹配（实际可用更复杂的情感分析）
+    # 简单的关键词匹配
     keywords = {
         'happiness': ['开心', '高兴', '太好了', '哈哈', '棒'],
         'sadness': ['难过', '伤心', '唉', '遗憾', '可惜'],

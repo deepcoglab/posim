@@ -1,9 +1,3 @@
-"""
-推荐系统 - S_exp = α·Homophily + β·Popularity + γ·Recency
-候选集: 50% 关系博文 + 50% 随机博文
-exploration_rate 比例的推荐位用纯随机填充，抑制信息茧房
-新增语义去重：与最近内容余弦相似度 > dedup_threshold 的博文被拒绝入池
-"""
 import numpy as np
 import random
 from datetime import datetime
@@ -186,7 +180,7 @@ class RecommendationSystem:
             remaining = [p for p in original_cands + repost_cands if p['id'] not in selected_ids]
             selected += _select(remaining, n_scored - len(selected))
 
-        # 探索位：从全部候选中纯随机选取（不经过打分排序）
+        # 探索位: 从全部候选中纯随机选取
         all_cands = original_cands + repost_cands
         selected_ids = {p['id'] for p in selected}
         explore_pool = [p for p in all_cands if p['id'] not in selected_ids]

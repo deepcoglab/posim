@@ -1,7 +1,3 @@
-"""
-角色身份信念 - 自然语言描述的个体基础认知
-包括人口学属性、社交属性、身份属性等，从初始化数据载入
-"""
 from dataclasses import dataclass
 from typing import Dict, Any
 
@@ -12,7 +8,7 @@ class IdentityBelief:
     user_id: str
     description: str  # 自然语言形式的角色身份描述
     
-    # 原始结构化数据（仅用于内部计算，不参与LLM推理）
+    # 原始结构化数据, 仅用于内部计算
     raw_data: Dict[str, Any] = None
     
     @classmethod

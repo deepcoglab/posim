@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-共享工具函数 - 时间解析、数据处理、通用计算
-"""
 import json
 import re
 import numpy as np
@@ -14,7 +10,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-# ========== 时间解析 ==========
 def parse_time(s: str) -> Optional[datetime]:
     """解析多种时间格式"""
     if not s:
@@ -42,7 +37,6 @@ def generate_time_range(start: datetime, end: datetime, granularity: int) -> Lis
     return times
 
 
-# ========== 数据平滑/归一化 ==========
 SMOOTH_W = 5
 
 def smooth(data: List, w: int = SMOOTH_W, target_len: int = None) -> np.ndarray:
@@ -69,7 +63,6 @@ def normalize(data: List) -> np.ndarray:
     return arr / max_val if max_val > 0 else arr
 
 
-# ========== JSON保存 ==========
 def save_json(path: Path, data: Any):
     """保存JSON文件"""
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -77,7 +70,6 @@ def save_json(path: Path, data: Any):
         json.dump(data, f, ensure_ascii=False, indent=2, default=str)
 
 
-# ========== 情绪/立场/风格关键词 ==========
 EMOTION_KEYWORDS = {
     'Anger': ['愤怒', '气愤', '生气', '恼火', '愤慨', '怒', '火大', '暴怒', '激愤',
               '可恶', '该死', '混蛋', '无耻', '可恨', '气死', '怒火', '愤恨'],
@@ -122,7 +114,6 @@ CONFLICT_KEYWORDS = {
     'polarization': ['极端', '偏激', '激进', '极端化', '两极化']
 }
 
-# 对抗性关键词（愤怒、攻击、情绪化表达）
 CONFRONTATIONAL_KEYWORDS = [
     '愤怒', '气愤', '恶心', '可恶', '该死', '去死', '无耻', '垃圾',
     '骗子', '造谣', '虚伪', '恶毒', '谩骂', '辱骂', '讽刺', '嘲讽',
@@ -132,7 +123,6 @@ CONFRONTATIONAL_KEYWORDS = [
     '炸了', '气死', '恶臭', '令人作呕', '不要脸', '厚颜无耻',
 ]
 
-# 理性呼吁关键词（冷静、理性、等待调查）
 RATIONAL_KEYWORDS = [
     '理性', '冷静', '客观', '理智', '慎重',
     '呼吁', '建议', '希望', '支持',
@@ -141,26 +131,22 @@ RATIONAL_KEYWORDS = [
     '静观其变', '让子弹飞', '别急', '等等看', '不要急',
 ]
 
-# 情绪强度映射
 INTENSITY_MAP = {
     '低': 0.2, '中等': 0.5, '高': 0.8, '极高': 1.0,
     'low': 0.2, 'medium': 0.5, 'high': 0.8, 'extreme': 1.0
 }
 
-# 立场映射
 STANCE_MAP = {
     '支持': 1.0, '反对': -1.0, '中立': 0.0,
     'Support': 1.0, 'Oppose': -1.0, 'Neutral': 0.0
 }
 
-# 情感极性映射
 SENTIMENT_POLARITY_MAP = {
     '正面': 'positive', '负面': 'negative', '中性': 'neutral',
     'positive': 'positive', 'negative': 'negative', 'neutral': 'neutral'
 }
 
 
-# ========== 分类函数 ==========
 def classify_emotion_by_keywords(text: str) -> Tuple[str, Dict[str, float]]:
     """基于关键词的情绪分类"""
     if not text:
@@ -233,7 +219,6 @@ def extract_user_id_from_url(url: str) -> str:
     return match.group(1) if match else ''
 
 
-# ========== 统计度量 ==========
 def calculate_entropy(counts: Dict) -> float:
     """计算信息熵"""
     total = sum(counts.values())
@@ -315,7 +300,7 @@ def calculate_kendall_tau(ranks1, ranks2) -> Dict[str, float]:
         tau, p = kendalltau(ranks1, ranks2)
         return {'tau': float(tau) if not np.isnan(tau) else 0.0,
                 'p_value': float(p) if not np.isnan(p) else 1.0}
-    except:
+    except Exception:
         return {'tau': 0.0, 'p_value': 1.0}
 
 
@@ -329,12 +314,12 @@ def calculate_ks_test(dist1, dist2) -> Dict[str, float]:
             return {'statistic': 1.0, 'p_value': 0.0}
         stat, p = ks_2samp(d1, d2)
         return {'statistic': float(stat), 'p_value': float(p)}
-    except:
+    except Exception:
         return {'statistic': 1.0, 'p_value': 0.0}
 
 
 def detect_inflection_points(curve: List[float], smooth_w: int = 5) -> List[int]:
-    """检测曲线的拐点（一阶导数符号变化位置）"""
+    """检测曲线拐点"""
     if len(curve) < 3:
         return []
     arr = smooth(curve, w=smooth_w) if smooth_w > 1 else np.array(curve, dtype=float)
@@ -355,7 +340,7 @@ def calculate_cosine_similarity_vec(vec1, vec2) -> float:
 
 
 def fit_power_law_exponent(data: List[float]) -> float:
-    """简单 MLE 幂律指数估计 (Clauset et al.)"""
+    """MLE 幂律指数估计"""
     arr = np.array(data, dtype=float)
     arr = arr[arr >= 1]
     if len(arr) < 5:

@@ -1,4 +1,3 @@
-"""配置管理器"""
 import json
 from pathlib import Path
 from typing import Dict, Any

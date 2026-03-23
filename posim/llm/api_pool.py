@@ -1,6 +1,3 @@
-"""
-API资源池 - 管理多个大模型API，支持端点级并发控制和轮询负载均衡
-"""
 import asyncio
 import random
 import logging
@@ -191,7 +188,7 @@ class APIPool:
             response = await _do_query()
         
         elapsed = time.time() - start_time
-        # 估算token数（简化：按字符数/4估算）
+        # 估算token数, 按字符数/4估算
         tokens_in = (len(query) + len(system_prompt or '')) // 4
         tokens_out = len(response) // 4
         self._record_call(purpose, client.name, tokens_in, tokens_out, elapsed, success)

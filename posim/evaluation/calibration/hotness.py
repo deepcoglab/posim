@@ -1,16 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-宏观热度曲线校准 + 时序节奏指标
-
-对比模拟和真实数据的热度曲线（总量、原创、转发、评论）
-包含：绝对值对比、归一化对比、分类对比、堆叠面积图
-
-时序节奏指标：
-1. 日内活跃节奏相似度（Circadian Rhythm Similarity）
-2. 峰值定位精度（Peak Location Precision）
-3. 生命周期阶段比例相似度（Lifecycle Phase Ratio Similarity）
-4. 半衰期比值（Half-Life Ratio）
-"""
 import logging
 import warnings
 import numpy as np
@@ -246,7 +233,7 @@ class HotnessCalibrationEvaluator(BaseEvaluator):
             from scipy.stats import pearsonr
             try:
                 pr, _ = pearsonr(sh_norm, rh_norm)
-            except:
+            except Exception:
                 pr = 0.0
             metrics['circadian_jsd'] = float(jsd)
             metrics['circadian_similarity'] = float(1 - jsd)

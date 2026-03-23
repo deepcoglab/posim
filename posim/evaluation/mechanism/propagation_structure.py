@@ -1,14 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-传播结构机制验证
-
-验证内容:
-1. 幂律度分布分析（核心）
-2. 同质性与回声室效应
-3. 级联效应分析
-4. 小世界现象检测
-5. 无标度网络属性
-"""
 import json
 import logging
 import numpy as np

@@ -1,14 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-情绪/情感曲线校准
-
-包含:
-1. 情绪曲线对比（去除中性的Top3情绪类别，数值/归一化/占比）
-2. 情感曲线对比（正面/中立/负面，数值/归一化/占比）
-3. 情绪值校准（SnowNLP / TextBlob等库计算情感值曲线）
-4. 情感极化程度
-5. 情绪煽动程度
-"""
 import logging
 import numpy as np
 import matplotlib.pyplot as plt
@@ -67,7 +56,7 @@ class EmotionCalibrationEvaluator(BaseEvaluator):
         results['emotion_curves'] = self._analyze_emotion_curves(
             sim_times, sim_emotion, real_times, real_emotion, has_real)
         
-        # 2. 情感曲线对比（正/中/负）
+        # 2. 情感曲线对比
         print("    [2/5] 情感曲线对比...")
         results['sentiment_curves'] = self._analyze_sentiment_curves(
             sim_times, sim_sentiment, real_times, real_sentiment, has_real)
@@ -374,7 +363,7 @@ class EmotionCalibrationEvaluator(BaseEvaluator):
                     try:
                         score = SnowNLP(text).sentiments
                         scores_by_time[t].append(score)
-                    except:
+                    except Exception:
                         scores_by_time[t].append(0.5)
         except ImportError:
             logger.warning("SnowNLP未安装，使用默认值0.5")
@@ -398,7 +387,6 @@ class EmotionCalibrationEvaluator(BaseEvaluator):
             t = a.get('time')
             if t:
                 t_trunc = truncate_time(t, granularity)
-                # 优先使用标注的nlp分数
                 score = a.get('nlp_sentiment_score', 0.5)
                 if score is not None:
                     scores_by_time[t_trunc].append(float(score))
@@ -408,7 +396,7 @@ class EmotionCalibrationEvaluator(BaseEvaluator):
                         text = a.get('content', '')
                         if text:
                             scores_by_time[t_trunc].append(SnowNLP(text).sentiments)
-                    except:
+                    except Exception:
                         scores_by_time[t_trunc].append(0.5)
         return scores_by_time
     
@@ -485,7 +473,6 @@ class EmotionCalibrationEvaluator(BaseEvaluator):
         # 极化指数: 情感分数偏离0.5的程度
         polarization_index = float(np.mean(np.abs(arr - 0.5)))
         
-        # 双峰性
         try:
             from scipy.stats import kurtosis, skew
             n = len(arr)
@@ -493,10 +480,9 @@ class EmotionCalibrationEvaluator(BaseEvaluator):
             k = kurtosis(arr)
             bimodality = (s ** 2 + 1) / (k + 3 * (n - 1) ** 2 / ((n - 2) * (n - 3)))
             bimodality = float(min(max(bimodality, 0), 1))
-        except:
+        except Exception:
             bimodality = 0.0
         
-        # 极端情感比例
         extreme_ratio = float(np.mean((arr < 0.2) | (arr > 0.8)))
         
         return {
@@ -515,7 +501,6 @@ class EmotionCalibrationEvaluator(BaseEvaluator):
             if s is not None:
                 scores.append(float(s))
         if not scores:
-            # 尝试用SnowNLP计算
             try:
                 from snownlp import SnowNLP
                 for a in actions:
@@ -539,7 +524,7 @@ class EmotionCalibrationEvaluator(BaseEvaluator):
                     text = a.get('content', '')
                     if text:
                         scores.append(SnowNLP(text).sentiments)
-                except:
+                except Exception:
                     pass
         return scores
     

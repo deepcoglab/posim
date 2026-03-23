@@ -1,8 +1,3 @@
-"""
-社交网络管理 - 基于Neo4j图数据库
-生成具有社交媒体性质的兴趣网络
-支持粉丝关注网络、实时转发网络、实时评论网络
-"""
 from typing import List, Dict, Any, Set
 from dataclasses import dataclass
 import random

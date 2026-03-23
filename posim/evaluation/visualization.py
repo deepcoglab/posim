@@ -1,17 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-共享可视化配置 - 统一的绘图风格和颜色方案
-
-全局风格在此文件统一控制，修改 plt.rcParams.update({...}) 中的参数即可全局生效。
-常用调整项:
-  - font.sans-serif: 字体优先级列表（CJK 字体在前以支持中文）
-  - font.size: 全局基准字号
-  - axes.linewidth: 边框线宽
-  - axes.labelsize / axes.titlesize: 坐标轴标签 / 标题字号
-  - xtick.labelsize / ytick.labelsize: 刻度字号
-  - legend.fontsize: 图例字号
-  - figure.dpi / savefig.dpi: 分辨率
-"""
 import warnings
 import matplotlib
 matplotlib.use('Agg')
@@ -21,7 +7,7 @@ import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 import matplotlib.dates as mdates
 
-# ========== 中文字体配置（自动检测可用 CJK 字体） ==========
+# ========== 中文字体配置 ==========
 _CJK_FONTS = ['SimHei', 'Microsoft YaHei', 'STSong', 'Noto Sans CJK SC',
               'WenQuanYi Micro Hei', 'PingFang SC', 'Hiragino Sans GB']
 _LATIN_FONTS = ['DejaVu Sans', 'Arial', 'Helvetica']
@@ -61,12 +47,12 @@ C_SENTIMENT = {
     'positive': '#2ca02c', 'negative': '#d62728', 'neutral': '#7f7f7f'
 }
 
-# 标准类型顺序和颜色（不含 like）
+# 标准类型顺序和颜色
 STANDARD_TYPE_ORDER = ['original', 'repost', 'comment']
 STANDARD_TYPE_COLORS = {'original': '#ff7f0e', 'repost': '#c49c94', 'comment': '#2ca02c'}
 
 # ============================================================
-# Matplotlib 全局配置（封闭式方框 + 大字号 + 原字体风格）
+# Matplotlib 全局配置
 # 修改此处即可全局生效
 # ============================================================
 plt.rcParams.update({
@@ -74,7 +60,7 @@ plt.rcParams.update({
     'font.family': 'sans-serif',
     'font.sans-serif': _font_list,
     'font.size': 13,
-    # 坐标轴 —— 封闭式方框（四边可见，加粗）
+    # 坐标轴
     'axes.unicode_minus': False,
     'mathtext.default': 'regular',
     'axes.linewidth': SPINE_LW,

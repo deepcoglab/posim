@@ -1,7 +1,3 @@
-"""
-政府智能体 - 政府官方账号
-特点：语言正式规范、发布官方通报、引导舆论
-"""
 from typing import Dict, Any, List
 from .base_agent import BaseAgent, AgentProfile
 

@@ -1,7 +1,3 @@
-"""
-意见领袖智能体 - KOL/大V
-特点：高影响力、注重个人品牌、更倾向发布原创内容
-"""
 from typing import Dict, Any, List
 from .base_agent import BaseAgent, AgentProfile
 

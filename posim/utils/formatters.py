@@ -1,7 +1,3 @@
-"""
-信息格式化工具 - 封装EBDI系统中的通用格式化逻辑
-包含：外部事件格式化、曝光博文格式化、记忆格式化等
-"""
 from datetime import datetime
 from typing import List, Dict, Optional
 
@@ -71,7 +67,7 @@ def format_external_events(events: List[Dict], current_time: str,
         parts.append("### 【重要的关注点】近期发生的突发事件：")
         parts.append("")
     
-    # 取最新的事件（事件列表按时间排序，旧的在前，新的在后）
+    # 取最新的事件
     recent_events = events[-max_events:] if len(events) > max_events else events
     
     for evt in recent_events:
@@ -116,7 +112,7 @@ def format_exposed_posts(posts: List[Dict], current_time: str = None,
         author = post.get('author', '未知')
         post_type = post.get('type', 'original')
         
-        # 根据博文类型格式化（标准字段: root_author, root_content, content）
+        # 根据博文类型格式化
         root_author = post.get('root_author', '')
         root_content = (post.get('root_content', '') or '')[:150]
         content = (post.get('content', '') or '')[:200]
@@ -125,7 +121,7 @@ def format_exposed_posts(posts: List[Dict], current_time: str = None,
             parts.append(f"{i}. {time_prefix}@{author} 转发了博文：")
             if root_author:
                 parts.append(f"   原博 @{root_author}：{root_content}")
-            # 转发评论（content 即为转发时的评论）
+            # 转发评论
             if post_type == 'repost_comment' and content and content != '转发微博':
                 parts.append(f"   转发评论：{content[:100]}")
         else:

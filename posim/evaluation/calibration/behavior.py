@@ -1,18 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-行为分布校准
-
-评估模拟和真实的用户行为分布的一致性:
-1. 行为类型分布对比（原创/转发/评论的比例，不含like）
-2. 行为类型时间演化对比
-3. 用户活跃度分布对比（每用户行为数分布）
-4. 行为强度分布（每时间窗口行为数分布）
-5. 用户参与度分层对比（头部/中部/尾部用户行为占比）
-6. 按角色的行为比例分布（KOL/普通用户/媒体/政府）
-7. 评论-原创比（C/O Ratio）时序相关
-8. 首次发言时间分布
-9. 舆论阵营转移率（Opinion Shift Rate）
-"""
 import logging
 import numpy as np
 import matplotlib.pyplot as plt
@@ -36,7 +21,7 @@ from ..visualization import (
 
 logger = logging.getLogger(__name__)
 
-# 模拟行为类型到标准类型的映射（排除 like）
+# 模拟行为类型到标准类型的映射
 SIM_TYPE_MAP = {
     'short_post': 'original', 'long_post': 'original',
     'repost': 'repost', 'repost_comment': 'repost',
@@ -50,7 +35,7 @@ REAL_TYPE_MAP = {
     'comment': 'comment'
 }
 
-# 详细行为类型中文->英文映射（用于 behavior_type_detailed 图表统一显示英文）
+# 详细行为类型中文到英文映射
 DETAILED_TYPE_TO_ENGLISH = {
     'short_post': 'short_post', 'long_post': 'long_post',
     'short_comment': 'short_comment', 'long_comment': 'long_comment',
@@ -62,7 +47,7 @@ DETAILED_TYPE_TO_ENGLISH = {
     '转发并长评论': 'repost_long_comment',
 }
 
-# 标准显示顺序（英文，用于 behavior_type_detailed 图表）
+# 标准显示顺序
 DETAILED_TYPE_ORDER = [
     'short_post', 'long_post', 'short_comment', 'long_comment',
     'repost', 'repost_comment', 'repost_long_comment'
@@ -323,7 +308,7 @@ class BehaviorCalibrationEvaluator(BaseEvaluator):
             add_grid(ax)
             save_figure(fig, self.output_dir / 'behavior_type_counts_sim.png')
 
-        # 详细行为类型分布图（统一英文类型名）
+        # 详细行为类型分布图
         sim_ordered = [t for t, _ in sim_detailed.most_common()]
         real_only = sorted(k for k in real_detailed if k not in sim_detailed)
         all_detail_types = sim_ordered + real_only

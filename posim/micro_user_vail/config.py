@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-"""实验配置"""
 import os
 import json
 from dataclasses import dataclass, field

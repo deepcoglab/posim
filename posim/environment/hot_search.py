@@ -1,7 +1,3 @@
-"""
-社交媒体热搜榜单 - 基于热度机制的话题排名
-每15分钟更新一次
-"""
 import numpy as np
 from datetime import datetime
 from typing import List, Dict, Any, Tuple
@@ -25,7 +21,7 @@ class HotSearchManager:
     """热搜榜单管理器"""
     
     def __init__(self, config):
-        self.update_interval = config.hot_search_update_interval  # 更新间隔（分钟）
+        self.update_interval = config.hot_search_update_interval
         self.max_count = config.hot_search_count
         self.min_mentions = getattr(config, 'hot_search_min_mentions', 10)  # 上榜最小提及次数
         self.display_count = getattr(config, 'hot_search_display_count', 5)  # 传递给智能体的数量
@@ -74,7 +70,7 @@ class HotSearchManager:
             if minutes_passed < self.update_interval:
                 return self.hot_list
         
-        # 计算所有话题的热度得分（需满足最小提及次数）
+        # 计算所有话题的热度得分
         scored = []
         for topic, stats in self.topics.items():
             # 检查是否满足最小提及次数阈值

@@ -1,6 +1,3 @@
-"""
-日志管理器 - 仿真日志记录与回退支持
-"""
 import json
 from pathlib import Path
 from typing import Dict, Any, List, Optional
@@ -74,6 +71,12 @@ class LogManager:
         """获取所有步骤日志"""
         return self._step_logs
     
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
+
     def close(self):
         """关闭日志"""
         self._log_file.close()

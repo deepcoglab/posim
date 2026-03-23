@@ -1,7 +1,3 @@
-"""
-信念推断机制 - 基于外部环境和历史记忆推断当前信念状态
-引入确认偏差、锚定效应等认知偏见机制
-"""
 import json
 import re
 from datetime import datetime
@@ -36,7 +32,7 @@ class BeliefUpdater:
         # 构建推断提示词
         prompt = self._build_update_prompt(belief_system, exposed_posts, external_events, memories, agent_type, current_time, event_background)
         
-        # 调用LLM推断信念（无需system prompt，已合并到主提示词中）
+        # 调用LLM推断信念
         response = await self.api_pool.async_text_query(prompt, "", purpose='belief')
         
         # 解析推断结果

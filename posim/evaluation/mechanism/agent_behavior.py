@@ -1,12 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-智能体行为机制验证（LLM驱动）
-
-验证内容:
-1. 行为序列稳定性 - 从心理认知视角判断行为逻辑
-2. 人格稳定性 - 从行为推断固有属性的一致性（横向验证）
-3. 提示稳定性 - 相同提示多次输出的一致性（纵向验证）
-"""
 import asyncio
 import json
 import random
@@ -21,7 +12,6 @@ from ..utils import save_json
 
 logger = logging.getLogger(__name__)
 
-# ===== LLM评估提示词 =====
 BEHAVIOR_SEQUENCE_PROMPT = """你是一个社会心理学和认知科学专家。请分析以下社交媒体用户的行为序列,从心理认知视角评估其行为逻辑是否合理。
 
 用户身份: {identity}
@@ -191,7 +181,6 @@ class AgentBehaviorEvaluator(BaseEvaluator):
         
         for i, (uid, response) in enumerate(zip(sample_users, seq_responses)):
             try:
-                # 尝试解析JSON
                 json_str = response.strip()
                 if '```' in json_str:
                     json_str = json_str.split('```')[1].replace('json', '').strip()
@@ -201,12 +190,12 @@ class AgentBehaviorEvaluator(BaseEvaluator):
                     'username': user_profiles.get(uid, {}).get('username', ''),
                     'scores': scores
                 })
-            except:
+            except Exception:
                 results['behavior_sequence'].append({
                     'user_id': uid, 'scores': None, 'raw_response': response[:200]
                 })
         
-        # 2. 人格稳定性（横向验证）
+        # 2. 人格稳定性
         print("    [2/3] 评估人格稳定性...")
         personality_queries = []
         personality_user_map = []  # (uid, action_idx)
@@ -234,10 +223,9 @@ class AgentBehaviorEvaluator(BaseEvaluator):
                         json_str = json_str.split('```')[1].replace('json', '').strip()
                     pers = json.loads(json_str)
                     user_personalities[uid].append(pers)
-                except:
+                except Exception:
                     pass
             
-            # 计算人格稳定性（各维度的标准差）
             for uid, pers_list in user_personalities.items():
                 if len(pers_list) >= 2:
                     dims = ['openness', 'conscientiousness', 'extraversion', 'agreeableness', 'neuroticism']
@@ -260,7 +248,7 @@ class AgentBehaviorEvaluator(BaseEvaluator):
                         'inference_count': len(pers_list)
                     })
         
-        # 3. 提示稳定性（纵向验证）
+        # 3. 提示稳定性
         print("    [3/3] 评估提示稳定性...")
         stability_queries = []
         stability_users = sample_users[:200]
@@ -269,7 +257,6 @@ class AgentBehaviorEvaluator(BaseEvaluator):
         for uid in stability_users:
             profile = user_profiles.get(uid, {})
             actions = user_actions[uid]
-            # 构造一个固定场景
             exposed = actions[0].get('text', actions[0].get('content', ''))[:200] if actions else '热点事件讨论中'
             query = PROMPT_STABILITY_TEMPLATE.format(
                 identity=profile.get('identity', '普通网友'),
@@ -298,11 +285,10 @@ class AgentBehaviorEvaluator(BaseEvaluator):
                                 json_str = json_str.split('```')[1].replace('json', '').strip()
                             parsed = json.loads(json_str)
                             user_responses.append(parsed)
-                        except:
+                        except Exception:
                             user_responses.append({'raw': stab_responses[idx][:100]})
                     idx += 1
                 
-                # 计算一致性
                 action_types = [r.get('action_type', '') for r in user_responses if 'action_type' in r]
                 emotions = [r.get('emotion', '') for r in user_responses if 'emotion' in r]
                 stances = [r.get('stance', '') for r in user_responses if 'stance' in r]

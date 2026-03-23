@@ -1,7 +1,3 @@
-"""
-LLM客户端 - 异步并发调用大模型接口
-支持超参数扰动以增强模拟多样性
-"""
 import asyncio
 import logging
 import random
@@ -12,9 +8,9 @@ import httpx
 
 logger = logging.getLogger(__name__)
 
-# 默认超时设置（秒）
-DEFAULT_TIMEOUT = 120  # 连接+读取总超时
-DEFAULT_CONNECT_TIMEOUT = 30  # 连接超时
+# 默认超时设置, 单位秒
+DEFAULT_TIMEOUT = 120
+DEFAULT_CONNECT_TIMEOUT = 30
 
 # 超参数扰动配置
 PERTURBATION_CONFIG = {
@@ -58,12 +54,12 @@ def generate_perturbed_params(base_temperature: float = 0.7,
     perturbed_top_p = max(0.5, min(1.0, base_top_p + top_p_delta))
     params['top_p'] = round(perturbed_top_p, 3)
     
-    # 随机添加frequency_penalty（增加词汇多样性）
+    # 随机添加frequency_penalty
     if random.random() < 0.3 * strength:  # 30%概率添加
         freq_penalty = random.uniform(0, PERTURBATION_CONFIG['frequency_penalty_range'] * strength)
         params['frequency_penalty'] = round(freq_penalty, 3)
     
-    # 随机添加presence_penalty（鼓励新话题）
+    # 随机添加presence_penalty
     if random.random() < 0.3 * strength:  # 30%概率添加
         pres_penalty = random.uniform(0, PERTURBATION_CONFIG['presence_penalty_range'] * strength)
         params['presence_penalty'] = round(pres_penalty, 3)
@@ -81,7 +77,7 @@ class LLMClient(BaseModel):
     top_p: float = 0.9
     weight: float = 1.0
     enabled: bool = True
-    timeout: float = DEFAULT_TIMEOUT  # 请求超时（秒）
+    timeout: float = DEFAULT_TIMEOUT
     enable_perturbation: bool = True  # 是否启用超参数扰动
     perturbation_strength: float = 0.5  # 扰动强度 (0.0-1.0)
     aclient: Any = None

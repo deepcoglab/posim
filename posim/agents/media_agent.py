@@ -1,7 +1,3 @@
-"""
-媒体智能体 - 新闻媒体账号
-特点：专业客观、以发布新闻为主、注重公信力
-"""
 from typing import Dict, Any, List
 from .base_agent import BaseAgent, AgentProfile
 

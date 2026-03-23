@@ -1,6 +1,3 @@
-"""
-数据库管理 - SQLite存储仿真数据
-"""
 import sqlite3
 import json
 from pathlib import Path
@@ -21,7 +18,6 @@ class SimulationDatabase:
         """初始化数据表"""
         cursor = self.conn.cursor()
         
-        # 行为记录表（包含完整表达策略）
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS actions (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -46,7 +42,6 @@ class SimulationDatabase:
             )
         ''')
         
-        # 状态快照表
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS snapshots (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -57,7 +52,6 @@ class SimulationDatabase:
             )
         ''')
         
-        # 统计数据表
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS statistics (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -71,7 +65,6 @@ class SimulationDatabase:
             )
         ''')
         
-        # 添加索引以加速查询
         cursor.execute('CREATE INDEX IF NOT EXISTS idx_actions_step ON actions(step)')
         cursor.execute('CREATE INDEX IF NOT EXISTS idx_actions_user ON actions(user_id)')
         cursor.execute('CREATE INDEX IF NOT EXISTS idx_actions_type ON actions(action_type)')
@@ -196,6 +189,12 @@ class SimulationDatabase:
         columns = [desc[0] for desc in cursor.description]
         return [dict(zip(columns, row)) for row in cursor.fetchall()]
     
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
+
     def close(self):
         """关闭数据库连接"""
         self.conn.close()
