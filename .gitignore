@@ -71,4 +71,17 @@ ENV/
 README_EN.md
 README_NEW.md
 
+# Ignore all config JSON files in scripts/ (contain API keys, model names, exact experiment parameters)
+/scripts/**/config*.json
+
+# Ignore case study detailed scripts (Discussion section, not in public framework structure)
+/scripts/xibeiyuzhicai/反事实干预实验/
+
+# Ignore internal design notes
+/docs/design_system_notes.md
+
+# Ignore empty/internal directories
+/image/
+/papers/
+
 
