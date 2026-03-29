@@ -468,9 +468,12 @@ posim/
 │   │       ├── belief_prompts.py
 │   │       ├── desire_prompts.py
 │   │       └── intention_prompts.py
-│   └── storage/                           # Data Storage
-│       ├── database.py                    # SQLite database
-│       └── log_manager.py                # Simulation logging
+│   ├── storage/                           # Data Storage
+│   │   ├── database.py                    # SQLite database
+│   │   └── log_manager.py                # Simulation logging
+│   └── utils/                             # Utility Helpers
+│       ├── formatters.py                  # Prompt context formatters
+│       └── logger.py                      # Logging utilities
 ├── scripts/                               # Simulation & Evaluation Scripts
 │   ├── tianjiaerhuan/                     # LE — Luxury Earring Event
 │   │   ├── run_with_monitor.py            # Run simulation with live monitoring

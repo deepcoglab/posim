@@ -463,9 +463,12 @@ posim/
 │   │       ├── belief_prompts.py
 │   │       ├── desire_prompts.py
 │   │       └── intention_prompts.py
-│   └── storage/                           # 数据存储
-│       ├── database.py                    # SQLite 数据库
-│       └── log_manager.py                # 仿真日志
+│   ├── storage/                           # 数据存储
+│   │   ├── database.py                    # SQLite 数据库
+│   │   └── log_manager.py                # 仿真日志
+│   └── utils/                             # 工具函数
+│       ├── formatters.py                  # 提示上下文格式化
+│       └── logger.py                      # 日志工具
 ├── scripts/                               # 仿真与评估脚本
 │   ├── tianjiaerhuan/                     # LE — 天价耳环事件
 │   │   ├── run_with_monitor.py            # 运行仿真（带实时监控）
