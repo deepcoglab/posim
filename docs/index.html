@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>POSIM — Public Opinion Simulator Based on Metacognitive Agents</title>
-  <meta name="description" content="POSIM: A Multi-Agent Simulation Framework for Social Media Public Opinion Evolution And Governance. Embedding LLMs into layered EBDI cognitive architecture for high-fidelity opinion simulation.">
-  <meta name="keywords" content="social media simulation, public opinion, LLM agents, EBDI, Hawkes process, agent-based modeling">
+  <title>POSIM — A Multi-Agent Simulation Framework for Social Media Public Opinion Evolution And Governance</title>
+  <meta name="description" content="POSIM: A Multi-Agent Simulation Framework for Social Media Public Opinion Evolution And Governance. Embedding LLMs into layered Social-BDI cognitive architecture for high-fidelity opinion simulation.">
+  <meta name="keywords" content="social media simulation, public opinion, LLM agents, Social-BDI, Hawkes process, agent-based modeling">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,7 +32,7 @@
       <li><a href="#overview" data-en="Overview" data-cn="概览">Overview</a></li>
       <li><a href="#contributions" data-en="Contributions" data-cn="贡献">Contributions</a></li>
       <li><a href="#framework" data-en="Framework" data-cn="框架">Framework</a></li>
-      <li><a href="#ebdi" data-en="EBDI Agent" data-cn="EBDI智能体">EBDI Agent</a></li>
+      <li><a href="#ebdi" data-en="Social-BDI Agent" data-cn="Social-BDI智能体">Social-BDI Agent</a></li>
       <li><a href="#results" data-en="Results" data-cn="实验结果">Results</a></li>
       <li><a href="#case-study" data-en="Case Study" data-cn="案例研究">Case Study</a></li>
       <li><a href="javascript:void(0)" onclick="openComingSoon()" data-en="Docs" data-cn="文档">Docs</a></li>
@@ -60,8 +60,8 @@
     <h1 class="hero-title" data-en="POSIM: A Multi-Agent Simulation Framework for Social Media Public Opinion Evolution And Governance" data-cn="POSIM：面向社交媒体舆情演化的多智能体仿真框架">
       POSIM: A Multi-Agent Simulation Framework for Social Media Public Opinion Evolution And Governance
     </h1>
-    <p class="hero-subtitle" data-en="Embedding Large Language Models into a layered EBDI cognitive architecture to build metacognitive agents with explicit cognitive states and traceable decision chains, driven by Hawkes self-exciting point processes for high-fidelity public opinion simulation." data-cn="将大语言模型嵌入EBDI分层认知框架，构建具有显式认知状态和可追溯决策链的元认知智能体，以霍克斯自激点过程驱动高保真舆情仿真。">
-      Embedding Large Language Models into a layered EBDI cognitive architecture to build metacognitive agents with explicit cognitive states and traceable decision chains, driven by Hawkes self-exciting point processes for high-fidelity public opinion simulation.
+    <p class="hero-subtitle" data-en="Embedding Large Language Models into a layered Social-BDI cognitive architecture to build metacognitive agents with explicit cognitive states and traceable decision chains, driven by Hawkes self-exciting point processes for high-fidelity public opinion simulation." data-cn="将大语言模型嵌入Social-BDI分层认知框架,构建具有显式认知状态和可追溯决策链的元认知智能体,以霍克斯自激点过程驱动高保真舆情仿真。">
+      Embedding Large Language Models into a layered Social-BDI cognitive architecture to build metacognitive agents with explicit cognitive states and traceable decision chains, driven by Hawkes self-exciting point processes for high-fidelity public opinion simulation.
     </p>
     <p class="hero-quote">"All models are wrong, but some are useful." — George E. P. Box</p>
 
@@ -70,9 +70,9 @@
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
         <span data-en="Code" data-cn="代码">Code</span>
       </a>
-      <a href="#" class="btn btn-outline">
+      <a href="https://arxiv.org/abs/2603.23884" class="btn btn-outline" target="_blank">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-        <span data-en="Paper (PDF)" data-cn="论文 (PDF)">Paper (PDF)</span>
+        <span data-en="Paper (arXiv)" data-cn="论文 (arXiv)">Paper (arXiv)</span>
       </a>
       <a href="javascript:void(0)" class="btn btn-outline" onclick="openComingSoon()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
@@ -103,7 +103,7 @@
     <div class="section-header reveal">
       <span class="section-label" data-en="Overview" data-cn="概览">Overview</span>
       <h2 class="section-title" data-en="Why POSIM?" data-cn="为什么需要 POSIM？">Why POSIM?</h2>
-      <p class="section-desc" data-en="Existing LLM-driven social simulation frameworks treat models as end-to-end behavior mappers without explicit cognitive states. POSIM addresses this by embedding LLMs into a structured cognitive architecture." data-cn="现有的大语言模型驱动社会仿真框架将模型作为端到端的行为映射器，缺乏显式认知状态建模。POSIM 通过将 LLM 嵌入结构化认知架构来解决这一问题。">
+      <p class="section-desc" data-en="Existing LLM-driven social simulation frameworks treat models as end-to-end behavior mappers without explicit cognitive states. POSIM addresses this by embedding LLMs into a structured cognitive architecture." data-cn="现有的大语言模型驱动社会仿真框架将模型作为端到端的行为映射器,缺乏显式认知状态建模。POSIM 通过将 LLM 嵌入结构化认知架构来解决这一问题。">
         Existing LLM-driven social simulation frameworks treat models as end-to-end behavior mappers without explicit cognitive states. POSIM addresses this by embedding LLMs into a structured cognitive architecture.
       </p>
     </div>
@@ -191,15 +191,15 @@
     <div class="section-header reveal">
       <span class="section-label" data-en="Architecture" data-cn="架构">Architecture</span>
       <h2 class="section-title" data-en="Framework Overview" data-cn="框架总览">Framework Overview</h2>
-      <p class="section-desc" data-en="POSIM consists of three core components: (1) Metacognitive Agents built on EBDI architecture, (2) Hawkes process-driven simulation environment, and (3) Strategy evaluation module for counterfactual reasoning." data-cn="POSIM 由三大核心组件协同构成：(1) 基于 EBDI 架构的元认知智能体，(2) 霍克斯过程驱动的仿真环境，(3) 支持反事实推理的策略推演模块。">
-        POSIM consists of three core components: (1) Metacognitive Agents built on EBDI architecture, (2) Hawkes process-driven simulation environment, and (3) Strategy evaluation module for counterfactual reasoning.
+      <p class="section-desc" data-en="POSIM consists of three core components: (1) Metacognitive Agents built on Social-BDI architecture, (2) Hawkes process-driven simulation environment, and (3) Strategy evaluation module for counterfactual reasoning." data-cn="POSIM 由三大核心组件协同构成：(1) 基于 Social-BDI 架构的元认知智能体，(2) 霍克斯过程驱动的仿真环境，(3) 支持反事实推理的策略推演模块。">
+        POSIM consists of three core components: (1) Metacognitive Agents built on Social-BDI architecture, (2) Hawkes process-driven simulation environment, and (3) Strategy evaluation module for counterfactual reasoning.
       </p>
     </div>
     <div class="framework-img-wrap reveal" onclick="openLightbox(this.querySelector('img'))">
       <img src="framework_overview.png" alt="POSIM Framework Overview">
     </div>
-    <p class="fig-caption" data-en="&lt;strong&gt;Figure 1.&lt;/strong&gt; POSIM framework architecture. Left: EBDI metacognitive agent cognitive pipeline. Upper-center: Hawkes process-driven simulation environment and virtual social media platform. Lower-right: Strategy evaluation module (Intervenor-Simulator-Evaluator)." data-cn="&lt;strong&gt;图 1.&lt;/strong&gt; POSIM 框架总体架构。左侧为 EBDI 元认知智能体的认知决策链路；中上方为霍克斯点过程驱动的仿真环境与虚拟社交媒体平台；右下方为策略推演模块（干预器-仿真器-评估器）。">
-      <strong>Figure 1.</strong> POSIM framework architecture. Left: EBDI metacognitive agent cognitive pipeline. Upper-center: Hawkes process-driven simulation environment and virtual social media platform. Lower-right: Strategy evaluation module (Intervenor-Simulator-Evaluator).
+    <p class="fig-caption" data-en="&lt;strong&gt;Figure 1.&lt;/strong&gt; POSIM framework architecture. Left: Social-BDI metacognitive agent cognitive pipeline. Upper-center: Hawkes process-driven simulation environment and virtual social media platform. Lower-right: Strategy evaluation module (Intervenor-Simulator-Evaluator)." data-cn="&lt;strong&gt;图 1.&lt;/strong&gt; POSIM 框架总体架构。左侧为 Social-BDI 元认知智能体的认知决策链路；中上方为霍克斯点过程驱动的仿真环境与虚拟社交媒体平台；右下方为策略推演模块（干预器-仿真器-评估器）。">
+      <strong>Figure 1.</strong> POSIM framework architecture. Left: Social-BDI metacognitive agent cognitive pipeline. Upper-center: Hawkes process-driven simulation environment and virtual social media platform. Lower-right: Strategy evaluation module (Intervenor-Simulator-Evaluator).
     </p>
 
     <!-- Hawkes equation -->
@@ -220,7 +220,7 @@
   <div class="container">
     <div class="section-header reveal">
       <span class="section-label" data-en="Cognitive Architecture" data-cn="认知架构">Cognitive Architecture</span>
-      <h2 class="section-title" data-en="EBDI Metacognitive Agent" data-cn="EBDI 元认知智能体">EBDI Metacognitive Agent</h2>
+      <h2 class="section-title" data-en="Social-BDI Metacognitive Agent" data-cn="Social-BDI 元认知智能体">Social-BDI Metacognitive Agent</h2>
       <p class="section-desc" data-en="Extending the classical BDI architecture with an emotional dimension, building agents with explicit self-aware cognitive states and auditable multi-stage decision chains." data-cn="在经典 BDI 认知架构上融入情感维度，构建具有显式自我认知状态和可审计多阶段决策链的元认知智能体。">
         Extending the classical BDI architecture with an emotional dimension, building agents with explicit self-aware cognitive states and auditable multi-stage decision chains.
       </p>
@@ -435,7 +435,7 @@
     <div style="margin-top:48px;" class="reveal">
       <h3 class="result-section-title" data-en="Tier 1 · Micro-Level Behavioral Mechanism Validation" data-cn="第一层 · 微观行为机制验证">Tier 1 &middot; Micro-Level Behavioral Mechanism Validation</h3>
       <div>
-        <p style="text-align:center;margin-bottom:16px;font-size:0.9rem;color:var(--text-secondary);" data-en="100 randomly sampled users, 12 simulation rounds, four methods under identical conditions." data-cn="随机抽取 100 名用户，12 轮仿真，四种方法在完全相同条件下对比。">100 randomly sampled users, 12 simulation rounds, four methods under identical conditions.</p>
+        <p style="text-align:center;margin-bottom:16px;font-size:0.9rem;color:var(--text-secondary);" data-en="500 randomly sampled users, 12 simulation rounds, four methods under identical conditions." data-cn="随机抽取 500 名用户，12 轮仿真，四种方法在完全相同条件下对比。">500 randomly sampled users, 12 simulation rounds, four methods under identical conditions.</p>
         <div class="result-table-wrap">
           <table class="result-table">
             <thead>
@@ -450,13 +450,13 @@
               <tr><td>Direct-Nothink</td><td>1.47 &pm; 0.50</td><td>0.478 &pm; 0.263</td><td>0.629 &pm; 0.240</td></tr>
               <tr><td>Direct-Think</td><td>1.75 &pm; 0.43</td><td>0.448 &pm; 0.269</td><td>0.603 &pm; 0.299</td></tr>
               <tr><td>CoT</td><td>3.09 &pm; 0.29</td><td>0.516 &pm; 0.272</td><td>0.541 &pm; 0.356</td></tr>
-              <tr class="ours-row"><td><strong>EBDI (Ours)</strong></td><td class="best">4.64 &pm; 0.48</td><td class="best">0.661 &pm; 0.215</td><td class="best">0.695 &pm; 0.213</td></tr>
+              <tr class="ours-row"><td><strong>Social-BDI (Ours)</strong></td><td class="best">4.64 &pm; 0.48</td><td class="best">0.661 &pm; 0.215</td><td class="best">0.695 &pm; 0.213</td></tr>
             </tbody>
           </table>
         </div>
         <div class="highlight-box" style="margin-top:24px;border-left-color:#8b5cf6;">
-          <p data-en="&lt;strong&gt;Key Finding:&lt;/strong&gt; CoT's decision robustness is actually the &lt;em&gt;lowest&lt;/em&gt; (0.541) — without stable state anchoring, input perturbations ripple through the entire reasoning chain. EBDI's explicit belief states provide a cognitive anchoring effect, maintaining decision stability." data-cn="&lt;strong&gt;关键发现：&lt;/strong&gt;CoT 的决策抗扰性反而&lt;em&gt;最低&lt;/em&gt;（0.541）——单次调用中缺乏稳定的状态锚定，输入扰动会波及整个推理链条。EBDI 通过显式信念状态提供认知锚定效应，保持决策稳定性。">
-            <strong>Key Finding:</strong> CoT's decision robustness is actually the <em>lowest</em> (0.541) — without stable state anchoring, input perturbations ripple through the entire reasoning chain. EBDI's explicit belief states provide a cognitive anchoring effect, maintaining decision stability.
+          <p data-en="&lt;strong&gt;Key Finding:&lt;/strong&gt; CoT's decision robustness is actually the &lt;em&gt;lowest&lt;/em&gt; (0.541) — without stable state anchoring, input perturbations ripple through the entire reasoning chain. Social-BDI's explicit belief states provide a cognitive anchoring effect, maintaining decision stability." data-cn="&lt;strong&gt;关键发现：&lt;/strong&gt;CoT 的决策抗扰性反而&lt;em&gt;最低&lt;/em&gt;（0.541）——单次调用中缺乏稳定的状态锚定，输入扰动会波及整个推理链条。Social-BDI 通过显式信念状态提供认知锚定效应，保持决策稳定性。">
+            <strong>Key Finding:</strong> CoT's decision robustness is actually the <em>lowest</em> (0.541) — without stable state anchoring, input perturbations ripple through the entire reasoning chain. Social-BDI's explicit belief states provide a cognitive anchoring effect, maintaining decision stability.
           </p>
         </div>
       </div>
@@ -526,7 +526,7 @@
                 <th data-en="Beh.Avg" data-cn="行为均">Beh.Avg &uarr;</th>
                 <th>Confr. &uarr;</th>
                 <th>|&Delta;TTR| &darr;</th>
-                <th>|&Delta;S&#x0304;| &darr;</th>
+                <th>|&Delta;S̄| &darr;</th>
                 <th data-en="Cont.Avg" data-cn="内容均">Cont.Avg &uarr;</th>
                 <th>Net. &uarr;</th>
                 <th>Casc. &uarr;</th>
@@ -571,7 +571,7 @@
                 <th>RMSE &darr;</th>
                 <th>Confr. &uarr;</th>
                 <th>|&Delta;TTR| &darr;</th>
-                <th>|&Delta;S&#x0304;| &darr;</th>
+                <th>|&Delta;S̄| &darr;</th>
                 <th>Net. &uarr;</th>
                 <th>Casc. &uarr;</th>
               </tr>
@@ -732,8 +732,8 @@
 │   │   ├── <span class="file">citizen_agent.py</span>        <span class="comment"># Citizen agent</span>
 │   │   ├── <span class="file">kol_agent.py</span>            <span class="comment"># KOL agent</span>
 │   │   ├── <span class="file">media_agent.py</span>          <span class="comment"># Media agent</span>
-│   │   ├── <span class="file">government_agent.py</span>     <span class="comment"># Government agent</span>
-│   │   └── <span class="folder">ebdi/</span>                   <span class="comment"># EBDI cognitive architecture</span>
+│   │   │   └── <span class="file">government_agent.py</span>     <span class="comment"># Government agent</span>
+│   │   └── <span class="folder">ebdi/</span>                   <span class="comment"># Social-BDI cognitive architecture</span>
 │   │       ├── <span class="folder">belief/</span>             <span class="comment"># Belief subsystem</span>
 │   │       ├── <span class="folder">desire/</span>             <span class="comment"># Desire subsystem</span>
 │   │       ├── <span class="folder">intention/</span>          <span class="comment"># Intention subsystem (3-level CoT)</span>
@@ -768,12 +768,17 @@
     </div>
     <div class="bibtex-wrap reveal">
       <button class="copy-btn" onclick="copyBibtex()" id="copyBtn" data-en="Copy" data-cn="复制">Copy</button>
-      <pre id="bibtexCode">@article{posim2025,
-  title   = {POSIM: A General-Purpose Social Media Public
-             Opinion Simulation Framework Based on
-             Metacognitive Agents},
-  author  = {Anonymous},
-  year    = {2025}
+      <pre id="bibtexCode">@misc{zhang2026posimmultiagentsimulationframework,
+  title   = {POSIM: A Multi-Agent Simulation Framework for 
+             Social Media Public Opinion Evolution and Governance},
+  author  = {Yongmao Zhang and Kai Qiao and Zhengyan Wang and 
+             Ningning Liang and Dekui Ma and Wenyao Sun and 
+             Jian Chen and Bin Yan},
+  year    = {2026},
+  eprint  = {2603.23884},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.GL},
+  url     = {https://arxiv.org/abs/2603.23884}
 }</pre>
     </div>
   </div>
@@ -785,8 +790,8 @@
     <p data-en="POSIM — Public Opinion Simulator &middot; Released under &lt;a href='https://opensource.org/licenses/MIT'&gt;MIT License&lt;/a&gt;" data-cn="POSIM — 公共舆情仿真器 &middot; 基于 &lt;a href='https://opensource.org/licenses/MIT'&gt;MIT 许可证&lt;/a&gt; 开源">
       POSIM — Public Opinion Simulator &middot; Released under <a href="https://opensource.org/licenses/MIT">MIT License</a>
     </p>
-    <p style="margin-top:8px;" data-en="Questions or suggestions? Please open an &lt;a href='https://github.com/2Cromwell/POSIM/issues'&gt;Issue&lt;/a&gt; on GitHub." data-cn="有问题或建议？欢迎在 GitHub 上提交 &lt;a href='https://github.com/2Cromwell/POSIM/issues'&gt;Issue&lt;/a&gt;。">
-      Questions or suggestions? Please open an <a href="https://github.com/2Cromwell/POSIM/issues">Issue</a> on GitHub.
+    <p style="margin-top:8px;" data-en="Questions or suggestions? Please open an &lt;a href='https://github.com/DeepCogLab/posim/issues'&gt;Issue&lt;/a&gt; on GitHub." data-cn="有问题或建议？欢迎在 GitHub 上提交 &lt;a href='https://github.com/DeepCogLab/posim/issues'&gt;Issue&lt;/a&gt;。">
+      Questions or suggestions? Please open an <a href="https://github.com/DeepCogLab/posim/issues">Issue</a> on GitHub.
     </p>
     <div class="pip-announcement" style="margin-top:16px;padding:12px 16px;background:linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);border-radius:8px;border:1px solid #0ea5e9;">
       <span style="display:inline-flex;align-items:center;color:#0369a1;font-weight:600;">
@@ -821,3 +826,4 @@
 <script src="main.js"></script>
 </body>
 </html>
+
