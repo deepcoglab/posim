@@ -60,8 +60,8 @@
     <h1 class="hero-title" data-en="POSIM: A Multi-Agent Simulation Framework for Social Media Public Opinion Evolution And Governance" data-cn="POSIM：面向社交媒体舆情演化的多智能体仿真框架">
       POSIM: A Multi-Agent Simulation Framework for Social Media Public Opinion Evolution And Governance
     </h1>
-    <p class="hero-subtitle" data-en="Embedding Large Language Models into a layered Social-BDI cognitive architecture to build metacognitive agents with explicit cognitive states and traceable decision chains, driven by Hawkes self-exciting point processes for high-fidelity public opinion simulation." data-cn="将大语言模型嵌入Social-BDI分层认知框架,构建具有显式认知状态和可追溯决策链的元认知智能体,以霍克斯自激点过程驱动高保真舆情仿真。">
-      Embedding Large Language Models into a layered Social-BDI cognitive architecture to build metacognitive agents with explicit cognitive states and traceable decision chains, driven by Hawkes self-exciting point processes for high-fidelity public opinion simulation.
+    <p class="hero-subtitle" data-en="Embedding Large Language Models into a layered Social-BDI cognitive architecture to build agents with explicit cognitive states and traceable decision chains, driven by Hawkes self-exciting point processes for high-fidelity public opinion simulation." data-cn="将大语言模型嵌入Social-BDI分层认知框架,构建具有显式认知状态和可追溯决策链的智能体,以霍克斯自激点过程驱动高保真舆情仿真。">
+      Embedding Large Language Models into a layered Social-BDI cognitive architecture to build agents with explicit cognitive states and traceable decision chains, driven by Hawkes self-exciting point processes for high-fidelity public opinion simulation.
     </p>
     <p class="hero-quote">"All models are wrong, but some are useful." — George E. P. Box</p>
 
@@ -113,26 +113,27 @@
         <thead>
           <tr>
             <th data-en="Platform" data-cn="平台">Platform</th>
-            <th data-en="Cognitive Mechanism" data-cn="认知机制">Cognitive Mechanism</th>
-            <th data-en="Real-Data Validation" data-cn="真实数据验证">Real-Data Validation</th>
-            <th data-en="Strategy Evaluation" data-cn="策略推演">Strategy Evaluation</th>
-            <th data-en="Multi-Type Agents" data-cn="多类型智能体">Multi-Type Agents</th>
+            <th data-en="Explicit Cognitive Modeling" data-cn="显式认知建模">Explicit Cognitive Modeling</th>
+            <th data-en="Validation (M/P/S)" data-cn="验证（机制/现象/统计）">Validation (M/P/S)</th>
+            <th data-en="Real-Case Intervention" data-cn="真实案例干预">Real-Case Intervention</th>
+            <th data-en="LLM Multi-Type Agents" data-cn="LLM多类型智能体">LLM Multi-Type Agents</th>
             <th data-en="Temporal Precision" data-cn="时间精度">Temporal Precision</th>
-            <th data-en="Scalability" data-cn="可扩展性">Scalability</th>
+            <th data-en="Modular Design" data-cn="模块化设计">Modular Design</th>
           </tr>
         </thead>
         <tbody>
-          <tr><td>S3</td><td class="cross">✗</td><td class="check">✓</td><td class="cross">✗</td><td class="cross">✗</td><td>★★★</td><td>★★★</td></tr>
-          <tr><td>HiSim</td><td class="cross">✗</td><td class="check">✓</td><td class="cross">✗</td><td class="cross">✗</td><td>★★</td><td>★★</td></tr>
-          <tr><td>GA-S3</td><td class="cross">✗</td><td class="check">✓</td><td class="cross">✗</td><td class="check">✓</td><td>★★★</td><td>★★</td></tr>
-          <tr><td>SPARK</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td><td>★★</td><td>★★</td></tr>
-          <tr><td>FDE-LLM</td><td class="cross">✗</td><td class="check">✓</td><td class="cross">✗</td><td class="cross">✗</td><td>★★</td><td>★★</td></tr>
-          <tr><td>TrendSim</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td><td>★★★★</td><td>★★★</td></tr>
-          <tr><td>OASIS</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td>★★★★</td><td>★★★★</td></tr>
-          <tr><td>LMAgent</td><td class="cross">✗</td><td class="check">✓</td><td class="cross">✗</td><td class="check">✓</td><td>★★</td><td>★★</td></tr>
-          <tr class="highlight-row"><td><strong>POSIM (Ours)</strong></td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td><strong>★★★★★</strong></td><td><strong>★★★★★</strong></td></tr>
+          <tr><td>S3</td><td class="cross">✗</td><td>✗/✓/✓</td><td class="cross">✗</td><td class="cross">✗</td><td>★★★</td><td>★★★</td></tr>
+          <tr><td>HiSim</td><td class="cross">✗</td><td>✗/✗/✓</td><td class="cross">✗</td><td class="cross">✗</td><td>★★</td><td>★★</td></tr>
+          <tr><td>GA-S3</td><td class="cross">✗</td><td>✗/✗/✓</td><td class="cross">✗</td><td class="check">✓</td><td>★★★</td><td>★★</td></tr>
+          <tr><td>SPARK</td><td class="cross">✗</td><td>✗/✓/✗</td><td class="cross">✗</td><td class="check">✓</td><td>★★</td><td>★★</td></tr>
+          <tr><td>FDE-LLM</td><td class="cross">✗</td><td>✗/✗/✓</td><td class="cross">✗</td><td class="cross">✗</td><td>★★</td><td>★★</td></tr>
+          <tr><td>TrendSim</td><td class="cross">✗</td><td>✓/✗/✗</td><td class="cross">✗</td><td class="check">✓</td><td>★★★★</td><td>★★★</td></tr>
+          <tr><td>OASIS</td><td class="cross">✗</td><td>✗/✓/✓</td><td class="cross">✗</td><td class="cross">✗</td><td>★★★★</td><td>★★★★</td></tr>
+          <tr><td>LMAgent</td><td class="cross">✗</td><td>✗/✗/✓</td><td class="cross">✗</td><td class="check">✓</td><td>★★</td><td>★★</td></tr>
+          <tr class="highlight-row"><td><strong>POSIM (Ours)</strong></td><td class="check">✓</td><td class="check">✓/✓/✓</td><td class="check">✓</td><td class="check">✓</td><td><strong>★★★★★</strong></td><td><strong>★★★★★</strong></td></tr>
         </tbody>
       </table>
+      <p style="text-align:center;font-size:0.8rem;color:var(--text-secondary);margin-top:8px;" data-en="M = Mechanism validation; P = Phenomenon validation; S = Statistical validation." data-cn="M = 机制验证；P = 现象验证；S = 统计验证。"><em>M = Mechanism validation; P = Phenomenon validation; S = Statistical validation.</em></p>
     </div>
   </div>
 </section>
@@ -149,9 +150,9 @@
         <div class="contrib-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
         </div>
-        <h3 data-en="EBDI Metacognitive Agent Architecture" data-cn="EBDI 元认知智能体架构">EBDI Metacognitive Agent Architecture</h3>
-        <p data-en="Embeds LLMs into a layered cognitive framework (Perception → Belief → Desire → Intention → Action). Three cognitive subsystems are each powered by independent LLM calls, making the behavior generation process fully traceable." data-cn="将 LLM 嵌入分层认知框架（感知 → 信念 → 欲望 → 意图 → 行为），三个认知子系统各由独立 LLM 调用完成，行为生成过程完全可追溯。">
-          Embeds LLMs into a layered cognitive framework (Perception &rarr; Belief &rarr; Desire &rarr; Intention &rarr; Action). Three cognitive subsystems are each powered by independent LLM calls, making the behavior generation process fully traceable.
+        <h3 data-en="Social-BDI Agent Architecture" data-cn="Social-BDI 智能体架构">Social-BDI Agent Architecture</h3>
+        <p data-en="Embeds LLMs within a layered cognitive framework (Perception → Belief → Desire → Intention → Action), incorporating emotional arousal and cognitive biases. Three cognitive subsystems are each powered by independent LLM calls, communicating through structured intermediate states. The entire behavioral generation process is fully traceable." data-cn="将 LLM 嵌入分层认知框架（感知 → 信念 → 欲望 → 意图 → 行为），融入情绪激发与认知偏差。三个认知子系统各由独立 LLM 调用驱动，通过结构化中间状态通信，整个行为生成过程完全可追溯。">
+          Embeds LLMs within a layered cognitive framework (Perception &rarr; Belief &rarr; Desire &rarr; Intention &rarr; Action), incorporating emotional arousal and cognitive biases. Three cognitive subsystems are each powered by independent LLM calls, communicating through structured intermediate states. The entire behavioral generation process is fully traceable.
         </p>
       </div>
       <div class="contrib-card">
@@ -191,15 +192,15 @@
     <div class="section-header reveal">
       <span class="section-label" data-en="Architecture" data-cn="架构">Architecture</span>
       <h2 class="section-title" data-en="Framework Overview" data-cn="框架总览">Framework Overview</h2>
-      <p class="section-desc" data-en="POSIM consists of three core components: (1) Metacognitive Agents built on Social-BDI architecture, (2) Hawkes process-driven simulation environment, and (3) Strategy evaluation module for counterfactual reasoning." data-cn="POSIM 由三大核心组件协同构成：(1) 基于 Social-BDI 架构的元认知智能体，(2) 霍克斯过程驱动的仿真环境，(3) 支持反事实推理的策略推演模块。">
-        POSIM consists of three core components: (1) Metacognitive Agents built on Social-BDI architecture, (2) Hawkes process-driven simulation environment, and (3) Strategy evaluation module for counterfactual reasoning.
+      <p class="section-desc" data-en="POSIM consists of three core components: (1) Social-BDI Agents, (2) Hawkes process-driven simulation environment, and (3) Strategy evaluation module for counterfactual reasoning." data-cn="POSIM 由三大核心组件协同构成：(1) Social-BDI 智能体，(2) 霍克斯过程驱动的仿真环境，(3) 支持反事实推理的策略推演模块。">
+        POSIM consists of three core components: (1) Social-BDI Agents, (2) Hawkes process-driven simulation environment, and (3) Strategy evaluation module for counterfactual reasoning.
       </p>
     </div>
     <div class="framework-img-wrap reveal" onclick="openLightbox(this.querySelector('img'))">
       <img src="framework_overview.png" alt="POSIM Framework Overview">
     </div>
-    <p class="fig-caption" data-en="&lt;strong&gt;Figure 1.&lt;/strong&gt; POSIM framework architecture. Left: Social-BDI metacognitive agent cognitive pipeline. Upper-center: Hawkes process-driven simulation environment and virtual social media platform. Lower-right: Strategy evaluation module (Intervenor-Simulator-Evaluator)." data-cn="&lt;strong&gt;图 1.&lt;/strong&gt; POSIM 框架总体架构。左侧为 Social-BDI 元认知智能体的认知决策链路；中上方为霍克斯点过程驱动的仿真环境与虚拟社交媒体平台；右下方为策略推演模块（干预器-仿真器-评估器）。">
-      <strong>Figure 1.</strong> POSIM framework architecture. Left: Social-BDI metacognitive agent cognitive pipeline. Upper-center: Hawkes process-driven simulation environment and virtual social media platform. Lower-right: Strategy evaluation module (Intervenor-Simulator-Evaluator).
+    <p class="fig-caption" data-en="&lt;strong&gt;Figure 1.&lt;/strong&gt; POSIM framework architecture. Left: Social-BDI agent cognitive pipeline. Upper-center: Hawkes process-driven simulation environment and virtual social media platform. Lower-right: Strategy evaluation module (Intervenor-Simulator-Evaluator)." data-cn="&lt;strong&gt;图 1.&lt;/strong&gt; POSIM 框架总体架构。左侧为 Social-BDI 智能体认知决策链路；中上方为霍克斯点过程驱动的仿真环境与虚拟社交媒体平台；右下方为策略推演模块（干预器-仿真器-评估器）。">
+      <strong>Figure 1.</strong> POSIM framework architecture. Left: Social-BDI agent cognitive pipeline. Upper-center: Hawkes process-driven simulation environment and virtual social media platform. Lower-right: Strategy evaluation module (Intervenor-Simulator-Evaluator).
     </p>
 
     <!-- Hawkes equation -->
@@ -220,9 +221,9 @@
   <div class="container">
     <div class="section-header reveal">
       <span class="section-label" data-en="Cognitive Architecture" data-cn="认知架构">Cognitive Architecture</span>
-      <h2 class="section-title" data-en="Social-BDI Metacognitive Agent" data-cn="Social-BDI 元认知智能体">Social-BDI Metacognitive Agent</h2>
-      <p class="section-desc" data-en="Extending the classical BDI architecture with an emotional dimension, building agents with explicit self-aware cognitive states and auditable multi-stage decision chains." data-cn="在经典 BDI 认知架构上融入情感维度，构建具有显式自我认知状态和可审计多阶段决策链的元认知智能体。">
-        Extending the classical BDI architecture with an emotional dimension, building agents with explicit self-aware cognitive states and auditable multi-stage decision chains.
+      <h2 class="section-title" data-en="Social-BDI Agent Architecture" data-cn="Social-BDI 智能体架构">Social-BDI Agent Architecture</h2>
+      <p class="section-desc" data-en="Extending the classical BDI architecture with an emotional dimension, building agents with explicit cognitive states and auditable multi-stage decision chains." data-cn="在经典 BDI 认知架构上融入情感维度，构建具有显式认知状态和可审计多阶段决策链的智能体。">
+        Extending the classical BDI architecture with an emotional dimension, building agents with explicit cognitive states and auditable multi-stage decision chains.
       </p>
     </div>
 
@@ -577,11 +578,11 @@
               </tr>
             </thead>
             <tbody>
-              <tr class="ours-row"><td><strong>Full POSIM</strong></td><td class="best">0.193</td><td class="best">0.809</td><td class="best">0.154</td><td class="best">0.790</td><td class="best">0.030</td><td class="best">0.029</td><td class="best">0.895</td><td class="best">0.830</td></tr>
+              <tr class="ours-row"><td><strong>Full POSIM</strong></td><td>0.193</td><td class="best">0.809</td><td class="best">0.154</td><td class="best">0.790</td><td class="best">0.030</td><td>0.029</td><td class="best">0.895</td><td class="best">0.830</td></tr>
               <tr><td>w/o Belief</td><td>0.258</td><td>0.762</td><td>0.172</td><td>0.706</td><td>0.058</td><td>0.067</td><td>0.861</td><td>0.773</td></tr>
               <tr><td>w/o Desire</td><td>0.267</td><td>0.779</td><td>0.169</td><td>0.682</td><td>0.071</td><td>0.083</td><td>0.853</td><td>0.788</td></tr>
               <tr><td>w/o Intention</td><td>0.237</td><td>0.802</td><td>0.159</td><td>0.728</td><td>0.064</td><td>0.055</td><td>0.858</td><td>0.814</td></tr>
-              <tr><td>w/o Hawkes</td><td>0.177</td><td>0.235</td><td>0.362</td><td>0.787</td><td>0.207</td><td>0.028</td><td>0.822</td><td>0.754</td></tr>
+              <tr><td>w/o Hawkes</td><td class="best">0.177</td><td>0.235</td><td>0.362</td><td>0.787</td><td>0.207</td><td class="best">0.028</td><td>0.822</td><td>0.754</td></tr>
             </tbody>
           </table>
         </div>

@@ -32,7 +32,7 @@
 </p>
 
 <p align="center">
-  📄 <a href="#">Paper (under review)</a> &nbsp;|&nbsp;
+  📄 <a href="https://arxiv.org/abs/2603.23884">Paper (arXiv)</a> &nbsp;|&nbsp;
   🌐 <a href="https://DeepCogLab.github.io/posim/">Homepage</a> &nbsp;|&nbsp;
   🐛 <a href="https://github.com/DeepCogLab/posim/issues">Issues</a>
 </p>
