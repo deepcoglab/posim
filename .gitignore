@@ -67,6 +67,10 @@ ENV/
 /posim/micro_user_vail/
 /posim/web/
 
+# Ignore evaluation module and ablation prompts (internal/under review)
+/posim/evaluation/
+/posim/prompts/ablation_prompts.py
+
 # Ignore old/draft README files
 README_EN.md
 README_NEW.md
