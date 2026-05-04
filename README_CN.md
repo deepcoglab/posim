@@ -44,7 +44,6 @@
 - [💡 为什么选择 POSIM？](#-为什么选择-posim)
 - [✨ 核心特性](#-核心特性)
 - [🏗️ 框架总览](#%EF%B8%8F-框架总览)
-- [🌳 项目结构](#-项目结构)
 - [⚙️ 安装配置](#%EF%B8%8F-安装配置)
 - [🚀 快速开始](#-快速开始)
 - [🔌 扩展指南](#-扩展指南)
@@ -56,34 +55,27 @@
 
 ## 💡 为什么选择 POSIM？
 
-真实舆情事件可在数小时内席卷社交网络。理解这些复杂的集体动力学对于社会治理、危机应对和公共政策至关重要——然而真实社会实验面临伦理约束和不可复现性的挑战。传统仿真方法（传染病模型、阈值级联、经典 ABM）共同面临一个瓶颈：**无法显式建模个体认知过程**。现有 LLM 方案将大模型视为端到端行为生成器，未建模中间认知状态，导致长程仿真中行为机制不透明。
+社交媒体上的舆情事件——从消费纠纷到公共安全事件——可以在数小时内从局部讨论升级为全网热搜。成千上万用户涌入评论区，情绪在转发链条中不断升级，一位意见领袖的一条帖子就能重塑整个公共话语。对于政府机构、媒体组织和平台运营者而言，理解舆情如何形成、演化和引导，具有重要的实践意义。
 
-**POSIM**（**P**ublic **O**pinion **Sim**ulator，舆情仿真器）将 LLM 嵌入结构化认知架构，使智能体维护显式信念状态并产生完全可追溯的行为决策。
+然而，对这些动态进行真实社会实验面临根本性挑战：伦理约束阻止了对公共话语的刻意操控，每个事件都是独一无二且不可复现的。这正是**计算仿真**的价值所在——它提供了一个虚拟实验室，让研究者能够在可控环境中回放、分析和实验舆情场景。
 
-| **平台**            | **显式认知建模** | **验证体系 (M/P/S)** | **真实事件干预** | **LLM多类型智能体** |  **时间精度**  | **模块化设计** |
-| :------------------------ | :--------------------: | :------------------------: | :--------------------: | :-----------------------: | :------------------: | :------------------: |
-| S3                        |           ✗           |          ✗/✓/✓          |           ✗           |            ✗            |        ★★★        |        ★★★        |
-| HiSim                     |           ✗           |          ✗/✗/✓          |           ✗           |            ✗            |         ★★         |         ★★         |
-| GA-S3                     |           ✗           |          ✗/✗/✓          |           ✗           |            ✓            |        ★★★        |         ★★         |
-| SPARK                     |           ✗           |          ✗/✓/✗          |           ✗           |            ✓            |         ★★         |         ★★         |
-| FDE-LLM                   |           ✗           |          ✗/✗/✓          |           ✗           |            ✗            |         ★★         |         ★★         |
-| TrendSim                  |           ✗           |          ✓/✗/✗          |           ✗           |            ✓            |       ★★★★       |        ★★★        |
-| OASIS                     |           ✗           |          ✗/✓/✓          |           ✗           |            ✗            |       ★★★★       |       ★★★★       |
-| LMAgent                   |           ✗           |          ✗/✗/✓          |           ✗           |            ✓            |         ★★         |         ★★         |
-| **POSIM（本框架）** |      **✓**      |     **✓/✓/✓**     |      **✓**      |       **✓**       | **★★★★★** | **★★★★★** |
+传统仿真方法——传染病模型、阈值级联模型和经典基于智能体的建模（ABM）——各自捕捉了舆论动态的某些方面，但共同存在一个关键局限：**无法显式建模个体认知过程**。这些系统中的智能体是规则驱动的自动机，既不理解其接触的内容，也不会对其回应进行推理。大语言模型（LLM）带来了突破——语义理解和类人推理能力，但现有基于 LLM 的仿真方案大多将模型作为黑箱行为生成器——输入提示词、输出动作——未建模驱动真实人类行为的中间认知状态。
 
-> *M = 机制验证；P = 现象验证；S = 统计验证。*
+**POSIM**（**P**ublic **O**pinion **Sim**ulator，舆情仿真器）填补了这一空白。通过将 LLM 嵌入结构化认知架构（Social-BDI），POSIM 创建的智能体能够：
+
+- **维护显式信念状态** — 每个智能体跟踪其身份、心理特质、事件观点和情绪激发等结构化、可检视的数据
+- **产生完全可追溯的决策** — 每个行为都可以通过意图 → 欲望 → 信念链追溯到产生它的原因
+- **展现涌现的集体行为** — 舆论生命周期模式、情绪极化和级联幂律从个体智能体交互中自发涌现，而非预设规则
+
+POSIM 面向计算社会科学、舆情动力学、危机传播和基于 LLM 的多智能体系统的研究者。同时也可作为通过反事实仿真评估治理策略的决策支持工具。
 
 ---
 
 ## ✨ 核心特性
 
 - 🧠 **Social-BDI 智能体架构** — 将 LLM 嵌入分层认知框架（感知 → 信念 → 欲望 → 意图 → 行为），融合情绪激发和认知偏差。三个认知子系统各由独立 LLM 调用驱动，行为决策链完全可追溯。
-
 - ⏱️ **Hawkes 过程驱动时间引擎** — Hawkes 自激点过程统一外生事件冲击与内生用户交互，结合昼夜节律调制，以分钟级分辨率再现"爆发-持续-衰退"活跃模式。
-
 - 🛡️ **三层递进验证** — 从个体行为机制校准 → 群体现象涌现 → 统计结果一致性，逐层建立仿真可信度。
-
 - 🔌 **高度解耦模块化架构** — 智能体、仿真环境和评估模块通过标准接口通信——可独立替换认知架构、时间引擎或评估指标。
 
 ---
@@ -116,124 +108,6 @@ POSIM 由三大核心组件构成：
 
 ---
 
-## 🌳 项目结构
-
-```
-posim/
-├── posim/                                 # 核心框架
-│   ├── agents/                            # 智能体模块
-│   │   ├── base_agent.py                  # 基础智能体（认知管线调度）
-│   │   ├── citizen_agent.py               # 普通用户智能体
-│   │   ├── kol_agent.py                   # 意见领袖智能体
-│   │   ├── media_agent.py                 # 媒体智能体
-│   │   ├── government_agent.py            # 政府智能体
-│   │   └── ebdi/                          # Social-BDI 认知架构
-│   │       ├── belief/                    # 信念子系统
-│   │       │   ├── belief_system.py       # 信念系统协调器
-│   │       │   ├── belief_updater.py      # LLM驱动的信念更新
-│   │       │   ├── emotion_belief.py      # 情绪激发信念
-│   │       │   ├── event_belief.py        # 事件观点信念
-│   │       │   ├── identity_belief.py     # 角色身份信念
-│   │       │   └── psychological_belief.py # 心理认知信念
-│   │       ├── desire/                    # 欲望子系统
-│   │       │   ├── desire_system.py       # 动机推理引擎
-│   │       │   └── desire_types.py        # 预定义动机类型
-│   │       ├── intention/                 # 意图子系统
-│   │       │   └── intention_system.py    # 多层级思维链规划
-│   │       └── memory/                    # 流式记忆
-│   │           ├── memory_retrieval.py    # 近因-相关性检索评分
-│   │           └── stream_memory.py       # 时间衰减记忆存储
-│   ├── config/                            # 配置管理
-│   │   ├── config_manager.py              # 配置加载器
-│   │   └── config_schema.py              # Dataclass 配置模式
-│   ├── data/                              # 数据管理
-│   │   ├── data_loader.py                 # 数据加载工具
-│   │   └── preprocessor.py               # 数据预处理
-│   ├── engine/                            # 仿真引擎
-│   │   ├── simulator.py                   # 主仿真循环（异步并发）
-│   │   ├── hawkes_process.py              # Hawkes 自激点过程
-│   │   └── time_engine.py                # 时间引擎（昼夜节律调制）
-│   ├── environment/                       # 仿真环境
-│   │   ├── recommendation.py              # 双通道内容推荐
-│   │   ├── social_network.py              # 三层有向社交网络
-│   │   ├── hot_search.py                  # 热搜话题
-│   │   └── event_queue.py                # 外部事件队列
-│   ├── evaluation/                        # 评估框架
-│   │   ├── base.py                        # 基础评估器类
-│   │   ├── data_loader.py                 # 评估数据加载器
-│   │   ├── evaluator_manager.py           # 评估协调器
-│   │   ├── utils.py                       # 评估工具
-│   │   ├── visualization.py               # 可视化工具
-│   │   ├── calibration/                   # 统计校准
-│   │   │   ├── behavior.py               # 行为层（JSD, ρ, RMSE）
-│   │   │   ├── emotion.py                # 情感校准
-│   │   │   ├── hotness.py                # 热度曲线校准
-│   │   │   ├── network.py                # 网络拓扑与级联
-│   │   │   ├── opinion_index.py          # 话语非理性指数
-│   │   │   └── topic.py                  # 话题分析
-│   │   └── mechanism/                     # 现象涌现验证
-│   │       ├── agent_behavior.py          # 智能体行为分析
-│   │       ├── lifecycle.py               # 舆情生命周期分析
-│   │       ├── macro_phenomenon.py        # 宏观现象验证
-│   │       ├── opinion_polarization.py    # 极化分析
-│   │       └── propagation_structure.py   # 级联与网络结构
-│   ├── llm/                               # LLM 资源管理
-│   │   ├── api_pool.py                    # 多端点池（负载均衡、故障转移）
-│   │   └── llm_client.py                 # 统一 LLM 调用客户端
-│   ├── micro_user_vail/                   # 个体行为机制验证
-│   │   ├── main.py                        # 验证入口
-│   │   ├── config.py                      # 验证配置
-│   │   ├── data_loader.py                 # 验证数据加载器
-│   │   ├── llm_service.py                 # 验证 LLM 服务
-│   │   ├── simulation.py                  # 验证仿真运行器
-│   │   ├── validation.py                  # 验证指标计算
-│   │   └── prompts.py                     # 验证提示
-│   ├── prompts/                           # 提示模板（按智能体类型）
-│   │   ├── prompt_loader.py               # 动态提示加载器
-│   │   ├── ablation_prompts.py            # 消融实验提示
-│   │   ├── citizen_prompts/               # 普通用户提示
-│   │   │   ├── belief_prompts.py
-│   │   │   ├── desire_prompts.py
-│   │   │   └── intention_prompts.py
-│   │   ├── kol_prompts/                   # 意见领袖提示
-│   │   ├── media_prompts/                 # 媒体提示
-│   │   └── government_prompts/            # 政府提示
-│   ├── storage/                           # 数据存储
-│   │   ├── database.py                    # SQLite 数据库
-│   │   └── log_manager.py                # 仿真日志
-│   ├── web/                               # 实时监控
-│   │   ├── websocket_server.py            # WebSocket 服务器
-│   │   └── monitor.html                   # 监控仪表盘
-│   └── utils/                             # 工具函数
-│       ├── formatters.py                  # 提示上下文格式化
-│       └── logger.py                      # 日志工具
-├── scripts/                               # 仿真与评估脚本
-│   ├── run_all_evaluations.py             # 批量评估所有事件
-│   ├── run_ablation_batch.py              # 批量消融实验
-│   ├── extract_all_metrics.py             # 提取指标汇总
-│   ├── extract_ablation_metrics.py        # 提取消融指标
-│   ├── tianjiaerhuan/                     # LE — 天价耳环事件
-│   │   ├── run_with_monitor.py            # 运行仿真（带实时监控）
-│   │   ├── evaluate.py                    # 运行评估流程
-│   │   ├── config.json                    # 仿真配置
-│   │   ├── config_*.json                  # 消融实验配置
-│   │   └── data/                          # 事件数据（用户、帖子、事件、关系）
-│   ├── wudatushuguan/                     # WL — 武大图书馆事件
-│   │   ├── run_with_monitor.py
-│   │   ├── evaluate.py
-│   │   ├── visualize_network.py           # 网络可视化
-│   │   └── data/
-│   └── xibeiyuzhicai/                     # XF — 西贝预制菜事件
-│       ├── run_with_monitor.py
-│       ├── evaluate.py
-│       └── data/
-├── docs/                                  # 项目主页（GitHub Pages）
-├── assets/                                # 静态资源（logo、论文图表）
-└── requirements.txt                       # Python 依赖
-```
-
----
-
 ## ⚙️ 安装配置
 
 ### 💻 系统要求
@@ -260,16 +134,16 @@ pip install -r requirements.txt
 
 ### 📚 核心依赖
 
-| 包名                      | 版本      | 用途                                     |
-| ------------------------- | --------- | ---------------------------------------- |
-| `numpy`                 | ≥ 1.24.0 | 数值计算，Hawkes 过程强度采样            |
-| `openai`                | ≥ 1.0.0  | LLM API 调用（OpenAI 兼容接口）         |
-| `pydantic`              | ≥ 2.0.0  | 配置验证与结构化数据管理                 |
-| `sentence-transformers` | ≥ 2.2.0  | 语义嵌入（推荐、去重、记忆）             |
-| `torch`                 | ≥ 2.0.0  | 深度学习后端（嵌入模型推理）             |
-| `matplotlib`            | ≥ 3.7.0  | 评估可视化                               |
-| `neo4j`                 | ≥ 5.0.0  | 社交网络图数据库（可选）                 |
-| `websockets`            | ≥ 12.0   | 实时仿真监控                             |
+| 包名                      | 版本      | 用途                            |
+| ------------------------- | --------- | ------------------------------- |
+| `numpy`                 | ≥ 1.24.0 | 数值计算，Hawkes 过程强度采样   |
+| `openai`                | ≥ 1.0.0  | LLM API 调用（OpenAI 兼容接口） |
+| `pydantic`              | ≥ 2.0.0  | 配置验证与结构化数据管理        |
+| `sentence-transformers` | ≥ 2.2.0  | 语义嵌入（推荐、去重、记忆）    |
+| `torch`                 | ≥ 2.0.0  | 深度学习后端（嵌入模型推理）    |
+| `matplotlib`            | ≥ 3.7.0  | 评估可视化                      |
+| `neo4j`                 | ≥ 5.0.0  | 社交网络图数据库（可选）        |
+| `websockets`            | ≥ 12.0   | 实时仿真监控                    |
 
 ---
 
@@ -354,7 +228,17 @@ POSIM 支持**任何 OpenAI 兼容的 API 服务**。在仿真配置文件（如
 python scripts/tianjiaerhuan/run_with_monitor.py
 ```
 
-仿真将：加载用户数据 → 初始化 Social-BDI 信念系统 → 构建社交网络与推荐系统 → 启动 Hawkes 时间引擎 → 每步执行认知管线（异步并发）→ 情绪传染 → 更新热搜。支持 **WebSocket 实时监控仪表盘**。
+**仿真流程：**
+1. **初始化** — 加载用户画像，为每个智能体构建 Social-BDI 信念系统（身份 → 心理认知 → 事件观点 → 初始情绪），构建社交网络和推荐系统
+2. **每步执行** — Hawkes 时间引擎确定激活智能体 → 个性化内容推荐 → 信念更新（LLM）→ 欲望推理（LLM）→ 意图规划（LLM）→ 行为执行，全程异步并发
+3. **步后处理** — 社交邻居间情绪传染、热搜话题更新、新帖子索引入推荐池、仿真状态日志记录
+
+**实时监控**：仿真启动 WebSocket 服务器，将实时数据推送到浏览器监控仪表盘（`posim/web/monitor.html`）。您可以实时观察智能体激活数量、发帖活跃度、情绪分布和热搜话题。
+
+**仿真输出**保存在各事件脚本目录下的 `output/` 目录，包括：
+- `simulation.db` — 完整仿真数据库（所有帖子、智能体状态、网络演化）
+- `simulation_log.json` — 每步每个智能体认知状态和行为的结构化日志
+- 智能体信念轨迹、情绪曲线和交互记录
 
 ### 4️⃣ 评估
 
@@ -362,7 +246,13 @@ python scripts/tianjiaerhuan/run_with_monitor.py
 python scripts/tianjiaerhuan/evaluate.py
 ```
 
-评估结果保存至 `vis_results/`，包括行为校准、热度校准、情感校准、网络拓扑可视化图表，以及综合 `evaluation_report.json`。
+评估框架读取仿真输出，与真实数据进行多维度对比：
+
+- **行为层** — 行为类型分布（JSD）、活跃度热度曲线相关性、热度 RMSE
+- **内容层** — 话语非理性分布、词汇多样性（TTR）、群体情感偏差
+- **拓扑层** — 网络拓扑相似性、级联规模分布、幂律指数
+
+结果保存至 `vis_results/`，包括校准图表、分布对比图，以及包含所有量化指标的综合 `evaluation_report.json`。
 
 <details>
 <summary><b>📋 完整配置参数</b></summary>
@@ -470,7 +360,7 @@ Social-BDI 的三个子系统通过结构化中间状态通信，可以独立替
 如果您对本项目感兴趣并希望参与开发，我们热忱欢迎您的加入！请通过邮件联系我们：**15939048354@163.com**
 
 <p align="center">
-  <img src="assets/system_prototype_1.png" alt="系统原型 1" width="420">    
+  <img src="assets/system_prototype_1.png" alt="系统原型 1" width="420">  
   <img src="assets/system_prototype_2.png" alt="系统原型 2" width="420">
 </p>
 <p align="center"><em>🖼️ 早期系统Demo原型 — 正式系统敬请期待！</em></p>

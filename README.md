@@ -44,7 +44,6 @@
 - [💡 Why POSIM?](#-why-posim)
 - [✨ Key Features](#-key-features)
 - [🏗️ Framework Overview](#%EF%B8%8F-framework-overview)
-- [🌳 Project Structure](#-project-structure)
 - [⚙️ Installation](#%EF%B8%8F-installation)
 - [🚀 Quick Start](#-quick-start)
 - [🔌 Extension Guide](#-extension-guide)
@@ -56,23 +55,19 @@
 
 ## 💡 Why POSIM?
 
-Real-world public opinion events can sweep across social networks within hours. Understanding these complex collective dynamics is critical for social governance, crisis response, and public policy — yet real-world social experiments face fundamental challenges of ethical constraints and irreproducibility. Traditional simulation methods (epidemic models, threshold cascades, classic ABM) share a common bottleneck: **they cannot explicitly model individual cognitive processes**. Recent LLM-based approaches treat models as end-to-end behavior generators without modeling intermediate cognitive states, leaving behavioral mechanisms opaque.
+Public opinion events on social media — from consumer disputes to public safety incidents — can escalate from a local discussion to a nationwide trending topic within hours. Thousands of users flood comment sections, emotions intensify through repost chains, and a single opinion leader's post can reshape the entire discourse. For government agencies, media organizations, and platform operators, understanding how public opinion forms, evolves, and can be guided is of critical practical importance.
 
-**POSIM** (**P**ublic **O**pinion **Sim**ulator) addresses these challenges by embedding LLMs within a structured cognitive architecture, enabling agents to maintain explicit belief states and produce fully traceable behavioral decisions.
+However, conducting real-world social experiments on these dynamics faces fundamental challenges: ethical constraints prevent deliberate manipulation of public discourse, and each event is unique and irreproducible. This is where **computational simulation** becomes invaluable — it provides a virtual laboratory where researchers can replay, analyze, and experiment with public opinion scenarios in a controlled environment.
 
-| **Platform** | **Explicit Cognitive Modeling** | **Validation (M/P/S)** | **Real-Case Intervention** | **LLM Multi-Type Agents** | **Temporal Precision** | **Modular Design** |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| S3 | ✗ | ✗/✓/✓ | ✗ | ✗ | ★★★ | ★★★ |
-| HiSim | ✗ | ✗/✗/✓ | ✗ | ✗ | ★★ | ★★ |
-| GA-S3 | ✗ | ✗/✗/✓ | ✗ | ✓ | ★★★ | ★★ |
-| SPARK | ✗ | ✗/✓/✗ | ✗ | ✓ | ★★ | ★★ |
-| FDE-LLM | ✗ | ✗/✗/✓ | ✗ | ✗ | ★★ | ★★ |
-| TrendSim | ✗ | ✓/✗/✗ | ✗ | ✓ | ★★★★ | ★★★ |
-| OASIS | ✗ | ✗/✓/✓ | ✗ | ✗ | ★★★★ | ★★★★ |
-| LMAgent | ✗ | ✗/✗/✓ | ✗ | ✓ | ★★ | ★★ |
-| **POSIM (Ours)** | **✓** | **✓/✓/✓** | **✓** | **✓** | **★★★★★** | **★★★★★** |
+Traditional simulation approaches — epidemic models, threshold cascade models, and classic agent-based modeling (ABM) — each capture certain aspects of opinion dynamics, but share a critical limitation: **they cannot explicitly model individual cognitive processes**. Agents in these systems are rule-driven automatons that neither understand the content they encounter nor reason about their responses. Large language models (LLMs) offer a breakthrough with semantic understanding and human-like reasoning, yet most existing LLM-based simulations treat the model as a black-box behavior generator — prompt in, action out — without modeling the intermediate cognitive states that drive real human behavior.
 
-> *M = Mechanism validation; P = Phenomenon validation; S = Statistical validation.*
+**POSIM** (**P**ublic **O**pinion **Sim**ulator) bridges this gap. By embedding LLMs within a structured cognitive architecture (Social-BDI), POSIM creates agents that:
+
+- **Maintain explicit belief states** — each agent tracks its identity, psychological traits, event opinions, and emotional arousal as structured, inspectable data
+- **Produce fully traceable decisions** — every action can be traced back through the intention → desire → belief chain that produced it
+- **Exhibit emergent collective behaviors** — opinion lifecycle patterns, emotional polarization, and cascade power laws arise spontaneously from individual agent interactions, without being programmed in
+
+POSIM is designed for researchers studying computational social science, public opinion dynamics, crisis communication, and LLM-based multi-agent systems. It can also serve as a decision-support tool for evaluating governance strategies through counterfactual simulation.
 
 ---
 
@@ -113,124 +108,6 @@ POSIM comprises three core components:
 | 🏛️ **Governments** | Official stance & governance | Low frequency, high authority | Pivotal influence after event escalation |
 
 > All behavioral patterns emerge autonomously through the Social-BDI pipeline — they are **not** preset by rules.
-
----
-
-## 🌳 Project Structure
-
-```
-posim/
-├── posim/                                 # Core Framework
-│   ├── agents/                            # Agent Module
-│   │   ├── base_agent.py                  # Base agent (cognitive pipeline scheduling)
-│   │   ├── citizen_agent.py               # Ordinary user agent
-│   │   ├── kol_agent.py                   # Opinion leader agent
-│   │   ├── media_agent.py                 # Media agent
-│   │   ├── government_agent.py            # Government agent
-│   │   └── ebdi/                          # Social-BDI Cognitive Architecture
-│   │       ├── belief/                    # Belief Subsystem
-│   │       │   ├── belief_system.py       # Belief system orchestrator
-│   │       │   ├── belief_updater.py      # LLM-driven belief update
-│   │       │   ├── emotion_belief.py      # Emotional arousal belief
-│   │       │   ├── event_belief.py        # Event opinion belief
-│   │       │   ├── identity_belief.py     # Role identity belief
-│   │       │   └── psychological_belief.py # Psychological cognition belief
-│   │       ├── desire/                    # Desire Subsystem
-│   │       │   ├── desire_system.py       # Motivation inference engine
-│   │       │   └── desire_types.py        # Predefined motivation types
-│   │       ├── intention/                 # Intention Subsystem
-│   │       │   └── intention_system.py    # Multi-level chain-of-thought planning
-│   │       └── memory/                    # Streaming Memory
-│   │           ├── memory_retrieval.py    # Recency-relevance retrieval scoring
-│   │           └── stream_memory.py       # Time-decayed memory store
-│   ├── config/                            # Configuration
-│   │   ├── config_manager.py              # Configuration loader
-│   │   └── config_schema.py              # Dataclass configuration schema
-│   ├── data/                              # Data Management
-│   │   ├── data_loader.py                 # Data loading utilities
-│   │   └── preprocessor.py               # Data preprocessing
-│   ├── engine/                            # Simulation Engine
-│   │   ├── simulator.py                   # Main simulation loop (async concurrent)
-│   │   ├── hawkes_process.py              # Hawkes self-exciting point process
-│   │   └── time_engine.py                # Temporal engine (circadian modulation)
-│   ├── environment/                       # Simulation Environment
-│   │   ├── recommendation.py              # Dual-channel content recommendation
-│   │   ├── social_network.py              # Three-layer directed social network
-│   │   ├── hot_search.py                  # Trending topics
-│   │   └── event_queue.py                # External event queue
-│   ├── evaluation/                        # Evaluation Framework
-│   │   ├── base.py                        # Base evaluator class
-│   │   ├── data_loader.py                 # Evaluation data loader
-│   │   ├── evaluator_manager.py           # Evaluation orchestrator
-│   │   ├── utils.py                       # Evaluation utilities
-│   │   ├── visualization.py               # Visualization tools
-│   │   ├── calibration/                   # Statistical Calibration
-│   │   │   ├── behavior.py               # Behavior layer (JSD, ρ, RMSE)
-│   │   │   ├── emotion.py                # Emotion calibration
-│   │   │   ├── hotness.py                # Hotness curve calibration
-│   │   │   ├── network.py                # Network topology & cascade
-│   │   │   ├── opinion_index.py          # Discourse irrationality index
-│   │   │   └── topic.py                  # Topic analysis
-│   │   └── mechanism/                     # Phenomenon Emergence Validation
-│   │       ├── agent_behavior.py          # Agent behavior analysis
-│   │       ├── lifecycle.py               # Opinion lifecycle analysis
-│   │       ├── macro_phenomenon.py        # Macro phenomenon validation
-│   │       ├── opinion_polarization.py    # Polarization analysis
-│   │       └── propagation_structure.py   # Cascade & network structure
-│   ├── llm/                               # LLM Resource Management
-│   │   ├── api_pool.py                    # Multi-endpoint pool (load balancing, failover)
-│   │   └── llm_client.py                 # Unified LLM call client
-│   ├── micro_user_vail/                   # Individual Behavior Mechanism Validation
-│   │   ├── main.py                        # Validation entry point
-│   │   ├── config.py                      # Validation configuration
-│   │   ├── data_loader.py                 # Validation data loader
-│   │   ├── llm_service.py                 # LLM service for validation
-│   │   ├── simulation.py                  # Validation simulation runner
-│   │   ├── validation.py                  # Validation metrics computation
-│   │   └── prompts.py                     # Validation prompts
-│   ├── prompts/                           # Prompt Templates (per agent type)
-│   │   ├── prompt_loader.py               # Dynamic prompt loader
-│   │   ├── ablation_prompts.py            # Ablation experiment prompts
-│   │   ├── citizen_prompts/               # Ordinary user prompts
-│   │   │   ├── belief_prompts.py
-│   │   │   ├── desire_prompts.py
-│   │   │   └── intention_prompts.py
-│   │   ├── kol_prompts/                   # Opinion leader prompts
-│   │   ├── media_prompts/                 # Media prompts
-│   │   └── government_prompts/            # Government prompts
-│   ├── storage/                           # Data Storage
-│   │   ├── database.py                    # SQLite database
-│   │   └── log_manager.py                # Simulation logging
-│   ├── web/                               # Real-time Monitoring
-│   │   ├── websocket_server.py            # WebSocket server for live monitoring
-│   │   └── monitor.html                   # Monitoring dashboard
-│   └── utils/                             # Utility Helpers
-│       ├── formatters.py                  # Prompt context formatters
-│       └── logger.py                      # Logging utilities
-├── scripts/                               # Simulation & Evaluation Scripts
-│   ├── run_all_evaluations.py             # Batch evaluation across all events
-│   ├── run_ablation_batch.py              # Batch ablation experiments
-│   ├── extract_all_metrics.py             # Extract metrics summary
-│   ├── extract_ablation_metrics.py        # Extract ablation metrics
-│   ├── tianjiaerhuan/                     # LE — Luxury Earring Event
-│   │   ├── run_with_monitor.py            # Run simulation with live monitoring
-│   │   ├── evaluate.py                    # Run evaluation pipeline
-│   │   ├── config.json                    # Simulation configuration
-│   │   ├── config_*.json                  # Ablation configurations
-│   │   └── data/                          # Event data (users, posts, events, relations)
-│   ├── wudatushuguan/                     # WL — WHU Library Event
-│   │   ├── run_with_monitor.py
-│   │   ├── evaluate.py
-│   │   ├── visualize_network.py           # Network visualization
-│   │   └── data/
-│   └── xibeiyuzhicai/                     # XF — Xibei Prepared Food Event
-│       ├── run_with_monitor.py
-│       ├── evaluate.py
-│       └── data/
-├── docs/                                  # Project Homepage (GitHub Pages)
-├── assets/                                # Static Resources (logo, figures)
-└── requirements.txt                       # Python dependencies
-```
 
 ---
 
@@ -354,7 +231,17 @@ Each simulation scenario requires four data files under `scripts/<event>/data/`:
 python scripts/tianjiaerhuan/run_with_monitor.py
 ```
 
-The simulation will: load user data → initialize Social-BDI belief system → build social network & recommendation system → start Hawkes temporal engine → execute cognitive pipeline per step (async concurrent) → run emotion contagion → update trending topics. Supports **WebSocket real-time monitoring dashboard**.
+**Simulation pipeline:**
+1. **Initialization** — Load user profiles, build Social-BDI belief system for each agent (identity → psychological cognition → event opinions → initial emotion), construct social networks and recommendation system
+2. **Per-step execution** — Hawkes temporal engine determines activated agents → personalized content recommendation → belief update (LLM) → desire inference (LLM) → intention planning (LLM) → action execution, all running with async concurrency
+3. **Post-step processing** — Emotion contagion among social neighbors, trending topic updates, new post indexing into recommendation pool, simulation state logging
+
+**Real-time monitoring**: The simulation starts a WebSocket server that pushes live data to a browser-based monitoring dashboard (`posim/web/monitor.html`). You can observe agent activation counts, posting activity, emotion distributions, and trending topics in real time.
+
+**Simulation outputs** are saved to the `output/` directory under each event script folder, including:
+- `simulation.db` — Full simulation database (all posts, agent states, network evolution)
+- `simulation_log.json` — Structured log of every agent's cognitive state and action per step
+- Agent belief trajectories, emotion curves, and interaction records
 
 ### 4️⃣ Evaluate
 
@@ -362,7 +249,13 @@ The simulation will: load user data → initialize Social-BDI belief system → 
 python scripts/tianjiaerhuan/evaluate.py
 ```
 
-Evaluation outputs are saved to `vis_results/`, including behavior calibration, hotness calibration, emotion calibration, network topology visualizations, and a comprehensive `evaluation_report.json`.
+The evaluation framework reads simulation outputs and compares them against real-world data across multiple dimensions:
+
+- **Behavior layer** — Action type distribution (JSD), activity hotness curve correlation, hotness RMSE
+- **Content layer** — Discourse irrationality distribution, lexical diversity (TTR), group sentiment deviation
+- **Topology layer** — Network topological similarity, cascade size distribution, power-law exponent
+
+Results are saved to `vis_results/`, including calibration charts, distribution comparisons, and a comprehensive `evaluation_report.json` with all quantitative metrics.
 
 <details>
 <summary><b>📋 Full Configuration Parameters</b></summary>
