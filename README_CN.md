@@ -219,7 +219,7 @@ POSIM 支持**任何 OpenAI 兼容的 API 服务**。在仿真配置文件（如
 | `users.json`         | 用户画像       |
 | `events.json`        | 外部事件序列   |
 | `initial_posts.json` | 仿真初始帖子   |
-| `relations.json`     | 用户关注关系   |
+| `relations.json`     | 用户关系       |
 
 <details>
 <summary><b>📋 数据格式说明</b></summary>
@@ -328,7 +328,7 @@ POSIM 支持**任何 OpenAI 兼容的 API 服务**。在仿真配置文件（如
 
 ---
 
-#### `relations.json` — 关注关系对象数组
+#### `relations.json` — 用户关系对象数组
 
 ```json
 [

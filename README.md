@@ -219,7 +219,7 @@ Each simulation scenario requires four data files under `scripts/<event>/data/`:
 | `users.json`         | User profiles                  |
 | `events.json`        | External event sequence        |
 | `initial_posts.json` | Seed posts at simulation start |
-| `relations.json`     | User follow relationships      |
+| `relations.json`     | User relationships             |
 
 <details>
 <summary><b>📋 Data Format Reference</b></summary>
@@ -330,7 +330,7 @@ Two event types are supported:
 
 ---
 
-#### `relations.json` — Array of follow relationship objects
+#### `relations.json` — Array of user relationship objects
 
 ```json
 [
