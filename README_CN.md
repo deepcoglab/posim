@@ -213,167 +213,138 @@ POSIM 支持**任何 OpenAI 兼容的 API 服务**。在仿真配置文件（如
 
 ### 2️⃣ 准备数据
 
-每个仿真场景需要四个数据文件，放置于 `scripts/<event>/data/` 目录下。您可以按照以下格式准备自己的数据。
+每个仿真场景需要四个数据文件，放置于 `scripts/<event>/data/` 目录下：
 
-#### `users.json` — 用户画像
+| 文件                   | 内容           |
+| ---------------------- | -------------- |
+| `users.json`         | 用户画像       |
+| `events.json`        | 外部事件序列   |
+| `initial_posts.json` | 仿真初始帖子   |
+| `relations.json`     | 用户关注关系   |
 
-JSON 数组，每个用户对象包含身份信息、行为倾向、初始情绪和基于历史数据生成的认知描述。
+<details>
+<summary><b>📋 数据格式说明</b></summary>
+
+#### `users.json` — 用户对象数组
 
 ```json
 [
   {
-    "user_id": "1234567890",
-    "username": "示例用户",
+    "user_id": "123456",
+    "username": "Alice",
     "agent_type": "citizen",
-    "followers_count": 323,
-    "following_count": 840,
-    "posts_count": 6069,
+    "followers_count": 500,
+    "following_count": 300,
     "verified": false,
-    "description": "用户简介文本",
+    "description": "个人简介。",
     "raw_profile": {
-      "gender": "男",
+      "gender": "女",
       "location": "北京",
-      "verified_type": "普通用户",
-      "register_time": "2018-01-01 00:00:00"
+      "verified_type": "普通用户"
     },
     "behavior_tendency": {
       "repost": 1,
-      "long_comment": 1,
-      "like": 3
+      "long_comment": 2,
+      "like": 5
     },
-    "emotion_vector": {
-      "happiness": 0.0, "sadness": 0.0, "anger": 0.0,
-      "fear": 0.0, "surprise": 0.0, "disgust": 0.0
-    },
-    "history_posts": [],
-    "identity_description": "对用户身份和行为模式的文本摘要。",
+    "identity_description": "一段自然语言描述，概括该用户的身份和行为模式。",
     "psychological_beliefs": [
-      "关于用户价值观和行为倾向的信念陈述1。",
-      "信念陈述2 ..."
+      "心理信念1。",
+      "心理信念2。"
     ],
     "event_opinions": [
       {
-        "time": "2025-01-01T12:00",
-        "subject": "事件名称",
-        "opinion": "用户对该事件的初始观点。",
-        "reason": "用户持有此观点的原因。"
+        "time": "2025-05-15T12:00",
+        "subject": "事件主题名称",
+        "opinion": "该用户对事件的初始立场。",
+        "reason": "持有该立场的原因。"
       }
     ]
   }
 ]
 ```
 
-| 字段 | 必填 | 说明 |
-| --- | :---: | --- |
-| `user_id` | ✅ | 唯一用户标识 |
-| `username` | ✅ | 显示名称 |
-| `agent_type` | ✅ | `citizen`（普通用户）、`kol`（意见领袖）、`media`（媒体）、`government`（政府）之一 |
-| `followers_count` / `following_count` / `posts_count` | ✅ | 基本社交指标 |
-| `verified` | ✅ | 是否认证 |
-| `raw_profile` | ✅ | 性别、地区、认证类型、注册时间 |
-| `behavior_tendency` | ✅ | `repost`（转发）、`long_comment`（长评论）、`like`（点赞）的相对权重 |
-| `emotion_vector` | ✅ | 初始六维情绪向量（中性时全为 0.0） |
-| `identity_description` | ✅ | LLM 生成的用户身份描述摘要 |
-| `psychological_beliefs` | ✅ | 用户心理信念列表 |
-| `event_opinions` | ✅ | 对仿真事件的初始观点 |
+> `agent_type`：`"citizen"` / `"kol"` / `"media"` / `"government"`
+> `behavior_tendency`：相对权重（整数），数值越大概率越高
+> `identity_description` 和 `psychological_beliefs` 作为智能体初始信念状态，建议基于真实画像数据提炼自然语言描述
 
-#### `events.json` — 外部事件序列
+---
 
-JSON 数组，仿真过程中注入的事件对象。两种类型：`global_broadcast`（全平台广播事件）和 `node_post`（触发讨论的特定用户帖子）。
+#### `events.json` — 事件对象数组
 
+支持两种事件类型：
+
+**`global_broadcast`** — 全平台广播（如突发新闻）：
 ```json
-[
-  {
-    "time": "2025-01-02T09:00",
-    "type": "global_broadcast",
-    "source": ["external"],
-    "topic": "事件主题标题",
-    "content": "事件详细描述。",
-    "influence": 1.0,
-    "metadata": {
-      "original_tags": ["标签1", "标签2"],
-      "group_name": "事件分组名称",
-      "reason": "该事件为何重要。"
-    }
-  },
-  {
-    "time": "2025-01-02T12:00",
-    "type": "node_post",
-    "source": ["1234567890"],
-    "topic": "讨论主题",
-    "content": "关键帖子内容。",
-    "influence": 1.0,
-    "metadata": {
-      "trigger_type": "意见领袖发声",
-      "selection_reason": "该帖子为何重要。"
-    },
-    "source_post": {
-      "user_id": "1234567890",
-      "username": "关键用户",
-      "agent_type": "citizen",
-      "time": "2025-01-02T12:00:00",
-      "content": "原始帖子内容",
-      "reposts": 100, "comments": 50, "likes": 500,
-      "tags": ["标签1"]
-    }
-  }
-]
+{
+  "time": "2025-05-16T09:45",
+  "type": "global_broadcast",
+  "source": ["external"],
+  "topic": "简短主题标签",
+  "content": "注入所有智能体感知的详细事件描述。",
+  "influence": 1.0
+}
 ```
 
-#### `initial_posts.json` — 种子帖子
+**`node_post`** — 指定用户发帖：
+```json
+{
+  "time": "2025-05-16T13:34",
+  "type": "node_post",
+  "source": ["user_id_here"],
+  "topic": "简短主题标签",
+  "content": "帖子内容文本。",
+  "influence": 1.0,
+  "source_post": {
+    "user_id": "user_id_here",
+    "username": "用户名",
+    "agent_type": "citizen",
+    "time": "2025-05-16T13:34:00",
+    "content": "帖子内容文本。"
+  }
+}
+```
 
-JSON 数组，仿真开始前填充平台的初始帖子/评论/转发数据。
+> `influence`：`[0, 1]` 区间浮点数，控制该事件对 Hawkes 过程的激励强度
+
+---
+
+#### `initial_posts.json` — 种子帖子对象数组
 
 ```json
 [
   {
-    "type": "comment",
+    "type": "post",
     "author": "用户名",
-    "author_id": "1234567890",
-    "content": "评论文本",
-    "raw_content": "原始未处理文本",
-    "time": "2025-01-01 10:00:00",
-    "level": 1,
-    "replied_to_user": null,
-    "replied_to_content": "",
-    "original_post_content": "被评论的帖子内容",
-    "original_post_url": "http://...",
-    "url": "http://...",
-    "sensitivity": "非敏感",
+    "author_id": "123456",
+    "content": "帖子内容文本。",
+    "time": "2025-05-07 19:21:39",
     "keywords": "关键词1,关键词2"
-  },
-  {
-    "type": "repost",
-    "author": "用户名",
-    "author_id": "1234567890",
-    "user_content": "转发评论",
-    "time": "2025-01-01 11:00:00",
-    "root_author": "原作者",
-    "root_content": "原始帖子内容",
-    "root_time": "2025-01-01 10:00:00",
-    "repost_chain": [{"author": "...", "content": "...", "level": 0}],
-    "sensitivity": "非敏感",
-    "keywords": "关键词1"
   }
 ]
 ```
 
-#### `relations.json` — 社交网络
+> `type`：`"post"`（原创帖）或 `"comment"`（评论）
+> 这些帖子构成推荐系统的初始内容池
 
-JSON 数组，用户之间的关注关系。
+---
+
+#### `relations.json` — 关注关系对象数组
 
 ```json
 [
   {
-    "follower_id": "1111111111",
-    "following_id": "2222222222",
+    "follower_id": "111",
+    "following_id": "222",
     "relation_type": "follow",
     "timestamp": 1746878497
   }
 ]
 ```
 
-> 💡 **自定义数据准备提示**：`users.json` 中的 `identity_description`、`psychological_beliefs` 和 `event_opinions` 字段可通过将用户画像和历史帖子输入 LLM 来生成。`events.json` 应包含驱动舆情生命周期的关键外部事件。`initial_posts.json` 提供仿真开始时智能体能看到的种子内容。
+> `timestamp`：Unix 时间戳（秒），用于加权关系时效性
+
+</details>
 
 ### 3️⃣ 运行仿真
 

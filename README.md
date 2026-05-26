@@ -216,49 +216,50 @@ Use any cloud provider that offers an OpenAI-compatible API (OpenAI, DeepSeek, e
 
 ### 2️⃣ Prepare Data
 
-Each simulation scenario requires four data files under `scripts/<event>/data/`. You can prepare your own data following the formats below.
+Each simulation scenario requires four data files under `scripts/<event>/data/`:
 
-#### `users.json` — User Profiles
+| File | Contents |
+| --- | --- |
+| `users.json` | User profiles |
+| `events.json` | External event sequence |
+| `initial_posts.json` | Seed posts at simulation start |
+| `relations.json` | User follow relationships |
 
-A JSON array of user objects. Each user contains identity, behavior tendency, initial emotion, and cognitive descriptions generated from their historical data.
+<details>
+<summary><b>📋 Data Format Reference</b></summary>
+
+#### `users.json` — Array of user objects
 
 ```json
 [
   {
-    "user_id": "1234567890",
-    "username": "example_user",
+    "user_id": "123456",
+    "username": "Alice",
     "agent_type": "citizen",
-    "followers_count": 323,
-    "following_count": 840,
-    "posts_count": 6069,
+    "followers_count": 500,
+    "following_count": 300,
     "verified": false,
-    "description": "User bio text",
+    "description": "A brief self-introduction.",
     "raw_profile": {
-      "gender": "男",
+      "gender": "女",
       "location": "北京",
-      "verified_type": "普通用户",
-      "register_time": "2018-01-01 00:00:00"
+      "verified_type": "普通用户"
     },
     "behavior_tendency": {
       "repost": 1,
-      "long_comment": 1,
-      "like": 3
+      "long_comment": 2,
+      "like": 5
     },
-    "emotion_vector": {
-      "happiness": 0.0, "sadness": 0.0, "anger": 0.0,
-      "fear": 0.0, "surprise": 0.0, "disgust": 0.0
-    },
-    "history_posts": [],
-    "identity_description": "A text summary of the user's identity and behavioral patterns.",
+    "identity_description": "One-paragraph natural language summary of the user's identity and behavior patterns.",
     "psychological_beliefs": [
-      "Belief statement 1 about the user's values and tendencies.",
-      "Belief statement 2 ..."
+      "Belief sentence 1.",
+      "Belief sentence 2."
     ],
     "event_opinions": [
       {
-        "time": "2025-01-01T12:00",
-        "subject": "Event name",
-        "opinion": "User's initial opinion on the event.",
+        "time": "2025-05-15T12:00",
+        "subject": "Event topic name",
+        "opinion": "The user's initial stance on the event.",
         "reason": "Why the user holds this opinion."
       }
     ]
@@ -266,117 +267,87 @@ A JSON array of user objects. Each user contains identity, behavior tendency, in
 ]
 ```
 
-| Field | Required | Description |
-| --- | :---: | --- |
-| `user_id` | ✅ | Unique user identifier |
-| `username` | ✅ | Display name |
-| `agent_type` | ✅ | One of `citizen`, `kol`, `media`, `government` |
-| `followers_count` / `following_count` / `posts_count` | ✅ | Basic social metrics |
-| `verified` | ✅ | Whether the user is verified |
-| `raw_profile` | ✅ | Gender, location, verification type, register time |
-| `behavior_tendency` | ✅ | Relative weights for `repost`, `long_comment`, `like` |
-| `emotion_vector` | ✅ | Initial 6-dimensional emotion (all 0.0 if neutral) |
-| `identity_description` | ✅ | LLM-generated summary of the user's identity |
-| `psychological_beliefs` | ✅ | List of belief statements about the user's psychology |
-| `event_opinions` | ✅ | Initial opinions on the event being simulated |
+> `agent_type`: `"citizen"` / `"kol"` / `"media"` / `"government"`
+> `behavior_tendency`: relative weights (integers); higher = more likely
+> `identity_description` and `psychological_beliefs` are used as the agent's initial belief state — provide natural language summaries based on real profile data
 
-#### `events.json` — External Event Sequence
+---
 
-A JSON array of event objects injected during the simulation. Two types: `global_broadcast` (platform-wide events) and `node_post` (specific user posts that trigger discussion).
+#### `events.json` — Array of event objects
 
+Two event types are supported:
+
+**`global_broadcast`** — Platform-wide push (e.g. breaking news):
 ```json
-[
-  {
-    "time": "2025-01-02T09:00",
-    "type": "global_broadcast",
-    "source": ["external"],
-    "topic": "Event topic title",
-    "content": "Detailed description of what happened.",
-    "influence": 1.0,
-    "metadata": {
-      "original_tags": ["tag1", "tag2"],
-      "group_name": "Event group name",
-      "reason": "Why this event matters."
-    }
-  },
-  {
-    "time": "2025-01-02T12:00",
-    "type": "node_post",
-    "source": ["1234567890"],
-    "topic": "Discussion topic",
-    "content": "Content of the key post.",
-    "influence": 1.0,
-    "metadata": {
-      "trigger_type": "Opinion leader post",
-      "selection_reason": "Why this post is important."
-    },
-    "source_post": {
-      "user_id": "1234567890",
-      "username": "key_user",
-      "agent_type": "citizen",
-      "time": "2025-01-02T12:00:00",
-      "content": "Original post content",
-      "reposts": 100, "comments": 50, "likes": 500,
-      "tags": ["tag1"]
-    }
-  }
-]
+{
+  "time": "2025-05-16T09:45",
+  "type": "global_broadcast",
+  "source": ["external"],
+  "topic": "Short topic label",
+  "content": "Detailed event description injected into all agents' perception.",
+  "influence": 1.0
+}
 ```
 
-#### `initial_posts.json` — Seed Posts
+**`node_post`** — A specific user publishes a post:
+```json
+{
+  "time": "2025-05-16T13:34",
+  "type": "node_post",
+  "source": ["user_id_here"],
+  "topic": "Short topic label",
+  "content": "Post content text.",
+  "influence": 1.0,
+  "source_post": {
+    "user_id": "user_id_here",
+    "username": "Username",
+    "agent_type": "citizen",
+    "time": "2025-05-16T13:34:00",
+    "content": "Post content text."
+  }
+}
+```
 
-A JSON array of initial posts/comments/reposts that populate the platform before simulation starts.
+> `influence`: float in `[0, 1]`, controls how strongly this event excites the Hawkes process
+
+---
+
+#### `initial_posts.json` — Array of seed post objects
 
 ```json
 [
   {
-    "type": "comment",
-    "author": "username",
-    "author_id": "1234567890",
-    "content": "Comment text",
-    "raw_content": "Original unprocessed text",
-    "time": "2025-01-01 10:00:00",
-    "level": 1,
-    "replied_to_user": null,
-    "replied_to_content": "",
-    "original_post_content": "The post being commented on",
-    "original_post_url": "http://...",
-    "url": "http://...",
-    "sensitivity": "非敏感",
+    "type": "post",
+    "author": "Username",
+    "author_id": "123456",
+    "content": "Post content text.",
+    "time": "2025-05-07 19:21:39",
     "keywords": "keyword1,keyword2"
-  },
-  {
-    "type": "repost",
-    "author": "username",
-    "author_id": "1234567890",
-    "user_content": "Repost comment",
-    "time": "2025-01-01 11:00:00",
-    "root_author": "original_author",
-    "root_content": "Original post content",
-    "root_time": "2025-01-01 10:00:00",
-    "repost_chain": [{"author": "...", "content": "...", "level": 0}],
-    "sensitivity": "非敏感",
-    "keywords": "keyword1"
   }
 ]
 ```
 
-#### `relations.json` — Social Network
+> `type`: `"post"` (original post) or `"comment"` (reply)
+> These posts form the initial content pool for the recommendation system
 
-A JSON array of follow relationships between users.
+---
+
+#### `relations.json` — Array of follow relationship objects
 
 ```json
 [
   {
-    "follower_id": "1111111111",
-    "following_id": "2222222222",
+    "follower_id": "111",
+    "following_id": "222",
     "relation_type": "follow",
     "timestamp": 1746878497
   }
 ]
 ```
 
-> 💡 **Tips for preparing your own data**: The `identity_description`, `psychological_beliefs`, and `event_opinions` fields in `users.json` can be generated by prompting an LLM with the user's profile and historical posts. The `events.json` should capture the key external events that drive the public opinion lifecycle. `initial_posts.json` provides the seed content that agents will see at the start of the simulation.
+> `timestamp`: Unix timestamp (seconds); used to weight relationship recency
+
+</details>
 
 ### 3️⃣ Run Simulation
 
