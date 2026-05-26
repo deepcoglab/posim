@@ -213,14 +213,167 @@ POSIM 支持**任何 OpenAI 兼容的 API 服务**。在仿真配置文件（如
 
 ### 2️⃣ 准备数据
 
-每个仿真场景需要四个数据文件，放置于 `scripts/<event>/data/` 目录下：
+每个仿真场景需要四个数据文件，放置于 `scripts/<event>/data/` 目录下。您可以按照以下格式准备自己的数据。
 
-| 文件                   | 内容                                                             |
-| ---------------------- | ---------------------------------------------------------------- |
-| `users.json`         | 用户画像（ID、昵称、性别、粉丝数、认证类型、简介、历史行为摘要） |
-| `events.json`        | 外部事件序列（注入时间、事件描述、影响强度）                     |
-| `initial_posts.json` | 初始帖子数据（内容、作者、时间戳、类型、关键词）                 |
-| `relations.json`     | 用户关注关系                                                     |
+#### `users.json` — 用户画像
+
+JSON 数组，每个用户对象包含身份信息、行为倾向、初始情绪和基于历史数据生成的认知描述。
+
+```json
+[
+  {
+    "user_id": "1234567890",
+    "username": "示例用户",
+    "agent_type": "citizen",
+    "followers_count": 323,
+    "following_count": 840,
+    "posts_count": 6069,
+    "verified": false,
+    "description": "用户简介文本",
+    "raw_profile": {
+      "gender": "男",
+      "location": "北京",
+      "verified_type": "普通用户",
+      "register_time": "2018-01-01 00:00:00"
+    },
+    "behavior_tendency": {
+      "repost": 1,
+      "long_comment": 1,
+      "like": 3
+    },
+    "emotion_vector": {
+      "happiness": 0.0, "sadness": 0.0, "anger": 0.0,
+      "fear": 0.0, "surprise": 0.0, "disgust": 0.0
+    },
+    "history_posts": [],
+    "identity_description": "对用户身份和行为模式的文本摘要。",
+    "psychological_beliefs": [
+      "关于用户价值观和行为倾向的信念陈述1。",
+      "信念陈述2 ..."
+    ],
+    "event_opinions": [
+      {
+        "time": "2025-01-01T12:00",
+        "subject": "事件名称",
+        "opinion": "用户对该事件的初始观点。",
+        "reason": "用户持有此观点的原因。"
+      }
+    ]
+  }
+]
+```
+
+| 字段 | 必填 | 说明 |
+| --- | :---: | --- |
+| `user_id` | ✅ | 唯一用户标识 |
+| `username` | ✅ | 显示名称 |
+| `agent_type` | ✅ | `citizen`（普通用户）、`kol`（意见领袖）、`media`（媒体）、`government`（政府）之一 |
+| `followers_count` / `following_count` / `posts_count` | ✅ | 基本社交指标 |
+| `verified` | ✅ | 是否认证 |
+| `raw_profile` | ✅ | 性别、地区、认证类型、注册时间 |
+| `behavior_tendency` | ✅ | `repost`（转发）、`long_comment`（长评论）、`like`（点赞）的相对权重 |
+| `emotion_vector` | ✅ | 初始六维情绪向量（中性时全为 0.0） |
+| `identity_description` | ✅ | LLM 生成的用户身份描述摘要 |
+| `psychological_beliefs` | ✅ | 用户心理信念列表 |
+| `event_opinions` | ✅ | 对仿真事件的初始观点 |
+
+#### `events.json` — 外部事件序列
+
+JSON 数组，仿真过程中注入的事件对象。两种类型：`global_broadcast`（全平台广播事件）和 `node_post`（触发讨论的特定用户帖子）。
+
+```json
+[
+  {
+    "time": "2025-01-02T09:00",
+    "type": "global_broadcast",
+    "source": ["external"],
+    "topic": "事件主题标题",
+    "content": "事件详细描述。",
+    "influence": 1.0,
+    "metadata": {
+      "original_tags": ["标签1", "标签2"],
+      "group_name": "事件分组名称",
+      "reason": "该事件为何重要。"
+    }
+  },
+  {
+    "time": "2025-01-02T12:00",
+    "type": "node_post",
+    "source": ["1234567890"],
+    "topic": "讨论主题",
+    "content": "关键帖子内容。",
+    "influence": 1.0,
+    "metadata": {
+      "trigger_type": "意见领袖发声",
+      "selection_reason": "该帖子为何重要。"
+    },
+    "source_post": {
+      "user_id": "1234567890",
+      "username": "关键用户",
+      "agent_type": "citizen",
+      "time": "2025-01-02T12:00:00",
+      "content": "原始帖子内容",
+      "reposts": 100, "comments": 50, "likes": 500,
+      "tags": ["标签1"]
+    }
+  }
+]
+```
+
+#### `initial_posts.json` — 种子帖子
+
+JSON 数组，仿真开始前填充平台的初始帖子/评论/转发数据。
+
+```json
+[
+  {
+    "type": "comment",
+    "author": "用户名",
+    "author_id": "1234567890",
+    "content": "评论文本",
+    "raw_content": "原始未处理文本",
+    "time": "2025-01-01 10:00:00",
+    "level": 1,
+    "replied_to_user": null,
+    "replied_to_content": "",
+    "original_post_content": "被评论的帖子内容",
+    "original_post_url": "http://...",
+    "url": "http://...",
+    "sensitivity": "非敏感",
+    "keywords": "关键词1,关键词2"
+  },
+  {
+    "type": "repost",
+    "author": "用户名",
+    "author_id": "1234567890",
+    "user_content": "转发评论",
+    "time": "2025-01-01 11:00:00",
+    "root_author": "原作者",
+    "root_content": "原始帖子内容",
+    "root_time": "2025-01-01 10:00:00",
+    "repost_chain": [{"author": "...", "content": "...", "level": 0}],
+    "sensitivity": "非敏感",
+    "keywords": "关键词1"
+  }
+]
+```
+
+#### `relations.json` — 社交网络
+
+JSON 数组，用户之间的关注关系。
+
+```json
+[
+  {
+    "follower_id": "1111111111",
+    "following_id": "2222222222",
+    "relation_type": "follow",
+    "timestamp": 1746878497
+  }
+]
+```
+
+> 💡 **自定义数据准备提示**：`users.json` 中的 `identity_description`、`psychological_beliefs` 和 `event_opinions` 字段可通过将用户画像和历史帖子输入 LLM 来生成。`events.json` 应包含驱动舆情生命周期的关键外部事件。`initial_posts.json` 提供仿真开始时智能体能看到的种子内容。
 
 ### 3️⃣ 运行仿真
 
