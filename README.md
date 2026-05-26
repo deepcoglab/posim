@@ -349,20 +349,33 @@ Two event types are supported:
 
 ### 3️⃣ Run Simulation
 
-Create your scenario folder under `scripts/` (e.g. `scripts/my_event/`) and place the `config.json` and `data/` directory inside it. Then run:
+Create a run script (e.g. `scripts/<event>/run.py`) that loads config and starts the simulator:
 
-```bash
-# Run with default config.json in the script directory
-python scripts/my_event/run_with_monitor.py
+```python
+import asyncio, sys
+from pathlib import Path
 
-# Or specify a config path explicitly
-python scripts/my_event/run_with_monitor.py path/to/config.json
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-# Disable real-time WebSocket monitor
-python scripts/my_event/run_with_monitor.py --no-websocket
+from posim.config.config_manager import ConfigManager
+from posim.llm.api_pool import APIPool
+from posim.engine.simulator import Simulator
+from posim.data.data_loader import DataLoader, parse_user_data
+from posim.storage.database import SimulationDatabase
+
+async def main():
+    config = ConfigManager("scripts/<event>/config.json").config
+    api_pool = APIPool(config.llm)
+    data_loader = DataLoader(config.data)
+    users = parse_user_data(data_loader.load_users())
+    db = SimulationDatabase("scripts/<event>/output/simulation.db")
+    simulator = Simulator(config, api_pool, users, data_loader, db)
+    await simulator.run()
+
+asyncio.run(main())
 ```
 
-You can use the provided scripts as a template — copy `run_with_monitor.py` into your scenario folder. Simulation outputs are saved to the `output/` directory under each event script folder.
+Simulation outputs are saved to the `output/` directory.
 
 ---
 

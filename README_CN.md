@@ -347,20 +347,33 @@ POSIM 支持**任何 OpenAI 兼容的 API 服务**。在仿真配置文件（如
 
 ### 3️⃣ 运行仿真
 
-在 `scripts/` 下创建场景目录（如 `scripts/my_event/`），放入 `config.json` 和 `data/` 目录后运行：
+创建运行脚本（如 `scripts/<event>/run.py`），加载配置并启动仿真：
 
-```bash
-# 使用脚本目录下默认的 config.json
-python scripts/my_event/run_with_monitor.py
+```python
+import asyncio, sys
+from pathlib import Path
 
-# 指定配置文件路径
-python scripts/my_event/run_with_monitor.py path/to/config.json
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-# 禁用实时 WebSocket 监控
-python scripts/my_event/run_with_monitor.py --no-websocket
+from posim.config.config_manager import ConfigManager
+from posim.llm.api_pool import APIPool
+from posim.engine.simulator import Simulator
+from posim.data.data_loader import DataLoader, parse_user_data
+from posim.storage.database import SimulationDatabase
+
+async def main():
+    config = ConfigManager("scripts/<event>/config.json").config
+    api_pool = APIPool(config.llm)
+    data_loader = DataLoader(config.data)
+    users = parse_user_data(data_loader.load_users())
+    db = SimulationDatabase("scripts/<event>/output/simulation.db")
+    simulator = Simulator(config, api_pool, users, data_loader, db)
+    await simulator.run()
+
+asyncio.run(main())
 ```
 
-可将 `run_with_monitor.py` 复制到自己的场景目录作为模板使用。仿真输出保存在各事件脚本目录下的 `output/` 目录。
+仿真输出保存在 `output/` 目录。
 
 ---
 
