@@ -49,7 +49,6 @@
 - [🔌 Extension Guide](#-extension-guide)
 - [💾 Datasets &amp; Ethics](#-datasets--ethics)
 - [📄 License](#-license)
-- [🚧 Online System — Coming Soon](#-online-system--coming-soon)
 
 ---
 
@@ -428,20 +427,6 @@ Experiments are based on three representative public opinion events collected fr
 ## 📄 License
 
 This project is open-sourced under the [MIT License](LICENSE).
-
----
-
-## 🚧 Online System — Coming Soon
-
-🔥 **A full-featured online public opinion simulation system is under active development!** The system will provide an end-to-end pipeline covering **public opinion sensing → analysis → simulation & forecasting**, enabling researchers and practitioners to conduct computational experiments directly from a web interface.
-
-If you are interested in this project and would like to contribute to its development, we warmly welcome you to join us! Feel free to reach out via email: **15939048354@163.com**
-
-<p align="center">
-  <img src="assets/system_prototype_1.png" alt="System Prototype 1" width="420">    
-  <img src="assets/system_prototype_2.png" alt="System Prototype 2" width="420">
-</p>
-<p align="center"><em>🖼️ Early-stage system demo prototypes — the official system is coming soon, stay tuned!</em></p>
 
 ---
 
