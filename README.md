@@ -47,7 +47,7 @@
 - [⚙️ Installation](#%EF%B8%8F-installation)
 - [🚀 Quick Start](#-quick-start)
 - [🔌 Extension Guide](#-extension-guide)
-- [💾 Datasets &amp; Ethics](#-datasets--ethics)
+- [⚠️ Ethical Statement](#%EF%B8%8F-ethical-statement)
 - [📄 License](#-license)
 
 ---
@@ -406,21 +406,11 @@ Simply add a new endpoint in the `llm_api_configs` configuration — the framewo
 
 ---
 
-## 💾 Datasets & Ethics
-
-Experiments are based on three representative public opinion events collected from the Sina Weibo platform:
-
-| Event                                                                                    | Code | Category           | #Users | #Posts | Duration |
-| ---------------------------------------------------------------------------------------- | :--: | ------------------ | :----: | :----: | :------: |
-| **Luxury Earring** — Jewelry worn by a public figure identified as luxury item    |  LE  | Social Controversy | 1,530 | 34,218 |   ~46h   |
-| **WHU Library** — Reported harassment incident; court verdict reignited discourse |  WL  | Campus Incident    | 1,843 | 51,647 |  ~190h  |
-| **Xibei Prepared Food** — Allegations of prepared food use in restaurant chain    |  XF  | Food Safety        | 1,987 | 14,892 |   ~71h   |
-
-### ⚠️ Ethical Statement & Data Access
+## ⚠️ Ethical Statement
 
 > **This study is conducted purely as data-driven scientific research. All events are analyzed based entirely on publicly available data, and the authors hold no opinions or positions regarding any events, individuals, or organizations involved. The simulation framework is intended exclusively for academic research and methodological validation.**
 
-📌 All datasets are collected from publicly available posts on Sina Weibo. Due to the sensitive nature of social media data, we do **not** provide open downloads. For academic research access, please contact: 📮 **15939048354@163.com**
+Datasets are collected from publicly available posts on Sina Weibo. We plan to release them publicly after careful review and anonymization.
 
 ---
 
