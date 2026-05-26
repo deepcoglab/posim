@@ -352,55 +352,7 @@ POSIM 支持**任何 OpenAI 兼容的 API 服务**。在仿真配置文件（如
 python scripts/tianjiaerhuan/run_with_monitor.py
 ```
 
-**仿真流程：**
-1. **初始化** — 加载用户画像，为每个智能体构建 Social-BDI 信念系统（身份 → 心理认知 → 事件观点 → 初始情绪），构建社交网络和推荐系统
-2. **每步执行** — Hawkes 时间引擎确定激活智能体 → 个性化内容推荐 → 信念更新（LLM）→ 欲望推理（LLM）→ 意图规划（LLM）→ 行为执行，全程异步并发
-3. **步后处理** — 社交邻居间情绪传染、热搜话题更新、新帖子索引入推荐池、仿真状态日志记录
-
-**实时监控**：仿真启动 WebSocket 服务器，将实时数据推送到浏览器监控仪表盘（`posim/web/monitor.html`）。您可以实时观察智能体激活数量、发帖活跃度、情绪分布和热搜话题。
-
-**仿真输出**保存在各事件脚本目录下的 `output/` 目录，包括：
-- `simulation.db` — 完整仿真数据库（所有帖子、智能体状态、网络演化）
-- `simulation_log.json` — 每步每个智能体认知状态和行为的结构化日志
-- 智能体信念轨迹、情绪曲线和交互记录
-
-### 4️⃣ 评估
-
-```bash
-python scripts/tianjiaerhuan/evaluate.py
-```
-
-评估框架读取仿真输出，与真实数据进行多维度对比：
-
-- **行为层** — 行为类型分布（JSD）、活跃度热度曲线相关性、热度 RMSE
-- **内容层** — 话语非理性分布、词汇多样性（TTR）、群体情感偏差
-- **拓扑层** — 网络拓扑相似性、级联规模分布、幂律指数
-
-结果保存至 `vis_results/`，包括校准图表、分布对比图，以及包含所有量化指标的综合 `evaluation_report.json`。
-
-<details>
-<summary><b>📋 完整配置参数</b></summary>
-
-| 参数                           | 说明                 | 默认值 |
-| ------------------------------ | -------------------- | :----: |
-| `time_granularity`           | 仿真时间步长（分钟） |   10   |
-| `hawkes_mu`                  | Hawkes 背景速率      |  0.01  |
-| `hawkes_internal.alpha`      | 内生激发强度         | 0.005 |
-| `hawkes_internal.beta`       | 内生衰减速率         |  0.16  |
-| `hawkes_external.alpha`      | 外生激发强度         |  0.08  |
-| `hawkes_external.beta`       | 外生衰减速率         | 0.005 |
-| `total_scale`                | 活跃度缩放因子       |  2000  |
-| `circadian_strength`         | 昼夜节律调制强度     |  0.3  |
-| `recommend_count`            | 每步推荐数量         |   10   |
-| `comment_count`              | 每帖展示评论数       |   5   |
-| `homophily_weight`           | 推荐同质性权重       |  0.3  |
-| `popularity_weight`          | 推荐热度权重         |  0.3  |
-| `recency_weight`             | 推荐新鲜度权重       |  0.4  |
-| `exploration_rate`           | 推荐探索率           |  0.2  |
-| `relation_weight`            | 关系通道权重         |  0.5  |
-| `hot_search_update_interval` | 热搜更新间隔（分钟） |   15   |
-
-</details>
+仿真输出保存在各事件脚本目录下的 `output/` 目录。
 
 ---
 

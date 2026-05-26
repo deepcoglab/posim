@@ -32,8 +32,8 @@
 </p>
 
 <p align="center">
-  📄 <a href="#">Paper (Under Review)</a> &nbsp;|&nbsp;
-  🌐 <a href="https://DeepCogLab.github.io/posim/">Homepage</a> &nbsp;|&nbsp;
+  📄 <a href="#">Paper (Under Review)</a>  | 
+  🌐 <a href="https://DeepCogLab.github.io/posim/">Homepage</a>  | 
   🐛 <a href="https://github.com/DeepCogLab/posim/issues">Issues</a>
 </p>
 
@@ -47,7 +47,7 @@
 - [⚙️ Installation](#%EF%B8%8F-installation)
 - [🚀 Quick Start](#-quick-start)
 - [🔌 Extension Guide](#-extension-guide)
-- [💾 Datasets & Ethics](#-datasets--ethics)
+- [💾 Datasets &amp; Ethics](#-datasets--ethics)
 - [📄 License](#-license)
 - [🚧 Online System — Coming Soon](#-online-system--coming-soon)
 
@@ -74,11 +74,8 @@ POSIM is designed for researchers studying computational social science, public 
 ## ✨ Key Features
 
 - 🧠 **Social-BDI Agent Architecture** — LLMs embedded in a layered cognitive framework (Perception → Belief → Desire → Intention → Action) with emotional arousal and cognitive biases. Three cognitive subsystems powered by independent LLM calls, fully traceable decision chains.
-
 - ⏱️ **Hawkes Process-Driven Temporal Engine** — Hawkes self-exciting point process unifying exogenous event shocks and endogenous user interactions with circadian rhythm modulation, reproducing realistic "outbreak–sustain–decay" activity patterns at minute-level resolution.
-
 - 🛡️ **Three-Tier Progressive Validation** — From individual behavioral mechanism calibration → collective phenomenon emergence → statistical consistency, establishing simulation credibility layer by layer.
-
 - 🔌 **Highly Decoupled Modular Architecture** — Agents, environment, and evaluation modules communicate through standard interfaces — swap the cognitive architecture, temporal engine, or evaluation metrics independently.
 
 ---
@@ -100,12 +97,12 @@ POSIM comprises three core components:
 
 ### 🎭 Four Heterogeneous Agent Types
 
-| Type | Role | Behavioral Traits | Typical Manifestation |
-| --- | --- | --- | --- |
-| 👤 **Ordinary Users** | Primary participants | Colloquial, fragmented, emotion-driven | Impulsive expression under high arousal |
-| 🌟 **Opinion Leaders** | Key intermediaries (two-step flow) | Independent views, agenda-setting | Significant influence on downstream beliefs |
-| 📰 **Media Accounts** | Information gathering & dissemination | Formal, restrained, timely | Information confirmation & agenda framing |
-| 🏛️ **Governments** | Official stance & governance | Low frequency, high authority | Pivotal influence after event escalation |
+| Type                        | Role                                  | Behavioral Traits                      | Typical Manifestation                       |
+| --------------------------- | ------------------------------------- | -------------------------------------- | ------------------------------------------- |
+| 👤**Ordinary Users**  | Primary participants                  | Colloquial, fragmented, emotion-driven | Impulsive expression under high arousal     |
+| 🌟**Opinion Leaders** | Key intermediaries (two-step flow)    | Independent views, agenda-setting      | Significant influence on downstream beliefs |
+| 📰**Media Accounts**  | Information gathering & dissemination | Formal, restrained, timely             | Information confirmation & agenda framing   |
+| 🏛️**Governments**   | Official stance & governance          | Low frequency, high authority          | Pivotal influence after event escalation    |
 
 > All behavioral patterns emerge autonomously through the Social-BDI pipeline — they are **not** preset by rules.
 
@@ -115,12 +112,12 @@ POSIM comprises three core components:
 
 ### 💻 System Requirements
 
-| Item | Minimum | Recommended |
-| --- | --- | --- |
-| Python | ≥ 3.8 | 3.10 |
-| CUDA | — | ≥ 11.0 (local embedding acceleration) |
-| RAM | 16 GB | 32 GB+ (large-scale simulation) |
-| GPU | — | Recommended (sentence-transformers acceleration) |
+| Item   | Minimum | Recommended                                      |
+| ------ | ------- | ------------------------------------------------ |
+| Python | ≥ 3.8  | 3.10                                             |
+| CUDA   | —      | ≥ 11.0 (local embedding acceleration)           |
+| RAM    | 16 GB   | 32 GB+ (large-scale simulation)                  |
+| GPU    | —      | Recommended (sentence-transformers acceleration) |
 
 ### 📦 Setup
 
@@ -137,16 +134,16 @@ pip install -r requirements.txt
 
 ### 📚 Core Dependencies
 
-| Package | Version | Purpose |
-| --- | --- | --- |
-| `numpy` | ≥ 1.24.0 | Numerical computation, Hawkes process sampling |
-| `openai` | ≥ 1.0.0 | LLM API calls (OpenAI-compatible interface) |
-| `pydantic` | ≥ 2.0.0 | Configuration validation & structured data |
-| `sentence-transformers` | ≥ 2.2.0 | Semantic embeddings (recommendation, dedup, memory) |
-| `torch` | ≥ 2.0.0 | Deep learning backend (embedding inference) |
-| `matplotlib` | ≥ 3.7.0 | Evaluation visualization |
-| `neo4j` | ≥ 5.0.0 | Social network graph database (optional) |
-| `websockets` | ≥ 12.0 | Real-time simulation monitoring |
+| Package                   | Version   | Purpose                                             |
+| ------------------------- | --------- | --------------------------------------------------- |
+| `numpy`                 | ≥ 1.24.0 | Numerical computation, Hawkes process sampling      |
+| `openai`                | ≥ 1.0.0  | LLM API calls (OpenAI-compatible interface)         |
+| `pydantic`              | ≥ 2.0.0  | Configuration validation & structured data          |
+| `sentence-transformers` | ≥ 2.2.0  | Semantic embeddings (recommendation, dedup, memory) |
+| `torch`                 | ≥ 2.0.0  | Deep learning backend (embedding inference)         |
+| `matplotlib`            | ≥ 3.7.0  | Evaluation visualization                            |
+| `neo4j`                 | ≥ 5.0.0  | Social network graph database (optional)            |
+| `websockets`            | ≥ 12.0   | Real-time simulation monitoring                     |
 
 ---
 
@@ -218,12 +215,12 @@ Use any cloud provider that offers an OpenAI-compatible API (OpenAI, DeepSeek, e
 
 Each simulation scenario requires four data files under `scripts/<event>/data/`:
 
-| File | Contents |
-| --- | --- |
-| `users.json` | User profiles |
-| `events.json` | External event sequence |
+| File                   | Contents                       |
+| ---------------------- | ------------------------------ |
+| `users.json`         | User profiles                  |
+| `events.json`        | External event sequence        |
 | `initial_posts.json` | Seed posts at simulation start |
-| `relations.json` | User follow relationships |
+| `relations.json`     | User follow relationships      |
 
 <details>
 <summary><b>📋 Data Format Reference</b></summary>
@@ -278,6 +275,7 @@ Each simulation scenario requires four data files under `scripts/<event>/data/`:
 Two event types are supported:
 
 **`global_broadcast`** — Platform-wide push (e.g. breaking news):
+
 ```json
 {
   "time": "2025-05-16T09:45",
@@ -290,6 +288,7 @@ Two event types are supported:
 ```
 
 **`node_post`** — A specific user publishes a post:
+
 ```json
 {
   "time": "2025-05-16T13:34",
@@ -355,55 +354,7 @@ Two event types are supported:
 python scripts/tianjiaerhuan/run_with_monitor.py
 ```
 
-**Simulation pipeline:**
-1. **Initialization** — Load user profiles, build Social-BDI belief system for each agent (identity → psychological cognition → event opinions → initial emotion), construct social networks and recommendation system
-2. **Per-step execution** — Hawkes temporal engine determines activated agents → personalized content recommendation → belief update (LLM) → desire inference (LLM) → intention planning (LLM) → action execution, all running with async concurrency
-3. **Post-step processing** — Emotion contagion among social neighbors, trending topic updates, new post indexing into recommendation pool, simulation state logging
-
-**Real-time monitoring**: The simulation starts a WebSocket server that pushes live data to a browser-based monitoring dashboard (`posim/web/monitor.html`). You can observe agent activation counts, posting activity, emotion distributions, and trending topics in real time.
-
-**Simulation outputs** are saved to the `output/` directory under each event script folder, including:
-- `simulation.db` — Full simulation database (all posts, agent states, network evolution)
-- `simulation_log.json` — Structured log of every agent's cognitive state and action per step
-- Agent belief trajectories, emotion curves, and interaction records
-
-### 4️⃣ Evaluate
-
-```bash
-python scripts/tianjiaerhuan/evaluate.py
-```
-
-The evaluation framework reads simulation outputs and compares them against real-world data across multiple dimensions:
-
-- **Behavior layer** — Action type distribution (JSD), activity hotness curve correlation, hotness RMSE
-- **Content layer** — Discourse irrationality distribution, lexical diversity (TTR), group sentiment deviation
-- **Topology layer** — Network topological similarity, cascade size distribution, power-law exponent
-
-Results are saved to `vis_results/`, including calibration charts, distribution comparisons, and a comprehensive `evaluation_report.json` with all quantitative metrics.
-
-<details>
-<summary><b>📋 Full Configuration Parameters</b></summary>
-
-| Parameter | Description | Default |
-| --- | --- | :---: |
-| `time_granularity` | Simulation time step (minutes) | 10 |
-| `hawkes_mu` | Hawkes background rate | 0.01 |
-| `hawkes_internal.alpha` | Endogenous excitation intensity | 0.005 |
-| `hawkes_internal.beta` | Endogenous decay rate | 0.16 |
-| `hawkes_external.alpha` | Exogenous excitation intensity | 0.08 |
-| `hawkes_external.beta` | Exogenous decay rate | 0.005 |
-| `total_scale` | Activity scaling factor | 2000 |
-| `circadian_strength` | Circadian rhythm modulation strength | 0.3 |
-| `recommend_count` | Recommended items per step | 10 |
-| `comment_count` | Displayed comments per post | 5 |
-| `homophily_weight` | Recommendation homophily weight | 0.3 |
-| `popularity_weight` | Recommendation popularity weight | 0.3 |
-| `recency_weight` | Recommendation freshness weight | 0.4 |
-| `exploration_rate` | Recommendation exploration rate | 0.2 |
-| `relation_weight` | Relationship channel weight | 0.5 |
-| `hot_search_update_interval` | Trending update interval (minutes) | 15 |
-
-</details>
+Simulation outputs are saved to the `output/` directory under each event script folder.
 
 ---
 
@@ -460,11 +411,11 @@ Simply add a new endpoint in the `llm_api_configs` configuration — the framewo
 
 Experiments are based on three representative public opinion events collected from the Sina Weibo platform:
 
-| Event | Code | Category | #Users | #Posts | Duration |
-| --- | :---: | --- | :---: | :---: | :---: |
-| **Luxury Earring** — Jewelry worn by a public figure identified as luxury item | LE | Social Controversy | 1,530 | 34,218 | ~46h |
-| **WHU Library** — Reported harassment incident; court verdict reignited discourse | WL | Campus Incident | 1,843 | 51,647 | ~190h |
-| **Xibei Prepared Food** — Allegations of prepared food use in restaurant chain | XF | Food Safety | 1,987 | 14,892 | ~71h |
+| Event                                                                                    | Code | Category           | #Users | #Posts | Duration |
+| ---------------------------------------------------------------------------------------- | :--: | ------------------ | :----: | :----: | :------: |
+| **Luxury Earring** — Jewelry worn by a public figure identified as luxury item    |  LE  | Social Controversy | 1,530 | 34,218 |   ~46h   |
+| **WHU Library** — Reported harassment incident; court verdict reignited discourse |  WL  | Campus Incident    | 1,843 | 51,647 |  ~190h  |
+| **Xibei Prepared Food** — Allegations of prepared food use in restaurant chain    |  XF  | Food Safety        | 1,987 | 14,892 |   ~71h   |
 
 ### ⚠️ Ethical Statement & Data Access
 
@@ -487,7 +438,7 @@ This project is open-sourced under the [MIT License](LICENSE).
 If you are interested in this project and would like to contribute to its development, we warmly welcome you to join us! Feel free to reach out via email: **15939048354@163.com**
 
 <p align="center">
-  <img src="assets/system_prototype_1.png" alt="System Prototype 1" width="420">&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="assets/system_prototype_1.png" alt="System Prototype 1" width="420">    
   <img src="assets/system_prototype_2.png" alt="System Prototype 2" width="420">
 </p>
 <p align="center"><em>🖼️ Early-stage system demo prototypes — the official system is coming soon, stay tuned!</em></p>
