@@ -349,11 +349,20 @@ Two event types are supported:
 
 ### 3️⃣ Run Simulation
 
+Create your scenario folder under `scripts/` (e.g. `scripts/my_event/`) and place the `config.json` and `data/` directory inside it. Then run:
+
 ```bash
-python scripts/tianjiaerhuan/run_with_monitor.py
+# Run with default config.json in the script directory
+python scripts/my_event/run_with_monitor.py
+
+# Or specify a config path explicitly
+python scripts/my_event/run_with_monitor.py path/to/config.json
+
+# Disable real-time WebSocket monitor
+python scripts/my_event/run_with_monitor.py --no-websocket
 ```
 
-Simulation outputs are saved to the `output/` directory under each event script folder.
+You can use the provided scripts as a template — copy `run_with_monitor.py` into your scenario folder. Simulation outputs are saved to the `output/` directory under each event script folder.
 
 ---
 

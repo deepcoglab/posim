@@ -347,11 +347,20 @@ POSIM 支持**任何 OpenAI 兼容的 API 服务**。在仿真配置文件（如
 
 ### 3️⃣ 运行仿真
 
+在 `scripts/` 下创建场景目录（如 `scripts/my_event/`），放入 `config.json` 和 `data/` 目录后运行：
+
 ```bash
-python scripts/tianjiaerhuan/run_with_monitor.py
+# 使用脚本目录下默认的 config.json
+python scripts/my_event/run_with_monitor.py
+
+# 指定配置文件路径
+python scripts/my_event/run_with_monitor.py path/to/config.json
+
+# 禁用实时 WebSocket 监控
+python scripts/my_event/run_with_monitor.py --no-websocket
 ```
 
-仿真输出保存在各事件脚本目录下的 `output/` 目录。
+可将 `run_with_monitor.py` 复制到自己的场景目录作为模板使用。仿真输出保存在各事件脚本目录下的 `output/` 目录。
 
 ---
 
