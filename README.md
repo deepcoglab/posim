@@ -148,16 +148,26 @@ pip install -r requirements.txt
 
 ## 🚀 Quick Start
 
-### 1️⃣ Configure LLM
+### 1️⃣ Configure
 
-POSIM supports **any OpenAI-compatible API service**. Configure the LLM endpoint in your simulation config file (e.g., `scripts/tianjiaerhuan/config.json`):
-
-#### 🔹 Option A: Local Deployment (vLLM / Ollama)
-
-Deploy a model locally using [vLLM](https://github.com/vllm-project/vllm), [Ollama](https://ollama.com/), or any OpenAI-compatible local server:
+Create `scripts/<event>/config.json`. A minimal example:
 
 ```json
 {
+  "simulation": {
+    "event_name": "my_event",
+    "simulation_title": "My Simulation",
+    "start_time": "2025-05-15T00:00",
+    "end_time": "2025-05-17T00:00",
+    "time_granularity": 10,
+    "decision_mode": "ebdi"
+  },
+  "data": {
+    "users_file": "data/users.json",
+    "events_file": "data/events.json",
+    "initial_posts_file": "data/initial_posts.json",
+    "relations_file": "data/relations.json"
+  },
   "llm": {
     "max_concurrent_requests": 30,
     "use_local_embedding_model": true,
@@ -166,7 +176,7 @@ Deploy a model locally using [vLLM](https://github.com/vllm-project/vllm), [Olla
     "embedding_device": "cuda",
     "llm_api_configs": [
       {
-        "name": "local-qwen",
+        "name": "my-llm",
         "enabled": true,
         "base_url": "http://localhost:8000/v1/",
         "api_key": "not-needed",
@@ -176,39 +186,16 @@ Deploy a model locally using [vLLM](https://github.com/vllm-project/vllm), [Olla
         "weight": 1.0
       }
     ]
+  },
+  "output": {
+    "base_dir": "output"
   }
 }
 ```
 
-#### 🔹 Option B: Cloud API Service
-
-Use any cloud provider that offers an OpenAI-compatible API (OpenAI, DeepSeek, etc.):
-
-```json
-{
-  "llm": {
-    "max_concurrent_requests": 30,
-    "use_local_embedding_model": true,
-    "local_embedding_model_path": "path/to/bge-small-zh-v1.5",
-    "embedding_dimension": 512,
-    "embedding_device": "cuda",
-    "llm_api_configs": [
-      {
-        "name": "cloud-api",
-        "enabled": true,
-        "base_url": "https://api.your-provider.com/v1/",
-        "api_key": "sk-your-api-key",
-        "model": "your-model-name",
-        "temperature": 0.7,
-        "top_p": 0.9,
-        "weight": 1.0
-      }
-    ]
-  }
-}
-```
-
-> 💡 **Multi-endpoint support**: Configure multiple endpoints in `llm_api_configs` — the framework manages them through a unified API pool with round-robin load balancing, per-purpose model routing (belief/desire/intention), concurrency control, and automatic failover.
+> **`decision_mode`**: `"ebdi"` (full cognitive pipeline) | `"no_ebdi"` | `"cot"` | `"wo_belief"` | `"wo_desire"` | `"wo_intention"` | `"wo_hawkes"`
+>
+> **LLM**: Supports any OpenAI-compatible API (vLLM, Ollama, DeepSeek, OpenAI, etc.). Multiple endpoints can be configured for load balancing and per-purpose routing.
 
 ### 2️⃣ Prepare Data
 

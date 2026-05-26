@@ -148,16 +148,26 @@ pip install -r requirements.txt
 
 ## 🚀 快速开始
 
-### 1️⃣ 配置 LLM
+### 1️⃣ 配置
 
-POSIM 支持**任何 OpenAI 兼容的 API 服务**。在仿真配置文件（如 `scripts/tianjiaerhuan/config.json`）中配置 LLM 端点：
-
-#### 🔹 方案 A：本地部署（vLLM / Ollama）
-
-使用 [vLLM](https://github.com/vllm-project/vllm)、[Ollama](https://ollama.com/) 或其他 OpenAI 兼容本地服务部署模型：
+创建 `scripts/<event>/config.json`，最小示例：
 
 ```json
 {
+  "simulation": {
+    "event_name": "my_event",
+    "simulation_title": "My Simulation",
+    "start_time": "2025-05-15T00:00",
+    "end_time": "2025-05-17T00:00",
+    "time_granularity": 10,
+    "decision_mode": "ebdi"
+  },
+  "data": {
+    "users_file": "data/users.json",
+    "events_file": "data/events.json",
+    "initial_posts_file": "data/initial_posts.json",
+    "relations_file": "data/relations.json"
+  },
   "llm": {
     "max_concurrent_requests": 30,
     "use_local_embedding_model": true,
@@ -166,7 +176,7 @@ POSIM 支持**任何 OpenAI 兼容的 API 服务**。在仿真配置文件（如
     "embedding_device": "cuda",
     "llm_api_configs": [
       {
-        "name": "local-qwen",
+        "name": "my-llm",
         "enabled": true,
         "base_url": "http://localhost:8000/v1/",
         "api_key": "not-needed",
@@ -176,39 +186,16 @@ POSIM 支持**任何 OpenAI 兼容的 API 服务**。在仿真配置文件（如
         "weight": 1.0
       }
     ]
+  },
+  "output": {
+    "base_dir": "output"
   }
 }
 ```
 
-#### 🔹 方案 B：云端 API 服务
-
-使用任何提供 OpenAI 兼容 API 的云服务商（OpenAI、DeepSeek 等）：
-
-```json
-{
-  "llm": {
-    "max_concurrent_requests": 30,
-    "use_local_embedding_model": true,
-    "local_embedding_model_path": "path/to/bge-small-zh-v1.5",
-    "embedding_dimension": 512,
-    "embedding_device": "cuda",
-    "llm_api_configs": [
-      {
-        "name": "cloud-api",
-        "enabled": true,
-        "base_url": "https://api.your-provider.com/v1/",
-        "api_key": "sk-your-api-key",
-        "model": "your-model-name",
-        "temperature": 0.7,
-        "top_p": 0.9,
-        "weight": 1.0
-      }
-    ]
-  }
-}
-```
-
-> 💡 **多端点支持**：在 `llm_api_configs` 中配置多个端点——框架通过统一 API 池管理，支持轮询负载均衡、按用途模型路由（信念/欲望/意图）、并发控制和自动故障转移。
+> **`decision_mode`**：`"ebdi"`（完整认知管线）| `"no_ebdi"` | `"cot"` | `"wo_belief"` | `"wo_desire"` | `"wo_intention"` | `"wo_hawkes"`
+>
+> **LLM**：支持任何 OpenAI 兼容 API（vLLM、Ollama、DeepSeek、OpenAI 等）。可配置多端点进行负载均衡和按用途路由。
 
 ### 2️⃣ 准备数据
 
