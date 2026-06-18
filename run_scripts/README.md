@@ -10,4 +10,4 @@ Each event folder includes:
 - `data/initial_posts.json`: sample seed posts
 - `data/relations.json`: sample social relations
 
-The JSON files under `data/` are intentionally small samples. They are not the full datasets used in experiments.
+The JSON files under `data/` intentionally include only 1 sample record per file. They are not the full datasets used in experiments.

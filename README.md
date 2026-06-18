@@ -50,6 +50,7 @@
 - [🔌 Extension Guide](#-extension-guide)
 - [⚠️ Ethical Statement](#%EF%B8%8F-ethical-statement)
 - [📄 License](#-license)
+- [🖥️ System Prototype](#%EF%B8%8F-system-prototype)
 
 ---
 
@@ -84,17 +85,7 @@ POSIM is designed for researchers studying computational social science, public 
 
 POSIM is under active development. We are building a full simulation system on top of POSIM and will publish it as soon as it is ready. A pip package is also in development, so please follow this repository for release updates.
 
-### System Prototype
-
-<p align="center">
-  <img src="assets/system_prototype_1.png" alt="POSIM system prototype overview" width="95%">
-</p>
-<p align="center"><b>Figure 1.</b> Prototype view of the POSIM simulation system.</p>
-
-<p align="center">
-  <img src="assets/system_prototype_2.png" alt="POSIM system prototype analysis view" width="95%">
-</p>
-<p align="center"><b>Figure 2.</b> Prototype view of simulation monitoring and analysis.</p>
+The current public repository includes the core simulation framework, sanitized run-script examples, lightweight sample data, and local embedding model assets. Full datasets and additional system components will be released gradually after review and anonymization.
 
 ---
 
@@ -103,7 +94,7 @@ POSIM is under active development. We are building a full simulation system on t
 <p align="center">
   <img src="assets/framework_overview.png" alt="POSIM Framework Overview" width="95%">
 </p>
-<p align="center"><b>Figure 3.</b> Overall architecture of POSIM.</p>
+<p align="center"><b>Figure 1.</b> Overall architecture of POSIM.</p>
 
 POSIM comprises three core components:
 
@@ -445,6 +436,22 @@ Datasets are collected from publicly available posts on Sina Weibo. We plan to r
 ## 📄 License
 
 This project is open-sourced under the [MIT License](LICENSE).
+
+---
+
+## 🖥️ System Prototype
+
+We are developing a complete public opinion simulation system based on POSIM. The following prototype screens show the current direction of the interface and analysis workflow.
+
+<p align="center">
+  <img src="assets/system_prototype_1.png" alt="POSIM system prototype overview" width="95%">
+</p>
+<p align="center"><b>Figure 2.</b> Prototype view of the POSIM simulation system.</p>
+
+<p align="center">
+  <img src="assets/system_prototype_2.png" alt="POSIM system prototype analysis view" width="95%">
+</p>
+<p align="center"><b>Figure 3.</b> Prototype view of simulation monitoring and analysis.</p>
 
 ---
 
