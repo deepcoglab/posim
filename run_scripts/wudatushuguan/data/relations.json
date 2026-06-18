@@ -1,0 +1,74 @@
+[
+  {
+    "follower_id": "1887344341",
+    "following_id": "1960785875",
+    "relation_type": "follow",
+    "timestamp": 1752753697
+  },
+  {
+    "follower_id": "1960785875",
+    "following_id": "1887344341",
+    "relation_type": "follow",
+    "timestamp": 1752718179
+  },
+  {
+    "follower_id": "1887344341",
+    "following_id": "1288429914",
+    "relation_type": "follow",
+    "timestamp": 1752792204
+  },
+  {
+    "follower_id": "1288429914",
+    "following_id": "1887344341",
+    "relation_type": "follow",
+    "timestamp": 1752706161
+  },
+  {
+    "follower_id": "1887344341",
+    "following_id": "1496883514",
+    "relation_type": "follow",
+    "timestamp": 1752814075
+  },
+  {
+    "follower_id": "1887344341",
+    "following_id": "5035763146",
+    "relation_type": "follow",
+    "timestamp": 1752869300
+  },
+  {
+    "follower_id": "1887344341",
+    "following_id": "7308140398",
+    "relation_type": "follow",
+    "timestamp": 1752739387
+  },
+  {
+    "follower_id": "7308140398",
+    "following_id": "1887344341",
+    "relation_type": "follow",
+    "timestamp": 1752754526
+  },
+  {
+    "follower_id": "1887344341",
+    "following_id": "3275115274",
+    "relation_type": "follow",
+    "timestamp": 1752892840
+  },
+  {
+    "follower_id": "3275115274",
+    "following_id": "1887344341",
+    "relation_type": "follow",
+    "timestamp": 1752792385
+  },
+  {
+    "follower_id": "1887344341",
+    "following_id": "3787126342",
+    "relation_type": "follow",
+    "timestamp": 1752722358
+  },
+  {
+    "follower_id": "3787126342",
+    "following_id": "1887344341",
+    "relation_type": "follow",
+    "timestamp": 1752881745
+  }
+]

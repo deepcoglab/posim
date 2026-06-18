@@ -43,6 +43,7 @@
 
 - [💡 为什么选择 POSIM？](#-为什么选择-posim)
 - [✨ 核心特性](#-核心特性)
+- [🚧 项目进展](#-项目进展)
 - [🏗️ 框架总览](#%EF%B8%8F-框架总览)
 - [⚙️ 安装配置](#%EF%B8%8F-安装配置)
 - [🚀 快速开始](#-快速开始)
@@ -79,12 +80,30 @@ POSIM 面向计算社会科学、舆情动力学、危机传播和基于 LLM 的
 
 ---
 
+## 🚧 项目进展
+
+POSIM 仍在持续开发中。我们目前正在基于 POSIM 开发完整的舆情仿真系统，后续会在系统稳定后尽快发布。同时，我们也正在开发 pip 包，欢迎关注本仓库以获取后续发布信息。
+
+### 系统原型展示
+
+<p align="center">
+  <img src="assets/system_prototype_1.png" alt="POSIM 系统原型总览" width="95%">
+</p>
+<p align="center"><b>图 1.</b> POSIM 仿真系统原型界面。</p>
+
+<p align="center">
+  <img src="assets/system_prototype_2.png" alt="POSIM 系统原型分析视图" width="95%">
+</p>
+<p align="center"><b>图 2.</b> 仿真监控与分析原型界面。</p>
+
+---
+
 ## 🏗️ 框架总览
 
 <p align="center">
   <img src="assets/framework_overview.png" alt="POSIM 框架总览" width="95%">
 </p>
-<p align="center"><b>图 1.</b> POSIM 总体架构。</p>
+<p align="center"><b>图 3.</b> POSIM 总体架构。</p>
 
 POSIM 由三大核心组件构成：
 

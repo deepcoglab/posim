@@ -43,6 +43,7 @@
 
 - [💡 Why POSIM?](#-why-posim)
 - [✨ Key Features](#-key-features)
+- [🚧 Project Status](#-project-status)
 - [🏗️ Framework Overview](#%EF%B8%8F-framework-overview)
 - [⚙️ Installation](#%EF%B8%8F-installation)
 - [🚀 Quick Start](#-quick-start)
@@ -79,12 +80,30 @@ POSIM is designed for researchers studying computational social science, public 
 
 ---
 
+## 🚧 Project Status
+
+POSIM is under active development. We are building a full simulation system on top of POSIM and will publish it as soon as it is ready. A pip package is also in development, so please follow this repository for release updates.
+
+### System Prototype
+
+<p align="center">
+  <img src="assets/system_prototype_1.png" alt="POSIM system prototype overview" width="95%">
+</p>
+<p align="center"><b>Figure 1.</b> Prototype view of the POSIM simulation system.</p>
+
+<p align="center">
+  <img src="assets/system_prototype_2.png" alt="POSIM system prototype analysis view" width="95%">
+</p>
+<p align="center"><b>Figure 2.</b> Prototype view of simulation monitoring and analysis.</p>
+
+---
+
 ## 🏗️ Framework Overview
 
 <p align="center">
   <img src="assets/framework_overview.png" alt="POSIM Framework Overview" width="95%">
 </p>
-<p align="center"><b>Figure 1.</b> Overall architecture of POSIM.</p>
+<p align="center"><b>Figure 3.</b> Overall architecture of POSIM.</p>
 
 POSIM comprises three core components:
 
